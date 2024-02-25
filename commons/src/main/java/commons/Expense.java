@@ -22,7 +22,7 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
-    @OneToMany(mappedBy = "Participant")
+    @OneToMany(mappedBy = "expense")
     Set<ExpensePayed> expensesPayed;
 
     @ManyToOne()
