@@ -17,6 +17,9 @@ import java.util.*;
             this.lastName = lastName;
         }
 
+        @OneToMany(mappedBy = "participant")
+        Set<ExpensePayed> expensesPayed;
+
         public Participant() {
 
         }
