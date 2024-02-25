@@ -18,31 +18,31 @@ public class DebtTest {
     }
     @Test
     void getterPersonsFrom(){
-        Participent[] participents = new Participent[3];
-        participents[0] = new Participent("Eduardas", "Eduardas", null);
-        participents[1] = new Participent("Eduardas", "Eduardas", null);
-        participents[2] = new Participent("Eduardas", "Eduardas", null);
-        Debt debt = new Debt(0, 0, participents, null, "EUR", null);
-        assertEquals(debt.getPersonsOwnsFrom(), participents);
+        Participant[] participants = new Participant[3];
+        participants[0] = new Participant("Eduardas", "Eduardas");
+        participants[1] = new Participant("Eduardas", "Eduardas");
+        participants[2] = new Participant("Eduardas", "Eduardas");
+        Debt debt = new Debt(0, 0, participants, null, "EUR", null);
+        assertEquals(debt.getPersonsOwnsFrom(), participants);
     }
     @Test
     void getterPersonsTo(){
-        Participent[] participents = new Participent[3];
-        participents[0] = new Participent("Eduardas", "Eduardas", null);
-        participents[1] = new Participent("Eduardas", "Eduardas", null);
-        participents[2] = new Participent("Eduardas", "Eduardas", null);
-        Debt debt = new Debt(0, 0, participents, participents[0], "EUR", null);
-        assertEquals(debt.getPersonOwnsTo(), participents[0]);
+        Participant[] participants = new Participant[3];
+        participants[0] = new Participant("Eduardas", "Eduardas");
+        participants[1] = new Participant("Eduardas", "Eduardas");
+        participants[2] = new Participant("Eduardas", "Eduardas");
+        Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
+        assertEquals(debt.getPersonOwnsTo(), participants[0]);
     }
     @Test
     void toStringTest() {
-        Participent[] participents = new Participent[3];
-        participents[0] = new Participent("Eduardas", "Eduardas", null);
-        participents[1] = new Participent("Eduardas", "Eduardas", null);
-        participents[2] = new Participent("Eduardas", "Eduardas", null);
-        Debt debt = new Debt(0, 0, participents, participents[0], "EUR", null);
+        Participant[] participants = new Participant[3];
+        participants[0] = new Participant("Eduardas", "Eduardas");
+        participants[1] = new Participant("Eduardas", "Eduardas");
+        participants[2] = new Participant("Eduardas", "Eduardas");
+        Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
         String output = "Debt: from persons, ";
-        for (Participent person : debt.getPersonsOwnsFrom()) {
+        for (Participant person : debt.getPersonsOwnsFrom()) {
             output += person;
             output += " ";
         }
@@ -53,13 +53,13 @@ public class DebtTest {
     }
     @Test
     void toStringAfterSettleTest() {
-        Participent[] participents = new Participent[3];
-        participents[0] = new Participent("Eduardas", "Eduardas", null);
-        participents[1] = new Participent("Eduardas", "Eduardas", null);
-        participents[2] = new Participent("Eduardas", "Eduardas", null);
-        Debt debt = new Debt(0, 0, participents, participents[0], "EUR", null);
+        Participant[] participants = new Participant[3];
+        participants[0] = new Participant("Eduardas", "Eduardas");
+        participants[1] = new Participant("Eduardas", "Eduardas");
+        participants[2] = new Participant("Eduardas", "Eduardas");
+        Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
         String output = "Debt: from persons, ";
-        for (Participent person : debt.getPersonsOwnsFrom()) {
+        for (Participant person : debt.getPersonsOwnsFrom()) {
             output += person;
             output += " ";
         }
