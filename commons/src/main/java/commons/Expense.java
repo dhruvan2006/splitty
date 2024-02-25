@@ -26,7 +26,7 @@ public class Expense {
     Set<ExpensePayed> expensesPayed;
 
     @ManyToOne()
-    Participant collector;
+    Participant creator;
 
     @ManyToOne()
     Event event; // the event this expense belongs to
@@ -45,8 +45,8 @@ public class Expense {
         this.title = title;
     }
 
-    public Participant getCollector() {
-        return collector;
+    public Participant getCreator() {
+        return creator;
     }
 
     private Set<ExpensePayed> getExpensesPayed() {
@@ -66,7 +66,7 @@ public class Expense {
     }
 
     public int hashCode() {
-        return Objects.hash(id, title, collector);//, expenses);
+        return Objects.hash(id, title, creator);//, expenses);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Expense {
         return "Expense{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                "created by" + collector + '\'' +
+                "created by" + creator + '\'' +
                 '}';
     }
 }
