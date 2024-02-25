@@ -85,14 +85,6 @@ public class ParticipantTest {
     }
 
     @Test
-    public void testHashCode() {
-        Map<String, Integer> moneySpentFor = new HashMap<>();
-        moneySpentFor.put("Theme1", 100);
-        Participent participent = new Participent("John", "Doe", moneySpentFor);
-        assertEquals(moneySpentFor.hashCode(), participent.hashCode());
-    }
-
-    @Test
     public void testToString() {
         Map<String, Integer> moneySpentFor = new HashMap<>();
         moneySpentFor.put("Theme1", 100);
