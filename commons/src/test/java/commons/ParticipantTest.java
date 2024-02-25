@@ -1,100 +1,64 @@
 package commons;
-import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 public class ParticipantTest {
-
     @Test
-    public void testGetMoneySpentFor() {
-        Map<String, Integer> moneySpentFor = new HashMap<>();
-        moneySpentFor.put("Theme1", 100);
-        Participent participent = new Participent("John", "Doe", moneySpentFor);
-        assertEquals(moneySpentFor, participent.getMoneySpentFor());
+    public void testConstructorAndGetters() {
+        String firstName = "John";
+        String lastName = "Doe";
+
+        Participant participant = new Participant(firstName, lastName);
+
+        assertEquals(firstName, participant.getFirstName());
+        assertEquals(lastName, participant.getLastName());
     }
 
     @Test
-    public void testSetMoneySpentFor() {
-        Map<String, Integer> moneySpentFor = new HashMap<>();
-        moneySpentFor.put("Theme1", 100);
-        Participent participent = new Participent("John", "Doe", new HashMap<>());
-        participent.setMoneySpentFor(moneySpentFor);
-        assertEquals(moneySpentFor, participent.getMoneySpentFor());
+    public void testSetters() {
+        Participant participant = new Participant("John", "Doe");
+
+        participant.setFirstName("Jane");
+        participant.setLastName("Smith");
+
+        assertEquals("Jane", participant.getFirstName());
+        assertEquals("Smith", participant.getLastName());
     }
 
     @Test
-    public void testMoneyForTheme_ExistingTheme() {
-        Map<String, Integer> moneySpentFor = new HashMap<>();
-        moneySpentFor.put("Theme1", 100);
-        Participent participent = new Participent("John", "Doe", moneySpentFor);
-        assertEquals(100, participent.moneyForTheme("Theme1"));
-    }
+    public void testGetId() {
+        Participant participant = new Participant("John", "Doe");
 
-    @Test
-    public void testMoneyForTheme_NonExistingTheme() {
-        Participent participent = new Participent("John", "Doe", new HashMap<>());
-        assertEquals(-1, participent.moneyForTheme("NonExistingTheme"));
+        assertEquals(0, participant.getId());
     }
-
     @Test
-    public void testAddTheme_ExistingTheme() {
-        Map<String, Integer> moneySpentFor = new HashMap<>();
-        moneySpentFor.put("Theme1", 100);
-        Participent participent = new Participent("John", "Doe", moneySpentFor);
-        participent.addTheme("Theme1", 50);
-        assertEquals(150, participent.moneyForTheme("Theme1"));
+    public void checkGetSetId(){
+        var p = new Participant("f","l");
+        p.setId(2020200202);
+        assertEquals(2020200202, p.getId());
     }
-
     @Test
-    public void testAddTheme_NonExistingTheme() {
-        Participent participent = new Participent("John", "Doe", new HashMap<>());
-        participent.addTheme("NewTheme", 50);
-        assertEquals(50, participent.moneyForTheme("NewTheme"));
+    public void checkGetSetFullName(){
+        var p = new Participant("f","l");
+        assertEquals("f",p.getFirstName());
+        p.setFirstName("x");
+        assertEquals("x",p.getFirstName());
     }
-
     @Test
-    public void testGetTotalSpent() {
-        Map<String, Integer> moneySpentFor = new HashMap<>();
-        moneySpentFor.put("Theme1", 100);
-        moneySpentFor.put("Theme2", 200);
-        Participent participent = new Participent("John", "Doe", moneySpentFor);
-        assertEquals(300, participent.getTotalSpent());
+    public void checkGetSetLastName(){
+        var p = new Participant("f","l");
+        assertEquals("l",p.getLastName());
+        p.setLastName("x");
+        assertEquals("x",p.getLastName());
     }
 
 
     @Test
-    public void testEquals_EqualObjects() {
-        Map<String, Integer> moneySpentFor1 = new HashMap<>();
-        moneySpentFor1.put("Theme1", 100);
-        Participent participent1 = new Participent("John", "Doe", moneySpentFor1);
+    public void testEquals() {
+        Participant participant1 = new Participant("John", "Doe");
+        Participant participant2 = new Participant("John", "Doe");
 
-        Map<String, Integer> moneySpentFor2 = new HashMap<>();
-        moneySpentFor2.put("Theme1", 100);
-        Participent participent2 = new Participent("John", "Doe", moneySpentFor2);
-
-        assertTrue(participent1.equals(participent2));
+        assertEquals(participant1, participant2);
     }
 
-    @Test
-    public void testEquals_DifferentObjects() {
-        Participent participent1 = new Participent("John", "Doe", new HashMap<>());
-        Participent participent2 = new Participent("Jane", "Doe", new HashMap<>());
-        assertFalse(participent1.equals(participent2));
-    }
-
-    @Test
-    public void testToString() {
-        Map<String, Integer> moneySpentFor = new HashMap<>();
-        moneySpentFor.put("Theme1", 100);
-        Participent participent = new Participent("John", "Doe", moneySpentFor);
-        String expectedToString = "Participent{" +
-                "moneySpentFor=" + moneySpentFor +
-                ", id=" + participent.getId() +
-                ", firstName='" + participent.getFirstName() + '\'' +
-                ", lastName='" + participent.getLastName() + '\'' +
-                '}';
-        assertEquals(expectedToString, participent.toString());
-    }
 }
