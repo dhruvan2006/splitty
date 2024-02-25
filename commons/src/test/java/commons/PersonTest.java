@@ -31,13 +31,34 @@ public class PersonTest {
 	}
 
 	@Test
+	public void checkGetSetId(){
+		var p = new Person("f","l");
+		p.setId(2020200202);
+		assertEquals(2020200202, p.getId());
+	}
+	@Test
+	public void checkGetSetFullName(){
+		var p = new Person("f","l");
+		assertEquals("f",p.getFirstName());
+		p.setFirstName("x");
+		assertEquals("x",p.getFirstName());
+	}
+	@Test
+	public void checkGetSetLastName(){
+		var p = new Person("f","l");
+		assertEquals("l",p.getLastName());
+		p.setLastName("x");
+		assertEquals("x",p.getLastName());
+	}
+
+
+	@Test
 	public void equalsHashCode() {
 		var a = new Person("a", "b");
 		var b = new Person("a", "b");
 		assertEquals(a, b);
 		assertEquals(a.hashCode(), b.hashCode());
 	}
-
 	@Test
 	public void notEqualsHashCode() {
 		var a = new Person("a", "b");
