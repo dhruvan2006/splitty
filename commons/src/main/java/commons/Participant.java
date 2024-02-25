@@ -17,6 +17,10 @@ import java.util.*;
             this.lastName = lastName;
         }
 
+        public Participant() {
+
+        }
+
         public long getId() {
             return id;
         }
