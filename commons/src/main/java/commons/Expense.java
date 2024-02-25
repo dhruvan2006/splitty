@@ -21,11 +21,11 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
-    @OneToMany(mappedBy = "participent")
+    @OneToMany(mappedBy = "Participant")
     Set<ExpensePayed> expensesPayed;
 
     @ManyToOne()
-    Participent collector;
+    Participant collector;
 
     public String title;
 
@@ -41,7 +41,7 @@ public class Expense {
         this.title = title;
     }
 
-    public Participent getCollector() {
+    public Participant getCollector() {
         return collector;
     }
 
@@ -49,13 +49,13 @@ public class Expense {
         return expensesPayed;
     }
 
-    public Set<Participent> getParticipantsWhoPayed(){
+    public Set<Participant> getParticipantsWhoPayed(){
         return expensesPayed.stream().filter((expensePayed -> expensePayed.payed))
                 .map((expensePayed -> expensePayed.participant))
                 .collect(Collectors.toSet());
     }
 
-    public Set<Participent> getParticipantsWhoNotPayed(){
+    public Set<Participant> getParticipantsWhoNotPayed(){
         return expensesPayed.stream().filter((expensePayed -> !expensePayed.payed))
                 .map((expensePayed -> expensePayed.participant))
                 .collect(Collectors.toSet());
@@ -75,7 +75,7 @@ class ExpensePayed {
     @ManyToOne
     @MapsId("expenseId")
     @JoinColumn(name = "participant_id")
-    Participent participant;
+    Participant participant;
 
     boolean payed;
 
@@ -95,7 +95,7 @@ class ExpensePayed {
         return expense;
     }
 
-    public Participent getParticipant() {
+    public Participant getParticipant() {
         return participant;
     }
 }
