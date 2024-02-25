@@ -43,7 +43,7 @@ public class Participent extends Person{
 
     public void addTheme(String k, int x){
         if(moneySpentFor.containsKey(k)){
-             moneySpentFor.replace(k, moneySpentFor.get(k)+x);
+            moneySpentFor.replace(k, moneySpentFor.get(k)+x);
         }
         else{
             moneySpentFor.put(k, x);
