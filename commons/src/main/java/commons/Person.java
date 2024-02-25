@@ -46,7 +46,6 @@ public class Person {
 		this.lastName = lastName;
 	}
 
-
 	public long getId() {
 		return id;
 	}
@@ -70,8 +69,6 @@ public class Person {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
