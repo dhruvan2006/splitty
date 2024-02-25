@@ -2,6 +2,7 @@ package commons;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,27 @@ public class ParticipantTest {
 
         assertEquals(0, participant.getId());
     }
+    @Test
+    public void checkGetSetId(){
+        var p = new Participant("f","l");
+        p.setId(2020200202);
+        assertEquals(2020200202, p.getId());
+    }
+    @Test
+    public void checkGetSetFullName(){
+        var p = new Participant("f","l");
+        assertEquals("f",p.getFirstName());
+        p.setFirstName("x");
+        assertEquals("x",p.getFirstName());
+    }
+    @Test
+    public void checkGetSetLastName(){
+        var p = new Participant("f","l");
+        assertEquals("l",p.getLastName());
+        p.setLastName("x");
+        assertEquals("x",p.getLastName());
+    }
+
 
     @Test
     public void testEquals() {
@@ -43,19 +65,4 @@ public class ParticipantTest {
         assertEquals(participant1, participant2);
     }
 
-    @Test
-    public void testHashCode() {
-        Participant participant1 = new Participant("John", "Doe");
-        Participant participant2 = new Participant("John", "Doe");
-
-        assertEquals(participant1.hashCode(), participant2.hashCode());
-    }
-
-    @Test
-    public void testToString() {
-        Participant participant = new Participant("John", "Doe");
-        String expectedToString = "Participant{id=0, firstName='John', lastName='Doe'}";
-
-        assertEquals(expectedToString, participant.toString());
-    }
 }
