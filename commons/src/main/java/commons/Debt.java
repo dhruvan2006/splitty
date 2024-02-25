@@ -5,15 +5,15 @@ import java.util.*;
 public class Debt {
     private int id_debt;
     private int amount;
-    private Participent[] personsOwnsFrom;
-    private Participent personOwnsTo;
+    private Participant[] personsOwnsFrom;
+    private Participant personOwnsTo;
     private boolean settled;
     private String currency;
     private Optional<String> iban;
     private  Map<String, Integer> exchangeRate;
 
 
-    public Debt(int id_debt, int amount, Participent[] personsOwnsFrom, Participent personOwnsTo, String currency,
+    public Debt(int id_debt, int amount, Participant[] personsOwnsFrom, Participant personOwnsTo, String currency,
         Map<String, Integer> exchangeRate) {
         this.id_debt = id_debt;
         this.amount = amount;
@@ -41,11 +41,11 @@ public class Debt {
         return amount;
     }
 
-    public Participent[] getPersonsOwnsFrom() {
+    public Participant[] getPersonsOwnsFrom() {
         return personsOwnsFrom;
     }
 
-    public Participent getPersonOwnsTo() {
+    public Participant getPersonOwnsTo() {
         return personOwnsTo;
     }
 
@@ -82,7 +82,7 @@ public class Debt {
     @Override
     public String toString() {
         String output = "Debt: from persons, ";
-        for (Participent person : personsOwnsFrom) {
+        for (Participant person : personsOwnsFrom) {
             output += person;
             output += " ";
         }
