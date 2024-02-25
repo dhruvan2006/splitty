@@ -19,6 +19,29 @@ public class Participent extends Person{
     }
 
 
+    public int moneyForTheme(String k){
+        if(!moneySpentFor.containsKey(k)){
+            return -1;
+        }
+        return moneySpentFor.get(k);
+    }
+
+    public void addTheme(String k, int x){
+        if(moneySpentFor.containsKey(k)){
+             moneySpentFor.replace(k, moneySpentFor.get(k)+x);
+        }
+        else{
+            moneySpentFor.put(k, x);
+        }
+    }
+
+    public int getTotalSpent(){
+        int result = 0;
+        for(String k : moneySpentFor.keySet()){
+            result += moneySpentFor.get(k);
+        }
+        return result;
+    }
 
     @Override
     public boolean equals(Object o) {
