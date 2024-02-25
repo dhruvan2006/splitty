@@ -1,24 +1,36 @@
 package commons;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 public class Debt {
     private int id_debt;
     private int amount;
-    //should be class person but on this stage of work it does not finished
-    private String[] personsOwnsFrom;
-    private String personOwnsTo;
-
+    private Participent[] personsOwnsFrom;
+    private Participent personOwnsTo;
+    private boolean settled;
     private String currency;
+    private Optional<String> iban;
+    private  Map<String, Integer> exchangeRate;
 
 
-    public Debt(int id_debt, int amount, String[] personsOwnsFrom, String personOwnsTo, String currency) {
+    public Debt(int id_debt, int amount, Participent[] personsOwnsFrom, Participent personOwnsTo, String currency,
+        Map<String, Integer> exchangeRate) {
         this.id_debt = id_debt;
         this.amount = amount;
         this.personsOwnsFrom = personsOwnsFrom;
         this.personOwnsTo = personOwnsTo;
         this.currency = currency;
+        settled = false;
+        iban = Optional.empty();
+        this.exchangeRate = exchangeRate;
+    }
+
+    public boolean isSettled() {
+        return settled;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 
     public int getId_debt() {
@@ -29,14 +41,18 @@ public class Debt {
         return amount;
     }
 
-    public String[] getPersonsOwnsFrom() {
+    public Participent[] getPersonsOwnsFrom() {
         return personsOwnsFrom;
     }
 
-    public String getPersonOwnsTo() {
+    public Participent getPersonOwnsTo() {
         return personOwnsTo;
     }
 
+    public void settleIt() {settled = true;}
+    public int rateConvert(String from, String to) {
+        return exchangeRate.get(from)/exchangeRate.get(to);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -52,6 +68,7 @@ public class Debt {
         boolean eq = true;
         eq &= (id_debt == debt.id_debt && amount == debt.amount);
         eq &= (Arrays.equals(personsOwnsFrom, debt.personsOwnsFrom) && Objects.equals(personOwnsTo, debt.personOwnsTo));
+        eq &= (Objects.equals(currency, debt.currency) && (settled == debt.settled));
         return eq;
     }
 
@@ -64,9 +81,8 @@ public class Debt {
 
     @Override
     public String toString() {
-        String output = "";
-        output += "Debt: from persons, ";
-        for (String person : personsOwnsFrom) {
+        String output = "Debt: from persons, ";
+        for (Participent person : personsOwnsFrom) {
             output += person;
             output += " ";
         }
@@ -76,6 +92,12 @@ public class Debt {
         output += amount;
         output += " of ";
         output += currency;
+        if(!settled)
+            output += " debt not settled";
+
+        else
+            output += " settled";
         return output;
     }
+
 }
