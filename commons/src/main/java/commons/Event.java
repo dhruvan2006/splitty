@@ -34,14 +34,8 @@ public class Event {
 //        this.expenses = new ArrayList<>();
     }
 
-    /**
-     * Generate and return a random alphanumeric invite code of length 5
-     * Example: "9PTQZ", "WZ91T"
-     * @return a randomly generated
-     */
     private String generateInviteCode() {
-        // TODO: Handle invite code collisions
-        return RandomStringUtils.randomAlphanumeric(5).toUpperCase();
+        return id + RandomStringUtils.randomAlphanumeric(5).toUpperCase();
     }
 
     public long getId() {
