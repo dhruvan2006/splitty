@@ -1,5 +1,9 @@
 package commons;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
+
 import java.util.*;
+@Entity
 public class Participent extends Person{
     Map<String,Integer> moneySpentFor;
 
@@ -9,7 +13,7 @@ public class Participent extends Person{
         this.moneySpentFor = moneySpentFor;
 
     }
-
+    @Transient
     public Map<String, Integer> getMoneySpentFor() {
         return moneySpentFor;
     }
