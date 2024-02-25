@@ -20,8 +20,8 @@ public class Event {
     @OneToMany(targetEntity = Participant.class)
     private List<Participant> participants;
 
-//    @OneToMany(targetEntity = Expense.class)
-//    private List<Expense> expenses;
+    @OneToMany(targetEntity = Expense.class)
+    private List<Expense> expenses;
 
     private Event() {
         // for object mapper
@@ -31,7 +31,7 @@ public class Event {
         this.inviteCode = generateInviteCode();
         this.title = title;
         this.participants = new ArrayList<>();
-//        this.expenses = new ArrayList<>();
+        this.expenses = new ArrayList<>();
     }
 
     private String generateInviteCode() {
@@ -70,13 +70,13 @@ public class Event {
         this.participants = participants;
     }
 
-//    public List<Expense> getExpenses() {
-//        return expenses;
-//    }
-//
-//    public void setExpenses(List<Expense> expenses) {
-//        this.expenses = expenses;
-//    }
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -86,8 +86,8 @@ public class Event {
         return id == event.id
                 && Objects.equals(inviteCode, event.inviteCode)
                 && Objects.equals(title, event.title)
-                && Objects.equals(participants, event.participants);
-//                && Objects.equals(expenses, event.expenses);
+                && Objects.equals(participants, event.participants)
+                && Objects.equals(expenses, event.expenses);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class Event {
                 ", inviteCode='" + inviteCode + '\'' +
                 ", title='" + title + '\'' +
                 ", participants=" + participants +
-//                ", expenses=" + expenses +
+                ", expenses=" + expenses +
                 '}';
     }
 }

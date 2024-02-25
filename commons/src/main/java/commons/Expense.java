@@ -28,6 +28,9 @@ public class Expense {
     @ManyToOne()
     Participant collector;
 
+    @ManyToOne()
+    Event event; // the event this expense belongs to
+
     private String title;
 
     public long getId() {
