@@ -14,6 +14,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private String inviteCode;
     private String title;
 
     @OneToMany(targetEntity = Participant.class)
@@ -27,10 +28,61 @@ public class Event {
     }
 
     public Event(String title) {
+        this.inviteCode = generateInviteCode();
         this.title = title;
         this.participants = new ArrayList<>();
 //        this.expenses = new ArrayList<>();
     }
+
+    /**
+     * Generate and return a random alphanumeric invite code of length 5
+     * Example: "9PTQZ", "WZ91T"
+     * @return a randomly generated
+     */
+    private String generateInviteCode() {
+        // TODO: Handle invite code collisions
+        return RandomStringUtils.randomAlphanumeric(5).toUpperCase();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<Participant> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
+    }
+
+//    public List<Expense> getExpenses() {
+//        return expenses;
+//    }
+//
+//    public void setExpenses(List<Expense> expenses) {
+//        this.expenses = expenses;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -38,6 +90,7 @@ public class Event {
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
         return id == event.id
+                && Objects.equals(inviteCode, event.inviteCode)
                 && Objects.equals(title, event.title)
                 && Objects.equals(participants, event.participants);
 //                && Objects.equals(expenses, event.expenses);
@@ -45,13 +98,14 @@ public class Event {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, participants);//, expenses);
+        return Objects.hash(id, inviteCode, title, participants);//, expenses);
     }
 
     @Override
     public String toString() {
         return "Event{" +
                 "id=" + id +
+                ", inviteCode='" + inviteCode + '\'' +
                 ", title='" + title + '\'' +
                 ", participants=" + participants +
 //                ", expenses=" + expenses +
