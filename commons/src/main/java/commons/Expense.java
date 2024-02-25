@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
+    long id;
 
     @OneToMany(mappedBy = "expense")
     Set<ExpensePayed> expensesPayed;
@@ -30,6 +30,10 @@ public class Expense {
 
     @ManyToOne()
     Event event; // the event this expense belongs to
+
+    public Event getEvent() {
+        return event;
+    }
 
     private String title;
 
