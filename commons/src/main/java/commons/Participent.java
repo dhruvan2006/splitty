@@ -1,11 +1,22 @@
 package commons;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 import java.util.*;
 @Entity
 public class Participent extends Person{
     Map<String,Integer> moneySpentFor;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long id;
+
+    @OneToMany(mappedBy = "participent")
+    Set<ExpensePayed> expensesPayed;
 
     public Participent(String firstName,
                        String lastName,Map<String, Integer> moneySpentFor){
