@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public class Expense {
     @ManyToOne()
     Participant collector;
 
-    public String title;
+    private String title;
 
     public long getId() {
         return id;
@@ -59,6 +60,19 @@ public class Expense {
         return expensesPayed.stream().filter((expensePayed -> !expensePayed.payed))
                 .map((expensePayed -> expensePayed.participant))
                 .collect(Collectors.toSet());
+    }
+
+    public int hashCode() {
+        return Objects.hash(id, title, collector);//, expenses);
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                "created by" + collector + '\'' +
+                '}';
     }
 }
 
