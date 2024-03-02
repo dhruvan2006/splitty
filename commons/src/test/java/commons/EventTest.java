@@ -24,6 +24,19 @@ class EventTest {
     }
 
     @Test
+    void testGetInviteCode() {
+        Event e = new Event("e");
+        assertNotNull(e.getInviteCode());
+    }
+
+    @Test
+    void testSetInviteCode() {
+        Event e = new Event("r");
+        e.setInviteCode("qwerty");
+        assertEquals("qwerty", e.getInviteCode());
+    }
+
+    @Test
     void testGetTitle() {
         Event e = new Event("t");
         assertEquals("t", e.getTitle());
@@ -75,5 +88,28 @@ class EventTest {
         Event e1 = new Event("f");
         assertEquals(e.hashCode(), e.hashCode());
         assertNotEquals(e1.hashCode(), e.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        Event e = new Event("Event");
+        assertNotNull(e.toString());
+    }
+
+    @Test
+    void testGetExpenses() {
+        Event e = new Event("Event");
+        assertTrue(e.getExpenses().isEmpty());
+    }
+
+    @Test
+    void testSetExpenses() {
+        Event e = new Event("Event");
+
+        List<Participant> participants = new ArrayList<>();
+        participants.add(new Participant());
+        e.setParticipants(participants);
+
+        assertEquals(participants, e.getParticipants());
     }
 }
