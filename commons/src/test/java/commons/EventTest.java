@@ -106,10 +106,10 @@ class EventTest {
     void testSetExpenses() {
         Event e = new Event("Event");
 
-        List<Participant> participants = new ArrayList<>();
-        participants.add(new Participant());
-        e.setParticipants(participants);
+        List<Expense> expenses = new ArrayList<>();
+        expenses.add(new Expense());
+        e.setExpenses(expenses);
 
-        assertEquals(participants, e.getParticipants());
+        assertEquals(expenses, e.getExpenses());
     }
 }
