@@ -8,7 +8,7 @@ public class ParticipantTest {
         String firstName = "John";
         String lastName = "Doe";
 
-        Participant participant = new Participant(firstName, lastName);
+        Participant participant = new Participant(firstName, lastName, "x", "s");
 
         assertEquals(firstName, participant.getFirstName());
         assertEquals(lastName, participant.getLastName());
@@ -16,7 +16,7 @@ public class ParticipantTest {
 
     @Test
     public void testSetters() {
-        Participant participant = new Participant("John", "Doe");
+        Participant participant = new Participant("John", "Doe", "x", "f");
 
         participant.setFirstName("Jane");
         participant.setLastName("Smith");
@@ -27,26 +27,26 @@ public class ParticipantTest {
 
     @Test
     public void testGetId() {
-        Participant participant = new Participant("John", "Doe");
+        Participant participant = new Participant("John", "Doe", "x", "f");
 
         assertEquals(0, participant.getId());
     }
     @Test
     public void checkGetSetId(){
-        var p = new Participant("f","l");
+        var p = new Participant("f","l", "r", "s");
         p.setId(2020200202);
         assertEquals(2020200202, p.getId());
     }
     @Test
     public void checkGetSetFullName(){
-        var p = new Participant("f","l");
+        var p = new Participant("f","l", "r", "s");
         assertEquals("f",p.getFirstName());
         p.setFirstName("x");
         assertEquals("x",p.getFirstName());
     }
     @Test
     public void checkGetSetLastName(){
-        var p = new Participant("f","l");
+        var p = new Participant("f","l", "r", "s");
         assertEquals("l",p.getLastName());
         p.setLastName("x");
         assertEquals("x",p.getLastName());
@@ -55,10 +55,10 @@ public class ParticipantTest {
 
     @Test
     public void testEquals() {
-        Participant participant1 = new Participant("John", "Doe");
-        Participant participant2 = new Participant("John", "Doe");
+        var p1 = new Participant("f","l", "r", "s");
+        var p2 = new Participant("f","l", "r", "s");
 
-        assertEquals(participant1, participant2);
+        assertEquals(p1, p2);
     }
 
 }
