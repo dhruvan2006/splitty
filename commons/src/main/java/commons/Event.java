@@ -92,7 +92,7 @@ public class Event {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, inviteCode, title, participants);//, expenses);
+        return Objects.hash(id, inviteCode, title, participants, expenses);
     }
 
     @Override
