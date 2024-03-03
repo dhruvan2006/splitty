@@ -12,6 +12,14 @@ public class SomeController {
     @GetMapping("/")
     @ResponseBody
     public String index() {
-        return "Hello world!";
+        return "Welcome to the home page of team 78's project app!";
+    }
+
+/**
+ * for searching another user
+ */
+    @PostMapping("/")
+    public void receiveData(@ResponseBody Person person) {
+       System.out.println("Here is the user: " + person.getFullName());
     }
 }

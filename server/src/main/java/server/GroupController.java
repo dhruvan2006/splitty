@@ -1,0 +1,31 @@
+package server;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+
+import server.database.GroupRepository;
+import commons.Group;
+
+@Controller
+@RequestMapping("/user/groups")
+public class GroupController {
+
+
+    @Autowired
+    private GroupRepository repository;
+
+
+    @GetMapping("")
+    @ResponseBody
+    public List<Groups> findAll() {
+        return repository.findAll();
+    }
+
+    @PostMapping("/{id}")
+    public Optional<Group> findById(@PathVariable Integer id){
+        return repository.findById(id).orElseThrow(() -> new ReponseStatusException(HttpStatus.NOT_FOUND,"Group does not exist"));
+    }
+}

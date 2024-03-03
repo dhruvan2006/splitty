@@ -36,6 +36,7 @@ public class Person {
 	public String firstName;
 	public String lastName;
 
+
 	@SuppressWarnings("unused")
 	private Person() {
 		// for object mapper
@@ -45,6 +46,8 @@ public class Person {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+
+
 
 	public long getId() {
 		return id;
@@ -84,4 +87,6 @@ public class Person {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
 	}
+
+
 }

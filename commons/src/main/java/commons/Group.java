@@ -3,12 +3,20 @@ package commons;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
 public class Group {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long id;
+
     private String groupName;
     private List<Participant> participants;
     private boolean pinned;
     private Participant groupLeader;
+
 
     public Group(String groupName) {
         this.groupName = groupName;
@@ -38,6 +46,14 @@ public class Group {
 
     public boolean isPinned() {
         return pinned;
+    }
+
+    public long getId() {
+            return id;
+    }
+
+    public void setId(long id) {
+            this.id = id;
     }
 
     public void setPinned(boolean pinned) {

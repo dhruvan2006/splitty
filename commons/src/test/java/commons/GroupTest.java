@@ -86,4 +86,16 @@ class GroupTest {
         group.setGroupLeader(groupLeader);
         assertEquals(groupLeader, group.getGroupLeader());
     }
+
+    @Test
+    public void testGetId() {
+        assertEquals(0,group.getId());
+    }
+
+    @Test
+    public void testSetId() {
+        group.setId(7)
+        assertEquals(7,group.getId());
+    }
+
 }
