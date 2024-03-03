@@ -112,4 +112,32 @@ class EventTest {
 
         assertEquals(expenses, e.getExpenses());
     }
+
+    @Test
+    void addParticipant() {
+        Event e = new Event("z");
+        assertTrue(e.getParticipants().isEmpty());
+
+        Participant p = new Participant();
+        e.addParticipant(p);
+
+        List<Participant> participants = new ArrayList<>();
+        participants.add(p);
+
+        assertEquals(participants, e.getParticipants());
+    }
+
+    @Test
+    void addExpense() {
+        Event e = new Event("x");
+        assertTrue(e.getExpenses().isEmpty());
+
+        Expense expense = new Expense();
+        e.addExpense(expense);
+
+        List<Expense> expenses = new ArrayList<>();
+        expenses.add(expense);
+
+        assertEquals(expenses, e.getExpenses());
+    }
 }

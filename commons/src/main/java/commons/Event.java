@@ -70,12 +70,20 @@ public class Event {
         this.participants = participants;
     }
 
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
+    }
+
     public List<Expense> getExpenses() {
         return expenses;
     }
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public void addExpense(Expense expense) {
+        expenses.add(expense);
     }
 
     @Override
