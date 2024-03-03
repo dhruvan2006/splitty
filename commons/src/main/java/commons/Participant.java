@@ -141,7 +141,7 @@ import java.util.*;
 		groups.remove(group);
 	    }
         
-        public Group getGroups(){
+        public List<Group> getGroups(){
             return groups;
         }
 
