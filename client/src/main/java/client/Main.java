@@ -20,7 +20,7 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.StartScreenCtrl;
+import client.scenes.OverviewCtrl;
 import com.google.inject.Injector;
 
 import client.scenes.MainCtrl;
@@ -37,20 +37,19 @@ public class Main extends Application {
     }
 
 
-    /*public void start(Stage primaryStage) throws IOException {
-
-        var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add);
-    }*/
-
-
-    @Override
     public void start(Stage primaryStage) throws IOException {
 
-        var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+        var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize2(primaryStage, start);
+        mainCtrl.initialize(primaryStage, overview);
     }
+
+
+//    @Override
+//    public void start(Stage primaryStage) throws IOException {
+//
+//        var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+//        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+//        mainCtrl.initialize2(primaryStage, start);
+//    }
 }
