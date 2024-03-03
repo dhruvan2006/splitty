@@ -24,6 +24,10 @@ public class Expense {
 
     @ManyToOne()
     Event event; // the event this expense belongs to
+    //to indicate if object ready to be added to database
+    public boolean isInit(){
+        return true;
+    }
 
     private int totalExpense;
 

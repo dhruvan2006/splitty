@@ -3,12 +3,14 @@ package server.api;
 import commons.Expense;
 import commons.ExpensePayedKey;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.database.ExpensePayedRepository;
 import server.database.ExpenseRepository;
@@ -48,4 +50,13 @@ public class ExpenseController {
     public void pay(@RequestBody ExpensePayedKey key){
         payRepo.Pay(key.getParticipantId(), key.getExpenseId());
     }
+
+    @DeleteMapping({"", "/"})
+    public ResponseEntity<Expense> deleteIt(@RequestParam("id") Long id) {
+        if (id < 0 || !repo.existsById(id))
+            return ResponseEntity.badRequest().build();
+
+        repo.deleteById(id);
+        List<Expense> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
+        return ResponseEntity.ok().build();
 }

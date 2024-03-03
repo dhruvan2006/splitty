@@ -47,7 +47,7 @@ class EventTest {
         Event e = new Event("s");
 
         List<Participant> participants = new ArrayList<>();
-        Participant p = new Participant("Z", "X");
+        Participant p = new Participant("Z", "X", "L", "E", "ZX");
         participants.add(p);
 
         e.setParticipants(participants);
