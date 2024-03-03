@@ -31,16 +31,16 @@ public class GroupController {
 
     @PutMapping("/{id}")
     public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
-        return groupRepository.findById(id)
+        return repository.findById(id)
                 .map(group -> {
                     group.setName(updatedGroup.getGroupName());
-                    return groupRepository.save(group);
+                    return repository.save(group);
                 })
                 .orElseThrow(() -> new RuntimeException("Group not found with id " + id));
     }
 
     @DeleteMapping("/groups/{id}")
     public void deleteGroup(@PathVariable Long id) {
-        groupRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }
