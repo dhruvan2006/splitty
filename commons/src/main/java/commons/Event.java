@@ -42,6 +42,10 @@ public class Event {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public List<Participant> getParticipants() {
         return participants;
     }
