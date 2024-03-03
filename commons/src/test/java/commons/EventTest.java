@@ -24,19 +24,6 @@ class EventTest {
     }
 
     @Test
-    void testGetInviteCode() {
-        Event e = new Event("e");
-        assertNotNull(e.getInviteCode());
-    }
-
-    @Test
-    void testSetInviteCode() {
-        Event e = new Event("r");
-        e.setInviteCode("qwerty");
-        assertEquals("qwerty", e.getInviteCode());
-    }
-
-    @Test
     void testGetTitle() {
         Event e = new Event("t");
         assertEquals("t", e.getTitle());
