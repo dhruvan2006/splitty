@@ -100,7 +100,7 @@ class GroupTest {
 
     @Test
     public void toStringTest(){
-        Participant formal = new Participant("Jane", "Doe", "s", "l", "JD",female);
+        Participant formal = new Participant("Jane", "Doe", "s", "l", "JD","female");
         formal.setFormal(true);
         group.addToGroup(groupLeader);
         group.addToGroup(formal);

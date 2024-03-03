@@ -81,8 +81,8 @@ public class ParticipantTest {
     public void testGroups() {
 
         Participant p1 = new Participant("John", "Hopkins", "x", "f", "JH");
-        group1 = new Group("Dummy group");
-        group2 = new Group ("Dummy group 2");
+        Group group1 = new Group("Dummy group");
+        Group group2 = new Group ("Dummy group 2");
         p1.enterGroup(group1);
         p1.enterGroup(group2);
         assertEquals(2,p1.getGroups().size());
