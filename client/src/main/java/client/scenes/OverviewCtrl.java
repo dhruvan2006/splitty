@@ -37,7 +37,7 @@ public class OverviewCtrl {
 
     @FXML
     public void initialize() {
-        inviteCodeLabel.setText(event.getInviteCode());
+        inviteCodeLabel.setText(event.getId() + "");
         updateParticipantsComboBox();
     }
 
@@ -58,7 +58,8 @@ public class OverviewCtrl {
 
         // Add the participant
         if (!participantFirstName.isEmpty() && !participantLastName.isEmpty()) {
-            Participant newParticipant = new Participant(participantFirstName, participantLastName);
+            // Giving dummy details for participant
+            Participant newParticipant = new Participant(participantFirstName, participantLastName, "email", "iban", "username");
             event.addParticipant(newParticipant);
             updateParticipantsComboBox();
             if (participantsText.getText() != null && !participantsText.getText().isEmpty()) {
