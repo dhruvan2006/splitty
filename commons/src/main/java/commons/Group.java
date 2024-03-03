@@ -95,5 +95,6 @@ public class Group {
         for (Participant p:participants){
             result+= p.getFullName() + "\n";
         }
+        return result;    
     }
 }
