@@ -26,6 +26,9 @@ public class OverviewCtrl {
     @FXML
     private Label inviteCodeLabel;
 
+    @FXML
+    private TextArea expensesTextArea;
+
     private final Event event;
 
     public OverviewCtrl() {
