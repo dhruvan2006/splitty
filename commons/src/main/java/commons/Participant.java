@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import java.util.*;
 
 
-    @Entity
-    public class Participant{
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        public long id;
-        public String firstName;
-        public String lastName;
+@Entity
+public class Participant{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long id;
+    public String firstName;
+    public String lastName;
 
         public String email;
 
@@ -46,36 +46,36 @@ import java.util.*;
             this.IBAN = IBAN;
         }
 
-        @OneToMany(mappedBy = "participant")
-        Set<ExpensePayed> expensesPayed;
+    @OneToMany(mappedBy = "participant")
+    Set<ExpensePayed> expensesPayed;
 
-        public Participant() {
+    public Participant() {
 
-        }
+    }
 
-        public long getId() {
-            return id;
-        }
+    public long getId() {
+        return id;
+    }
 
-        public String getFirstName() {
-            return firstName;
-        }
+    public String getFirstName() {
+        return firstName;
+    }
 
-        public String getLastName() {
-            return lastName;
-        }
+    public String getLastName() {
+        return lastName;
+    }
 
-        public void setId(long id) {
-            this.id = id;
-        }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
         public String getUserName() {
             return userName;

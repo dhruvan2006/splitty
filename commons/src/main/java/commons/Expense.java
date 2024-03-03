@@ -1,19 +1,15 @@
 package commons;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
-import java.io.Serializable;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -23,26 +19,43 @@ public class Expense {
     long id;
 
     @OneToMany(mappedBy = "expense")
-    Set<ExpensePayed> expensesPayed;
+    ArrayList<ExpensePayed> expensesPayed;
 
     @ManyToOne()
     Participant creator;
 
     @ManyToOne()
     Event event; // the event this expense belongs to
+
+    public Expense() {
+    }
+
     //to indicate if object ready to be added to database
     public boolean isInit(){
         return true;
+    }
+
+    private int totalExpense;
+
+    private String title;
+
+    public Expense(String title, int totalExpense, Participant creator) {
+        this.title = title;
+        this.totalExpense = totalExpense;
+        this.creator = creator;
+        this.expensesPayed = new ArrayList<>();
     }
 
     public Event getEvent() {
         return event;
     }
 
-    private String title;
-
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -57,20 +70,32 @@ public class Expense {
         return creator;
     }
 
-    private Set<ExpensePayed> getExpensesPayed() {
+    public void setCreator(Participant creator) {
+        this.creator = creator;
+    }
+
+    private ArrayList<ExpensePayed> getExpensesPayed() {
         return expensesPayed;
     }
 
-    public Set<Participant> getParticipantsWhoPayed(){
-        return expensesPayed.stream().filter((expensePayed -> expensePayed.payed))
-                .map((expensePayed -> expensePayed.participant))
-                .collect(Collectors.toSet());
+    public int getTotalExpense() {
+        return totalExpense;
     }
 
-    public Set<Participant> getParticipantsWhoNotPayed(){
+    public void setTotalExpense(int totalExpense) {
+        this.totalExpense = totalExpense;
+    }
+
+    public List<Participant> getParticipantsWhoPayed(){
+        return expensesPayed.stream().filter((expensePayed -> expensePayed.payed))
+                .map((expensePayed -> expensePayed.participant))
+                .collect(Collectors.toList());
+    }
+
+    public List<Participant> getParticipantsWhoNotPayed(){
         return expensesPayed.stream().filter((expensePayed -> !expensePayed.payed))
                 .map((expensePayed -> expensePayed.participant))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public int hashCode() {
@@ -87,57 +112,3 @@ public class Expense {
     }
 }
 
-@Entity
-class ExpensePayed {
-    @EmbeddedId
-    ExpensePayedKey id;
-
-    @ManyToOne
-    @MapsId("participantId")
-    @JoinColumn(name = "expense_id")
-    Expense expense;
-
-    @ManyToOne
-    @MapsId("expenseId")
-    @JoinColumn(name = "participant_id")
-    Participant participant;
-
-    boolean payed;
-
-    public boolean isPayed() {
-        return payed;
-    }
-
-    public void setPayed(boolean payed) {
-        this.payed = payed;
-    }
-
-    public ExpensePayedKey getId() {
-        return id;
-    }
-
-    public Expense getExpense() {
-        return expense;
-    }
-
-    public Participant getParticipant() {
-        return participant;
-    }
-}
-
-@Embeddable
-class ExpensePayedKey implements Serializable {
-    @Column(name = "expense_id")
-    Long expenseId;
-
-    @Column(name = "participant_id")
-    Long participantId;
-
-    public Long getExpenseId() {
-        return expenseId;
-    }
-
-    public Long getParticipantId() {
-        return participantId;
-    }
-}
