@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.database.ExpensePayedRepository;
-import server.database.ExpenseRepository;
+import server.database.ExpensesRepository;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/expense")
 public class ExpenseController {
-    private final ExpenseRepository repo;
+    private final ExpensesRepository repo;
     private final ExpensePayedRepository payRepo;
 
-    public ExpenseController(ExpenseRepository repo, ExpensePayedRepository payRepo) {
+    public ExpenseController(ExpensesRepository repo, ExpensePayedRepository payRepo) {
         this.repo = repo;
         this.payRepo = payRepo;
     }

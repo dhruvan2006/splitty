@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -17,13 +19,17 @@ public class Expense {
     long id;
 
     @OneToMany(mappedBy = "expense")
-    Set<ExpensePayed> expensesPayed;
+    ArrayList<ExpensePayed> expensesPayed;
 
     @ManyToOne()
     Participant creator;
 
     @ManyToOne()
     Event event; // the event this expense belongs to
+
+    public Expense() {
+    }
+
     //to indicate if object ready to be added to database
     public boolean isInit(){
         return true;
@@ -33,12 +39,23 @@ public class Expense {
 
     private String title;
 
+    public Expense(String title, int totalExpense, Participant creator) {
+        this.title = title;
+        this.totalExpense = totalExpense;
+        this.creator = creator;
+        this.expensesPayed = new ArrayList<>();
+    }
+
     public Event getEvent() {
         return event;
     }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -53,7 +70,11 @@ public class Expense {
         return creator;
     }
 
-    private Set<ExpensePayed> getExpensesPayed() {
+    public void setCreator(Participant creator) {
+        this.creator = creator;
+    }
+
+    private ArrayList<ExpensePayed> getExpensesPayed() {
         return expensesPayed;
     }
 
@@ -65,16 +86,16 @@ public class Expense {
         this.totalExpense = totalExpense;
     }
 
-    public Set<Participant> getParticipantsWhoPayed(){
+    public List<Participant> getParticipantsWhoPayed(){
         return expensesPayed.stream().filter((expensePayed -> expensePayed.payed))
                 .map((expensePayed -> expensePayed.participant))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
-    public Set<Participant> getParticipantsWhoNotPayed(){
+    public List<Participant> getParticipantsWhoNotPayed(){
         return expensesPayed.stream().filter((expensePayed -> !expensePayed.payed))
                 .map((expensePayed -> expensePayed.participant))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public int hashCode() {
