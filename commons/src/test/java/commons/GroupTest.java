@@ -94,7 +94,7 @@ class GroupTest {
 
     @Test
     public void testSetId() {
-        group.setId(7)
+        group.setId(7);
         assertEquals(7,group.getId());
     }
 
