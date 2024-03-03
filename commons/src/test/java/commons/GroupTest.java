@@ -14,9 +14,9 @@ class GroupTest {
     @BeforeEach
     void setUp() {
         group = new commons.Group("Test Group");
-        p1 = new commons.Participant("John", "Doe");
-        p2 = new commons.Participant("Jane", "Doe");
-        groupLeader = new commons.Participant ("Group", "Leader");
+        p1 = new commons.Participant("John", "Doe", "JD");
+        p2 = new commons.Participant("Jane", "Doe", "JD");
+        groupLeader = new commons.Participant ("Group", "Leader", "GL");
     }
 
     @Test
@@ -39,7 +39,7 @@ class GroupTest {
         group.addToGroup(p2);
 
         // Trying to remove commons.Participant 1 without being the group leader
-        commons.Participant  nonLeader = new commons.Participant ("Non", "Leader");
+        commons.Participant  nonLeader = new commons.Participant ("Non", "Leader", "NL");
         group.removeFromGroup(nonLeader,p1);
         assertTrue(group.getParticipants().contains(p1)); // commons.Participant 1 should not be removed
 
