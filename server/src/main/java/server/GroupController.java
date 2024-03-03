@@ -28,4 +28,19 @@ public class GroupController {
     public Optional<Group> findById(@PathVariable Integer id){
         return repository.findById(id).orElseThrow(() -> new ReponseStatusException(HttpStatus.NOT_FOUND,"Group does not exist"));
     }
+
+    @PutMapping("/{id}")
+    public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
+        return groupRepository.findById(id)
+                .map(group -> {
+                    group.setName(updatedGroup.getGroupName());
+                    return groupRepository.save(group);
+                })
+                .orElseThrow(() -> new RuntimeException("Group not found with id " + id));
+    }
+
+    @DeleteMapping("/groups/{id}")
+    public void deleteGroup(@PathVariable Long id) {
+        groupRepository.deleteById(id);
+    }
 }
