@@ -31,11 +31,13 @@ public class Expense {
     @ManyToOne()
     Event event; // the event this expense belongs to
 
+    private int totalExpense;
+
+    private String title;
+
     public Event getEvent() {
         return event;
     }
-
-    private String title;
 
     public long getId() {
         return id;
@@ -55,6 +57,14 @@ public class Expense {
 
     private Set<ExpensePayed> getExpensesPayed() {
         return expensesPayed;
+    }
+
+    public int getTotalExpense() {
+        return totalExpense;
+    }
+
+    public void setTotalExpense(int totalExpense) {
+        this.totalExpense = totalExpense;
     }
 
     public Set<Participant> getParticipantsWhoPayed(){
