@@ -93,6 +93,4 @@ public class Event {
                 '}';
     }
 
-    public void setId(int i) {
-    }
 }
