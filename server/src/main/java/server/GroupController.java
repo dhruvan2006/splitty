@@ -33,7 +33,7 @@ public class GroupController {
     public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
         return repository.findById(id)
                 .map(group -> {
-                    group.setName(updatedGroup.getGroupName());
+                    group.setGroupName(updatedGroup.getGroupName());
                     return repository.save(group);
                 })
                 .orElseThrow(() -> new RuntimeException("Group not found with id " + id));

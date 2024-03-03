@@ -19,7 +19,7 @@ public class SomeController {
  * for searching another user
  */
     @PostMapping("/")
-    public void receiveData(@ResponseBody Person person) {
+    public void receiveData(Person person) {
        System.out.println("Here is the user: " + person.getFullName());
     }
 }
