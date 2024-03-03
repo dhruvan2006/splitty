@@ -9,7 +9,8 @@ public class ParticipantTest {
         String lastName = "Doe";
         String userName = "JD";
 
-        Participant participant = new Participant(firstName, lastName, userName);
+        Participant participant = new Participant(firstName, lastName, "x", "s", userName);
+
 
         assertEquals(firstName, participant.getFirstName());
         assertEquals(lastName, participant.getLastName());
@@ -18,7 +19,8 @@ public class ParticipantTest {
 
     @Test
     public void testSetters() {
-        Participant participant = new Participant("John", "Doe", "JD");
+
+        Participant participant = new Participant("John", "Doe", "x", "f", "JD");
 
         participant.setFirstName("Jane");
         participant.setLastName("Smith");
@@ -31,27 +33,27 @@ public class ParticipantTest {
 
     @Test
     public void testGetId() {
-        Participant participant = new Participant("John", "Doe", "JD");
+        Participant participant = new Participant("John", "Doe", "x", "f", "JD");
 
         assertEquals(0, participant.getId());
     }
     @Test
     public void checkGetSetId(){
-        var p = new Participant("f","l", "fl");
+        Participant p = new Participant("John", "Doe", "x", "f", "JD");
         p.setId(2020200202);
         assertEquals(2020200202, p.getId());
     }
     @Test
     public void checkGetSetFullName(){
-        var p = new Participant("f","l", "fl");
-        assertEquals("f",p.getFirstName());
+        Participant p = new Participant("John", "Doe", "x", "f", "JD");
+        assertEquals("John",p.getFirstName());
         p.setFirstName("x");
         assertEquals("x",p.getFirstName());
     }
     @Test
     public void checkGetSetLastName(){
-        var p = new Participant("f","l", "fl");
-        assertEquals("l",p.getLastName());
+        Participant p = new Participant("John", "Doe", "x", "f", "JD");
+        assertEquals("Doe",p.getLastName());
         p.setLastName("x");
         assertEquals("x",p.getLastName());
     }
@@ -59,10 +61,10 @@ public class ParticipantTest {
 
     @Test
     public void testEquals() {
-        Participant participant1 = new Participant("John", "Doe", "JD");
-        Participant participant2 = new Participant("John", "Doe", "JD");
 
-        assertEquals(participant1, participant2);
+        Participant p2 = new Participant("John", "Doe", "x", "f", "JD");
+        Participant p1 = new Participant("John", "Doe", "x", "f", "JD");
+        assertEquals(p1, p2);
     }
 
 }
