@@ -105,8 +105,8 @@ class GroupTest {
         group.addToGroup(groupLeader);
         group.addToGroup(formal);
         assertContains(group.getGroupName() + " ,ID:" + group.getId(),group.toString());
-        assertContains("Group Leader, known as GL");
-        assertContains("Ms. Jane Doe, known as JD");
+        assertContains("Group Leader, known as GL",group.toString());
+        assertContains("Ms. Jane Doe, known as JD",group.toString());
     }
 
 }
