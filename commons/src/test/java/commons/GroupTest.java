@@ -104,7 +104,7 @@ class GroupTest {
         formal.setFormal(true);
         group.addToGroup(groupLeader);
         group.addToGroup(formal);
-        assertTrue(group.toString().contains(group.getGroupName() + " ,ID:" + group.getId()));
+        assertTrue(group.toString().contains(group.getGroupName() + " ,ID: " + group.getId()));
         assertTrue(group.toString().contains("Group Leader, known as GL"));
         assertTrue(group.toString().contains("Ms. Jane Doe, known as JD"));
     }
