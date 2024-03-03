@@ -1,16 +1,10 @@
 package server.api;
 
 import commons.Expense;
-import commons.Participant;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.ExpensesRepository;
-import server.database.ParticipantRepository;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
