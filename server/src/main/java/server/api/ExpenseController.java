@@ -22,32 +22,40 @@ public class ExpenseController {
     private final ExpenseRepository repo;
     private final ExpensePayedRepository payRepo;
 
-    public ExpenseController(ExpenseRepository repo, ExpensePayedRepository payRepo){
+    public ExpenseController(ExpenseRepository repo, ExpensePayedRepository payRepo) {
         this.repo = repo;
         this.payRepo = payRepo;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public List<Expense> getAll() {
         return repo.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Expense> getById(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
+    public ResponseEntity<List<Expense>> getById(@PathVariable("id") String id) {
+        long lid;
+        try {
+            lid = Long.parseLong(id);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        if (lid < 0 || !repo.existsById(lid))
+            return ResponseEntity.badRequest().build();
+
+        List<Expense> resp = repo.findAll().stream().filter(x -> x.getId() == lid).toList();
+        return ResponseEntity.ok(resp);
+
     }
 
-    @PostMapping(path = { "add", "/" })
+    @PostMapping(path = {"add", "/"})
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
         Expense saved = repo.save(expense);
         return ResponseEntity.ok(saved);
     }
 
     @PutMapping(path = "/pay")
-    public void pay(@RequestBody ExpensePayedKey key){
+    public void pay(@RequestBody ExpensePayedKey key) {
         payRepo.Pay(key.getParticipantId(), key.getExpenseId());
     }
 
@@ -59,4 +67,5 @@ public class ExpenseController {
         repo.deleteById(id);
         List<Expense> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
         return ResponseEntity.ok().build();
+    }
 }
