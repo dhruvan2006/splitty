@@ -61,6 +61,7 @@ public class Group {
     }
 
     public Participant getGroupLeader() {
+        if (groupLeader==null) System.out.println("There is no group leader assigned");
         return groupLeader;
     }
 
@@ -85,6 +86,14 @@ public class Group {
         }
         else {
             System.out.println("Invalid participant.");
+        }
+    }
+
+    @Override
+    public String toString(){
+        String result = groupName + " ,ID: " + id + " ,with the following participants:\n";
+        for (Participant p:participants){
+            result+= p.getFullName() + "\n";
         }
     }
 }

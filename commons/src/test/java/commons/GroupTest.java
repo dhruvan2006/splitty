@@ -98,4 +98,15 @@ class GroupTest {
         assertEquals(7,group.getId());
     }
 
+    @Test
+    public void toStringTest(){
+        Participant formal = new Participant("Jane", "Doe", "s", "l", "JD",female);
+        formal.setFormal(true);
+        group.addToGroup(groupLeader);
+        group.addToGroup(formal);
+        assertContains(group.getGroupName() + " ,ID:" + group.getId(),group.toString());
+        assertContains("Group Leader, known as GL");
+        assertContains("Ms. Jane Doe, known as JD");
+    }
+
 }

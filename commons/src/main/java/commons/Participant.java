@@ -152,10 +152,13 @@ import java.util.*;
 		formal = value;
 	    }
 
+        /**
+        * to be used whenever searching a user or looking through the participants of a group
+        */
 	    public String getFullName(){
         String name = getFirstName + " " + getLastName + ", known as " + userName;    
 		if (formal && gender!=null){
-			if (gender.equals("female")) return "Mrs. " + name;
+			if (gender.equals("female")) return "Ms. " + name;
             else if (gender.equals("male")) return "Mr. " + name
 			return "Mx. " + name;
 		}
