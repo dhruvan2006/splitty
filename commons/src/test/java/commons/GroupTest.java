@@ -6,17 +6,17 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GroupTest {
-    private commons.Group group;
-    private commons.Participant  p1;
-    private commons.Participant  p2;
-    private commons.Participant  groupLeader;
+    private Group group;
+    private Participant p1;
+    private Participant p2;
+    private Participant groupLeader;
 
     @BeforeEach
     void setUp() {
-        group = new commons.Group("Test Group");
-        p1 = new commons.Participant("John", "Doe");
-        p2 = new commons.Participant("Jane", "Doe");
-        groupLeader = new commons.Participant ("Group", "Leader");
+        group = new Group("Test Group");
+        p1 = new Participant("John", "Doe", "s", "d", "JD");
+        p2 = new Participant("Jane", "Doe", "s", "l", "JD");
+        groupLeader = new Participant("Group", "Leader", "w", "aa", "GL");
     }
 
     @Test
@@ -38,12 +38,13 @@ class GroupTest {
         group.addToGroup(p1);
         group.addToGroup(p2);
 
-        // Trying to remove commons.Participant 1 without being the group leader
-        commons.Participant  nonLeader = new commons.Participant ("Non", "Leader");
-        group.removeFromGroup(nonLeader,p1);
-        assertTrue(group.getParticipants().contains(p1)); // commons.Participant 1 should not be removed
+        // Trying to remove Participant 1 without being the group leader
+        Participant nonLeader = new Participant("Non", "Leader", "l", "x", "NL");
 
-        // Removing commons.Participant 1 by the group leader
+        group.removeFromGroup(nonLeader, p1);
+        assertTrue(group.getParticipants().contains(p1)); // Participant 1 should not be removed
+
+        // Removing Participant 1 by the group leader
         group.removeFromGroup(groupLeader, p1);
         assertFalse(group.getParticipants().contains(p1));
     }

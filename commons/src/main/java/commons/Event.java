@@ -1,7 +1,6 @@
 package commons;
 
 import jakarta.persistence.*;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,8 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    private String inviteCode;
+    //I think invite code is a same as id
+    //private String inviteCode;
     private String title;
 
     @OneToMany(targetEntity = Participant.class)
@@ -28,31 +27,16 @@ public class Event {
     }
 
     public Event(String title) {
-        this.inviteCode = generateInviteCode();
         this.title = title;
         this.participants = new ArrayList<>();
         this.expenses = new ArrayList<>();
     }
 
-    private String generateInviteCode() {
-        return id + RandomStringUtils.randomAlphanumeric(5).toUpperCase();
-    }
-
     public long getId() {
         return id;
     }
+    public void setId(long id) {this.id = id;}
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getInviteCode() {
-        return inviteCode;
-    }
-
-    public void setInviteCode(String inviteCode) {
-        this.inviteCode = inviteCode;
-    }
 
     public String getTitle() {
         return title;
@@ -92,12 +76,14 @@ public class Event {
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
         return id == event.id
-                && Objects.equals(inviteCode, event.inviteCode)
                 && Objects.equals(title, event.title)
                 && Objects.equals(participants, event.participants)
                 && Objects.equals(expenses, event.expenses);
     }
 
+    public boolean isInit(){
+        return title != null && participants.stream().allMatch(Participant::notNull) && expenses.isEmpty();
+    }
     @Override
     public int hashCode() {
         return Objects.hash(id, inviteCode, title, participants, expenses);
@@ -107,10 +93,11 @@ public class Event {
     public String toString() {
         return "Event{" +
                 "id=" + id +
-                ", inviteCode='" + inviteCode + '\'' +
+                ", inviteCode='" + '\'' +
                 ", title='" + title + '\'' +
                 ", participants=" + participants +
                 ", expenses=" + expenses +
                 '}';
     }
+
 }

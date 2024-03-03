@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.OverviewCtrl;
+import client.scenes.StartScreenCtrl;
 import com.google.inject.Injector;
 
-import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -37,13 +37,21 @@ public class Main extends Application {
         launch();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
+
+    /*public void start(Stage primaryStage) throws IOException {
 
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
-
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, overview, add);
+    }*/
+
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+
+        var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+        mainCtrl.initialize2(primaryStage, start);
     }
 }

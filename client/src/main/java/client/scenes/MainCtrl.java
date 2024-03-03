@@ -30,6 +30,9 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private StartScreenCtrl startScreenCtrl;
+    private Scene start;
+
     public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add) {
         this.primaryStage = primaryStage;
@@ -43,6 +46,19 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    public void initialize2(Stage primaryStage, Pair<StartScreenCtrl, Parent> startScreen){
+        this.primaryStage = primaryStage;
+        this.startScreenCtrl = startScreen.getKey();
+        this.start = new Scene(startScreen.getValue());
+        showStartScreen();
+        primaryStage.show();
+    }
+
+    public void showStartScreen(){
+        primaryStage.setTitle("StartScreen");
+        primaryStage.setScene(start);
+        startScreenCtrl.updateEventsList();
+    }
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
