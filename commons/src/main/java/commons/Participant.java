@@ -11,10 +11,12 @@ import java.util.*;
         public long id;
         public String firstName;
         public String lastName;
+        public String userName;
 
-        public Participant(String firstName, String lastName) {
+        public Participant(String firstName, String lastName, String userName) {
             this.firstName = firstName;
             this.lastName = lastName;
+            this.userName = userName;
         }
 
         @OneToMany(mappedBy = "participant")
@@ -48,16 +50,29 @@ import java.util.*;
             this.lastName = lastName;
         }
 
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof Participant that)) return false;
-            return getId() == that.getId() && Objects.equals(getFirstName(), that.getFirstName()) && Objects.equals(getLastName(), that.getLastName());
+            return getId() == that.getId() && Objects.equals(getFirstName(), that.getFirstName())
+                    && Objects.equals(getLastName(), that.getLastName())
+                    && Objects.equals(getUserName(), that.getUserName());
         }
 
+        public boolean notNull(){
+            return (userName != null) && (firstName != null) && (lastName != null);
+        }
         @Override
         public int hashCode() {
-            return Objects.hash(getId(), getFirstName(), getLastName());
+            return Objects.hash(getId(), getFirstName(), getLastName(), getUserName());
         }
 
         @Override
@@ -66,6 +81,7 @@ import java.util.*;
                     "id=" + id +
                     ", firstName='" + firstName + '\'' +
                     ", lastName='" + lastName + '\'' +
+                    ", userName='" + userName + '\'' +
                     '}';
         }
     }
