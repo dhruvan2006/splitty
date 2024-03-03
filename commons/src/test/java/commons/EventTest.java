@@ -76,4 +76,55 @@ class EventTest {
         assertEquals(e.hashCode(), e.hashCode());
         assertNotEquals(e1.hashCode(), e.hashCode());
     }
+
+    @Test
+    void testToString() {
+        Event e = new Event("Event");
+        assertNotNull(e.toString());
+    }
+
+    @Test
+    void testGetExpenses() {
+        Event e = new Event("Event");
+        assertTrue(e.getExpenses().isEmpty());
+    }
+
+    @Test
+    void testSetExpenses() {
+        Event e = new Event("Event");
+
+        List<Expense> expenses = new ArrayList<>();
+        expenses.add(new Expense());
+        e.setExpenses(expenses);
+
+        assertEquals(expenses, e.getExpenses());
+    }
+
+    @Test
+    void addParticipant() {
+        Event e = new Event("z");
+        assertTrue(e.getParticipants().isEmpty());
+
+        Participant p = new Participant();
+        e.addParticipant(p);
+
+        List<Participant> participants = new ArrayList<>();
+        participants.add(p);
+
+        assertEquals(participants, e.getParticipants());
+    }
+
+    @Test
+    void addExpense() {
+        Event e = new Event("x");
+        assertTrue(e.getExpenses().isEmpty());
+
+        Expense expense = new Expense();
+        e.addExpense(expense);
+
+        List<Expense> expenses = new ArrayList<>();
+        expenses.add(expense);
+
+        assertEquals(expenses, e.getExpenses());
+    }
 }

@@ -12,8 +12,6 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    //I think invite code is a same as id
-    //private String inviteCode;
     private String title;
 
     @OneToMany(targetEntity = Participant.class)
@@ -35,7 +33,9 @@ public class Event {
     public long getId() {
         return id;
     }
-    public void setId(long id) {this.id = id;}
+    public void setId(long id) {
+        this.id = id;
+    }
 
 
     public String getTitle() {
@@ -54,12 +54,20 @@ public class Event {
         this.participants = participants;
     }
 
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
+    }
+
     public List<Expense> getExpenses() {
         return expenses;
     }
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public void addExpense(Expense expense) {
+        expenses.add(expense);
     }
 
     @Override
@@ -78,14 +86,13 @@ public class Event {
     }
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, participants);//, expenses);
+        return Objects.hash(id, title, participants, expenses);
     }
 
     @Override
     public String toString() {
         return "Event{" +
                 "id=" + id +
-                ", inviteCode='" + '\'' +
                 ", title='" + title + '\'' +
                 ", participants=" + participants +
                 ", expenses=" + expenses +
