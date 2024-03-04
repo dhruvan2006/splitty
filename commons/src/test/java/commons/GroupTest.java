@@ -86,4 +86,27 @@ class GroupTest {
         group.setGroupLeader(groupLeader);
         assertEquals(groupLeader, group.getGroupLeader());
     }
+
+    @Test
+    public void testGetId() {
+        assertEquals(0,group.getId());
+    }
+
+    @Test
+    public void testSetId() {
+        group.setId(7);
+        assertEquals(7,group.getId());
+    }
+
+    @Test
+    public void toStringTest(){
+        Participant formal = new Participant("Jane", "Doe", "s", "l", "JD","female");
+        formal.setFormal(true);
+        group.addToGroup(groupLeader);
+        group.addToGroup(formal);
+        assertTrue(group.toString().contains(group.getGroupName() + " ,ID: " + group.getId()));
+        assertTrue(group.toString().contains("Group Leader, known as GL"));
+        assertTrue(group.toString().contains("Ms. Jane Doe, known as JD"));
+    }
+
 }

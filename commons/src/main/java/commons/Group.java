@@ -3,12 +3,20 @@ package commons;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
 public class Group {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long id;
+
     private String groupName;
     private List<Participant> participants;
     private boolean pinned;
     private Participant groupLeader;
+
 
     public Group(String groupName) {
         this.groupName = groupName;
@@ -40,11 +48,20 @@ public class Group {
         return pinned;
     }
 
+    public long getId() {
+            return id;
+    }
+
+    public void setId(long id) {
+            this.id = id;
+    }
+
     public void setPinned(boolean pinned) {
         this.pinned = pinned;
     }
 
     public Participant getGroupLeader() {
+        if (groupLeader==null) System.out.println("There is no group leader assigned");
         return groupLeader;
     }
 
@@ -70,5 +87,14 @@ public class Group {
         else {
             System.out.println("Invalid participant.");
         }
+    }
+
+    @Override
+    public String toString(){
+        String result = groupName + " ,ID: " + id + " ,with the following participants:\n";
+        for (Participant p:participants){
+            result+= p.getFullName() + "\n";
+        }
+        return result;    
     }
 }

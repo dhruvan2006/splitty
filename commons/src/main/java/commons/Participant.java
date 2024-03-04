@@ -18,12 +18,31 @@ public class Participant{
 
         public String userName;
 
+        public boolean formal;
+
+        public String gender;
+
+        public List<Group> groups;
+
         public Participant(String firstName, String lastName, String email, String IBAN, String userName) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
             this.IBAN = IBAN;
             this.userName = userName;
+            formal = false;
+            groups = new ArrayList<>();
+        }
+
+        public Participant(String firstName, String lastName, String email, String IBAN, String userName, String gender) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
+            this.IBAN = IBAN;
+            this.userName = userName;
+            this.gender = gender;
+            formal = false;
+            groups = new ArrayList<>();
         }
 
         public String getEmail() {
@@ -113,5 +132,37 @@ public class Participant{
         public boolean notNull(){
             return (userName != null) && (firstName != null) && (lastName != null);
         }
+
+        public void enterGroup(Group group){
+		groups.add(group);
+	    }
+
+	    public void leaveGroup(Group group){
+		groups.remove(group);
+	    }
+        
+        public List<Group> getGroups(){
+            return groups;
+        }
+
+	    /**
+ 	    * each person will have the option to display their profile name formally or not
+ 	    */
+	    public void setFormal(boolean value){
+		formal = value;
+	    }
+
+        /**
+        * to be used whenever searching a user or looking through the participants of a group
+        */
+	    public String getFullName(){
+        String name = firstName + " " + lastName + ", known as " + userName;    
+		if (formal && gender!=null){
+			if (gender.equals("female")) return "Ms. " + name;
+            else if (gender.equals("male")) return "Mr. " + name;
+			return "Mx. " + name;
+		}
+		return name;
+	    }
 
     }

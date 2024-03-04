@@ -67,4 +67,29 @@ public class ParticipantTest {
         assertEquals(p1, p2);
     }
 
+    @Test
+	public void fullName() {
+		Participant person = new Participant("John", "Hopkins", "x", "f", "JH", "male");
+		var notFormal = person.getFullName();
+        person.setFormal(true);
+		var formal = person.getFullName();
+		assertEquals("John Hopkins, known as JH", notFormal);
+		assertEquals("Mr. John Hopkins, known as JH", formal);
+	}
+
+    @Test
+    public void testGroups() {
+
+        Participant p1 = new Participant("John", "Hopkins", "x", "f", "JH");
+        Group group1 = new Group("Dummy group");
+        Group group2 = new Group ("Dummy group 2");
+        p1.enterGroup(group1);
+        p1.enterGroup(group2);
+        assertEquals(2,p1.getGroups().size());
+        p1.leaveGroup(group1);
+        assertEquals(group2,p1.getGroups().get(0));
+    }
+
+
+
 }
