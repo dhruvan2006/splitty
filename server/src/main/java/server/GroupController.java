@@ -33,9 +33,14 @@ public class GroupController {
     }
 
     @PostMapping("/{id}")
-    public Optional<Group> findById(@PathVariable Long id){
-        return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Group does not exist"));
+    public Optional<?> findById(@PathVariable Integer id){
+    Optional<Group> groupOptional = repository.findById(id);
+    if(groupOptional.isPresent()) {
+        return groupOptional;
+    } else {
+        return Optional.of("Group with ID " + id + " does not exist");
     }
+}
 
     @PostMapping("/{id}")
     public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
