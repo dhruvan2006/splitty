@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 import server.database.GroupRepository;
 import commons.Group;
@@ -27,17 +28,16 @@ public class GroupController {
 
 
     @GetMapping("")
-    @ResponseBody
-    public List<Groups> findAll() {
-        return repository.findAll();
+    public ResponseEntity<List<Expense>> findAll() {
+        return ResponseEntity.ok(repository.findAll());
     }
 
     @PostMapping("/{id}")
     public Optional<Group> findById(@PathVariable Integer id){
-        return repository.findById(id).orElseThrow(() -> new ReponseStatusException(HttpStatus.NOT_FOUND,"Group does not exist"));
+        return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Group does not exist"));
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
         return repository.findById(id)
                 .map(group -> {
