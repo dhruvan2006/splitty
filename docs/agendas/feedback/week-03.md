@@ -24,7 +24,6 @@ Feedback: There were no previous minutes uploaded.
 
 #### Chair performance
 
-*TA Instructions:*
 
 Mark: Good
 
@@ -41,7 +40,7 @@ Feedback: The team had ownership of the meeting. However the meeting began a lot
 
 #### Potentially Shippable Product
 
-*TA Instructions:*
+
 
 
 Mark: Insufficient
