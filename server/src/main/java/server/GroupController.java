@@ -28,12 +28,12 @@ public class GroupController {
 
 
     @GetMapping("")
-    public ResponseEntity<List<Expense>> findAll() {
+    public ResponseEntity<List<Group>> findAll() {
         return ResponseEntity.ok(repository.findAll());
     }
 
     @PostMapping("/{id}")
-    public Optional<Group> findById(@PathVariable Integer id){
+    public Optional<Group> findById(@PathVariable Long id){
         return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Group does not exist"));
     }
 
