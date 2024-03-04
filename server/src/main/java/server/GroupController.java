@@ -33,7 +33,7 @@ public class GroupController {
     }
 
     @PostMapping("/{id}")
-    public Optional<?> findById(@PathVariable Integer id){
+    public Optional<?> findById(@PathVariable Long id){
     Optional<Group> groupOptional = repository.findById(id);
     if(groupOptional.isPresent()) {
         return groupOptional;
