@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import commons.Participant;
 
 @Controller
 @RequestMapping("/")
@@ -19,7 +20,7 @@ public class SomeController {
  * for searching another user
  */
     @PostMapping("/")
-    public void receiveData(Person person) {
-       System.out.println("Here is the user: " + person.getFullName());
+    public void receiveData(Participant participant) {
+       System.out.println("Here is the user: " + participant.getFullName());
     }
 }
