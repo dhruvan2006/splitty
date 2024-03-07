@@ -28,10 +28,20 @@ public class ExpenseController {
         this.payRepo = payRepo;
     }
 
-    @GetMapping(path = {"", "/"})
-    public List<Expense> getAll() {
-        return repo.findAll();
+    /**
+    * sorted by ID so the most recently created expenses show up first
+    */
+    @GetMapping(path = {""})
+    public ResponseEntity<List<Expense>> findAllExpenses(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size,
+                                                        @RequestParam(defaultValue = "id") String sortBy,
+                                                        @RequestParam(defaultValue = "desc") String sortOrder) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Page<Expense> expensePage = repo.findAll(pageable);
+        return ResponseEntity.ok(expensePage.getContent());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<List<Expense>> getById(@PathVariable("id") String id) {
@@ -69,4 +79,5 @@ public class ExpenseController {
         List<Expense> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
         return ResponseEntity.ok().build();
     }
+
 }
