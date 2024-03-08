@@ -130,7 +130,7 @@ public class Participant{
         }
 
         public String toStringGendered() {
-            return toString().substring(0,toString().length-1) + "\', gender= " + gender + '}';
+            return toString().substring(0,toString().length()-1) + "\', gender= " + gender + '}';
         }
 
         public boolean notNull(){
