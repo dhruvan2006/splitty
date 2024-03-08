@@ -81,7 +81,7 @@ public class ParticipantTest {
     @Test
     public void testToString() {
         Participant p1 = new Participant("John", "Hopkins", "email", "JH13", "JH");
-        assertTrue(p1.toString().contains("first name= John\', last name= Hopkins\', email= email\', IBAN= JH13\', userName= JH\'"));
+        assertTrue(p1.toString().contains("first name= John, last name= Hopkins, email= email, IBAN= JH13, userName= JH"));
     }
 
     @Test
