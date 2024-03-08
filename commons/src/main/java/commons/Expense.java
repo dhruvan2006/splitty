@@ -104,11 +104,9 @@ public class Expense {
 
     @Override
     public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                "created by" + creator + '\'' +
-                '}';
+        return "Expense " + id +
+                " - " + title + '\'' +
+                "created by " + creator.getFullName() + '\'';
     }
 }
 

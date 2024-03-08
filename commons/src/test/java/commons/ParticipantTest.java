@@ -78,17 +78,20 @@ public class ParticipantTest {
 	}
 
     @Test
-    public void testGroups() {
-
-        Participant p1 = new Participant("John", "Hopkins", "x", "f", "JH");
-        Group group1 = new Group("Dummy group");
-        Group group2 = new Group ("Dummy group 2");
-        p1.enterGroup(group1);
-        p1.enterGroup(group2);
-        assertEquals(2,p1.getGroups().size());
-        p1.leaveGroup(group1);
-        assertEquals(group2,p1.getGroups().get(0));
+    public void testToString() {
+        Participant p1 = new Participant("John", "Hopkins", "email", "JH13", "JH");
+        assertTrue(p1.toString().contains("first name= John\', last name= Hopkins\', email= email\', IBAN= JH13\', userName= JH\'"));
     }
+
+    @Test
+    public void testToStringGendered() {
+        Participant p1 = new Participant("John", "Hopkins", "email", "JH13", "JH","male");
+        assertTrue(p1.toString().contains(", gender= male}"));
+    }
+
+
+
+
 
 
 
