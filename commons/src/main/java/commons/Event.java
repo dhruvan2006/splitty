@@ -91,7 +91,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event " id +
+        return "Event " + id +
                 ", with the title: " + title +
                 ", with the following participants: " + participants.getFullName() +
                 ", with the following expenses: " + expenses.toString() + "\n" ;
