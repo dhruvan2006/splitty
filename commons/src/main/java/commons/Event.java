@@ -91,12 +91,10 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", participants=" + participants +
-                ", expenses=" + expenses +
-                '}';
+        return "Event " id +
+                ", with the title: " + title +
+                ", with the following participants: " + participants.getFullName() +
+                ", with the following expenses: " + expenses.toString() + "\n" ;
     }
 
 }

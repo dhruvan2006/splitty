@@ -78,6 +78,10 @@ public class Expense {
         return expensesPayed;
     }
 
+    private void setExpensesPayed(ArrayList<ExpensePayed> newExpenses){
+        this.expensesPayed= newExpenses;
+    }
+
     public int getTotalExpense() {
         return totalExpense;
     }
@@ -105,8 +109,8 @@ public class Expense {
     @Override
     public String toString() {
         return "Expense " + id +
-                " - " + title + '\'' +
-                "created by " + creator.getFullName() + '\'';
+                " - " + title +
+                ", created by " + creator.getFullName() + "\n";
     }
 }
 

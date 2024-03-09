@@ -126,11 +126,11 @@ public class Participant{
                     ", IBAN= " + IBAN  +
                     ", userName= " + userName  +
                     ", expensesPayed= " + expensesPayed +
-                    "}";
+                    "}\n";
         }
 
         public String toStringGendered() {
-            return toString().substring(0,toString().length()-1) + ", gender= " + gender + "}";
+            return toString().substring(0,toString().length()-2) + ", gender= " + gender + "}\n";
         }
 
         public boolean notNull(){

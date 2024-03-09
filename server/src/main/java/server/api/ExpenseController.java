@@ -84,4 +84,23 @@ public class ExpenseController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+    * when we need to edit an expense, the mapping needn't be altered here
+    */
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense updatedExpense) {
+    Optional<Expense> expenseOptional = repo.findById(id);
+    if (expenseOptional.isPresent()) {
+        Expense existingExpense = expenseOptional.get();
+        existingExpense.setTitle(updatedExpense.getTitle());
+        existingExpense.setTotalExpense(updatedExpense.getTotalExpense());  
+        existingExpense.setExpensesPayed(updatedExpense.getExpensesPayed());
+
+        Expense savedExpense = repo.save(existingExpense);
+        return ResponseEntity.ok(savedExpense);
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+    }
+
 }

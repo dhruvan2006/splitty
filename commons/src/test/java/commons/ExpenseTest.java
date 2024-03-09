@@ -97,7 +97,7 @@ class ExpenseTest {
         p.setFormal(true);
         Expense e = new Expense("Brunch in Delft", 1200, p);
         assertTrue(e.toString().contains("Expense "));
-        assertTrue(e.toString().contains(" - Brunch in Delft\'created by Ms. Mara Tacenco, known as MT"));
+        assertTrue(e.toString().contains(" - Brunch in Delft, created by Ms. Mara Tacenco, known as MT"));
     }
 
 }

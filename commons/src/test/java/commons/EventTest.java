@@ -127,4 +127,12 @@ class EventTest {
 
         assertEquals(expenses, e.getExpenses());
     }
+
+    @Test
+    void toStringTest() {
+        Event e = new Event("X");
+        assertTrue(e.toString().contains("Event"));
+        assertTrue(e.toString().contains("with the tile: X, with the following participants:"));
+        assertTrue(e.toString().contains("with the following expenses:"));
+    }
 }

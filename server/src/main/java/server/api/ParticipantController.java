@@ -29,7 +29,7 @@ public class ParticipantController {
                                                                  @RequestParam(defaultValue = "asc") String sortOrder) {
         Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        Page<Participant> participantPage = repository.findAll(pageable);
+        Page<Participant> participantPage = repo.findAll(pageable);
         return ResponseEntity.ok(participantPage.getContent());
     }
 
@@ -67,7 +67,7 @@ public class ParticipantController {
 
     @GetMapping("/searchName/{name}")
     public ResponseEntity<List<Participant>> findByName(@PathVariable String name) {
-        List<Participant> participants = repository.findByName(name);
+        List<Participant> participants = repo.findByName(name);
         if (participants.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -76,7 +76,7 @@ public class ParticipantController {
 
     @GetMapping("/searchPartial/{substring}")
     public ResponseEntity<List<Participant>> findByPartialName(@PathVariable String substring) {
-        List<Participant> participants = repository.findByNameContaining(substring);
+        List<Participant> participants = repo.findByNameContaining(substring);
         if (participants.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
