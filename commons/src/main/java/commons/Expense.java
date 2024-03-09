@@ -74,11 +74,11 @@ public class Expense {
         this.creator = creator;
     }
 
-    private ArrayList<ExpensePayed> getExpensesPayed() {
+    public ArrayList<ExpensePayed> getExpensesPayed() {
         return expensesPayed;
     }
 
-    private void setExpensesPayed(ArrayList<ExpensePayed> newExpenses){
+    public void setExpensesPayed(ArrayList<ExpensePayed> newExpenses){
         this.expensesPayed= newExpenses;
     }
 
