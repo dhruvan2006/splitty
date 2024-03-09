@@ -91,9 +91,11 @@ public class Event {
 
     @Override
     public String toString() {
+        String participant = "";
+        for(Participant p:participants) participant+=p.getFullName() + " ";
         return "Event " + id +
                 ", with the title: " + title +
-                ", with the following participants: " + participants.getFullName() +
+                ", with the following participants: " + participant +
                 ", with the following expenses: " + expenses.toString() + "\n" ;
     }
 
