@@ -15,7 +15,7 @@ import org.springframework.data.domain.Sort;
 @RequestMapping("/api/participant")
 public class ParticipantController {
     private final ParticipantRepository repo;
-    
+
     ParticipantController(ParticipantRepository repo){
         this.repo = repo;
     }
@@ -77,7 +77,7 @@ public class ParticipantController {
 
     @GetMapping("/searchPartial/{substring}")
     public ResponseEntity<List<Participant>> findByPartialName(@PathVariable String substring) {
-        List<Participant> participants = repo.findByNameContaining(substring);
+        List<Participant> participants = repo.findByPartialName(substring);
         if (participants.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
