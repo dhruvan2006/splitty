@@ -87,7 +87,7 @@ public class ParticipantTest {
     @Test
     public void testToStringGendered() {
         Participant p1 = new Participant("John", "Hopkins", "email", "JH13", "JH","male");
-        assertTrue(p1.toString().contains(", gender= male}"));
+        assertTrue(p1.toStringGendered().contains(", gender= male}"));
     }
 
 
