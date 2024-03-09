@@ -132,7 +132,7 @@ class EventTest {
     void toStringTest() {
         Event e = new Event("X");
         assertTrue(e.toString().contains("Event"));
-        assertTrue(e.toString().contains("with the tile: X, with the following participants:"));
+        assertTrue(e.toString().contains("with the title: X, with the following participants:"));
         assertTrue(e.toString().contains("with the following expenses:"));
     }
 }
