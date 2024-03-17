@@ -1,28 +1,35 @@
 package commons;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-public class Group {
+public class Groups {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
     private String groupName;
+    @ManyToMany
     private List<Participant> participants;
     private boolean pinned;
+    @ManyToOne
     private Participant groupLeader;
 
 
-    public Group(String groupName) {
+    public Groups(String groupName) {
         this.groupName = groupName;
         this.participants = new ArrayList<>();
         this.pinned = false; // Set a pin so that a group is displayed first
         this.groupLeader = null; // Initially, no group leader
+    }
+
+    public Groups() {
+
     }
 
     public String getGroupName() {
@@ -37,7 +44,7 @@ public class Group {
         return participants;
     }
 
-    /** 
+    /**
     if we plan to create a group from scratch
     */
     public void setParticipants(List<Participant> participants) {
@@ -70,7 +77,7 @@ public class Group {
         else System.out.println("Member is not part of the group");
     }
 
-    /** 
+    /**
     * if we plan to add a person to an existing group
     */
     public void addToGroup(Participant participant) {
@@ -95,6 +102,6 @@ public class Group {
         for (Participant p:participants){
             result+= p.getFullName() + "\n";
         }
-        return result;    
+        return result;
     }
 }
