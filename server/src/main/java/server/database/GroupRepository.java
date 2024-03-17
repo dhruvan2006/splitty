@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 
 public interface GroupRepository extends JpaRepository<Groups, Long>{
-    @Query("SELECT g FROM Group g WHERE g.groupName LIKE %?1%")
-    List<Group> findByGroupNameContaining(String groupName);
+    @Query("SELECT g FROM Groups g WHERE g.groupName LIKE %?1%")
+    List<Groups> findByGroupNameContaining(String groupName);
 
-    List<Group> findByGroupName(String groupName);
+    List<Groups> findByGroupName(String groupName);
 }

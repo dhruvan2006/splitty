@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Groups;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,9 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
 import server.database.GroupRepository;
-import commons.Group;
 
 @Controller
 @RequestMapping("/api/groups")
@@ -28,20 +27,20 @@ public class GroupController {
      * see the most recently created groups first
      */
     @GetMapping("")
-    public ResponseEntity<List<Group>> findAll(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int size,
-                                            @RequestParam(defaultValue = "id") String sortBy,
-                                            @RequestParam(defaultValue = "desc") String sortOrder) {
+    public ResponseEntity<List<Groups>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size,
+                                                @RequestParam(defaultValue = "id") String sortBy,
+                                                @RequestParam(defaultValue = "desc") String sortOrder) {
     Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
     Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-    Page<Group> groupPage = repository.findAll(pageable);
+    Page<Groups> groupPage = repository.findAll(pageable);
     return ResponseEntity.ok(groupPage.getContent());
     }
     
 
     @PostMapping("/searchName/{id}")
     public Optional<?> findById(@PathVariable Long id){
-    Optional<Group> groupOptional = repository.findById(id);
+    Optional<Groups> groupOptional = repository.findById(id);
     if(groupOptional.isPresent()) {
         return groupOptional;
     } else {
@@ -50,7 +49,7 @@ public class GroupController {
     }
 
     @PostMapping("/{id}")
-    public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
+    public Groups updateGroup(@PathVariable Long id, @RequestBody Groups updatedGroup) {
         return repository.findById(id)
                 .map(group -> {
                     group.setGroupName(updatedGroup.getGroupName());
@@ -65,8 +64,8 @@ public class GroupController {
     }
 
     @GetMapping("/searchName/{groupName}")
-    public ResponseEntity<List<Group>> findByGroupName(@PathVariable String groupName) {
-    List<Group> groups = repository.findByGroupName(groupName);
+    public ResponseEntity<List<Groups>> findByGroupName(@PathVariable String groupName) {
+    List<Groups> groups = repository.findByGroupName(groupName);
     if (groups.isEmpty()) {
         return ResponseEntity.notFound().build();
     }
@@ -74,8 +73,8 @@ public class GroupController {
     }
 
     @GetMapping("/searchPartial/{substring}")
-    public ResponseEntity<List<Group>> findByGroupNameContaining(@PathVariable String substring) {
-        List<Group> groups = repository.findByGroupNameContaining(substring);
+    public ResponseEntity<List<Groups>> findByGroupNameContaining(@PathVariable String substring) {
+        List<Groups> groups = repository.findByGroupNameContaining(substring);
         if (groups.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
