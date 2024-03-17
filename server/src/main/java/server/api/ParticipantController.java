@@ -68,7 +68,7 @@ public class ParticipantController {
 
     @GetMapping("/searchName/{name}")
     public ResponseEntity<List<Participant>> findByName(@PathVariable String name) {
-        List<Participant> participants = repo.findByName(name);
+        List<Participant> participants = repo.findByUserName(name);
         if (participants.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

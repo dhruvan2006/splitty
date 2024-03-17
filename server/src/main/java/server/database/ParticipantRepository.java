@@ -8,8 +8,8 @@ import commons.Participant;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long>{
 
-    @Query("SELECT p FROM Participant p WHERE p.name LIKE %?1%")
+    @Query("SELECT p FROM Participant p WHERE p.userName LIKE %?1%")
     List<Participant> findByPartialName(String substring);
 
-    List<Participant> findByName(String name);
+    List<Participant> findByUserName(String name);
  }
