@@ -21,8 +21,8 @@ public class Participant{
         public boolean formal;
 
         public String gender;
-        @OneToMany
-        public List<Group> groups;
+        @ManyToMany
+        public List<Groups> groups;
 
         public Participant(String firstName, String lastName, String email, String IBAN, String userName) {
             this.firstName = firstName;
@@ -42,7 +42,7 @@ public class Participant{
             this.userName = userName;
             this.gender = gender;
             formal = false;
-            groups = new ArrayList<>();
+            //groups = new ArrayList<>();
         }
 
         public String getEmail() {
@@ -133,15 +133,15 @@ public class Participant{
             return (userName != null) && (firstName != null) && (lastName != null);
         }
 
-        public void enterGroup(Group group){
+        public void enterGroup(Groups group){
 		groups.add(group);
 	    }
 
-	    public void leaveGroup(Group group){
+	    public void leaveGroup(Groups group){
 		groups.remove(group);
 	    }
 
-        public List<Group> getGroups(){
+        public List<Groups> getGroups(){
             return groups;
         }
 

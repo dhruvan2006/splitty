@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import server.database.GroupRepository;
-import commons.Group;
+import commons.Groups;
 
 @Controller
 @RequestMapping("/api/groups")
@@ -18,13 +18,13 @@ public class GroupController {
 
 
     @GetMapping("")
-    public ResponseEntity<List<Group>> findAll() {
+    public ResponseEntity<List<Groups>> findAll() {
         return ResponseEntity.ok(repository.findAll());
     }
 
     @PostMapping("/{id}")
     public Optional<?> findById(@PathVariable Long id){
-    Optional<Group> groupOptional = repository.findById(id);
+    Optional<Groups> groupOptional = repository.findById(id);
     if(groupOptional.isPresent()) {
         return groupOptional;
     } else {
@@ -33,7 +33,7 @@ public class GroupController {
 }
 
     @PutMapping("/{id}")
-    public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
+    public Groups updateGroup(@PathVariable Long id, @RequestBody Groups updatedGroup) {
         return repository.findById(id)
                 .map(group -> {
                     group.setGroupName(updatedGroup.getGroupName());

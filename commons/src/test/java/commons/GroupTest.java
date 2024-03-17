@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GroupTest {
-    private Group group;
+    private Groups group;
     private Participant p1;
     private Participant p2;
     private Participant groupLeader;
 
     @BeforeEach
     void setUp() {
-        group = new Group("Test Group");
+        group = new Groups("Test Group");
         p1 = new Participant("John", "Doe", "s", "d", "JD");
         p2 = new Participant("Jane", "Doe", "s", "l", "JD");
         groupLeader = new Participant("Group", "Leader", "w", "aa", "GL");
