@@ -13,8 +13,10 @@ public class Group {
     public long id;
 
     private String groupName;
+    @OneToMany
     private List<Participant> participants;
     private boolean pinned;
+    @ManyToOne
     private Participant groupLeader;
 
 
@@ -23,6 +25,10 @@ public class Group {
         this.participants = new ArrayList<>();
         this.pinned = false; // Set a pin so that a group is displayed first
         this.groupLeader = null; // Initially, no group leader
+    }
+
+    public Group() {
+
     }
 
     public String getGroupName() {

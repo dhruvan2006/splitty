@@ -1,4 +1,4 @@
-package server.api;
+package server;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class GroupController {
     }
 }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public Group updateGroup(@PathVariable Long id, @RequestBody Group updatedGroup) {
         return repository.findById(id)
                 .map(group -> {

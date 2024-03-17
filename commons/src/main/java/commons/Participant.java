@@ -21,7 +21,7 @@ public class Participant{
         public boolean formal;
 
         public String gender;
-
+        @OneToMany
         public List<Group> groups;
 
         public Participant(String firstName, String lastName, String email, String IBAN, String userName) {
@@ -140,7 +140,7 @@ public class Participant{
 	    public void leaveGroup(Group group){
 		groups.remove(group);
 	    }
-        
+
         public List<Group> getGroups(){
             return groups;
         }
