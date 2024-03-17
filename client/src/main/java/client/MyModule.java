@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.OverviewCtrl;
+import client.scenes.ParticipantCtrl;
 import client.scenes.StartScreenCtrl;
 
 import com.google.inject.Binder;
@@ -33,5 +34,6 @@ public class MyModule implements Module {
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(OverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ParticipantCtrl.class).in(Scopes.SINGLETON);
     }
 }
