@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 
 import client.scenes.OverviewCtrl;
 import client.scenes.StartScreenCtrl;
+import client.scenes.ParticipantCtrl;
 import com.google.inject.Injector;
 
 import client.scenes.MainCtrl;
