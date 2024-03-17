@@ -13,6 +13,13 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class TestEventRepository implements EventRepository {
+
+    List<Event> events;
+
+    public TestEventRepository(List<Event> events) {
+        this.events = events;
+    }
+
     @Override
     public void flush() {
 
@@ -95,7 +102,9 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public <S extends Event> S save(S entity) {
-        return null;
+        entity.setId((long) events.size());
+        events.add(entity);
+        return entity;
     }
 
     @Override
@@ -110,12 +119,17 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public boolean existsById(Long aLong) {
+        for (Event event : events) {
+            if (event.getId() == aLong) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public List<Event> findAll() {
-        return null;
+        return events;
     }
 
     @Override
@@ -130,7 +144,7 @@ public class TestEventRepository implements EventRepository {
 
     @Override
     public void deleteById(Long aLong) {
-
+        events.removeIf(event -> aLong.equals(event.getId()));
     }
 
     @Override
