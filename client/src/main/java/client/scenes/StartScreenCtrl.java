@@ -35,6 +35,10 @@ public class StartScreenCtrl {
 
     public void create(){
         //Will code after API is created
+        String createEventText = createEventTextField.getText().trim();
+        Event newEvent = new Event(createEventText);
+//        server.addEvent(newEvent);
+        mainCtrl.showOverview();
     }
 
     public void join(){

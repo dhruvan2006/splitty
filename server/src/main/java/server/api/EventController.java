@@ -48,7 +48,7 @@ public class EventController {
     //initially expenses are empty
     @PostMapping({"", "/"})
     public ResponseEntity<Event> postParticipant(@RequestBody Event e) {
-        if (e != null && e.isInit())
+        if (e == null || !e.isInit())
             return ResponseEntity.badRequest().build();
         Event saved = repo.save(e);
         return ResponseEntity.ok(saved);
