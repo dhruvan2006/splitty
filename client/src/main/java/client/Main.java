@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.OverviewCtrl;
+import client.scenes.ParticipantCtrl;
 import com.google.inject.Injector;
 
 import client.scenes.MainCtrl;
@@ -40,8 +41,9 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
+        var participant = FXML.load(ParticipantCtrl.class, "client", "scenes", "Participant.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview);
+        mainCtrl.initialize(primaryStage, participant.getValue());
     }
 
 

@@ -90,10 +90,15 @@ public class ParticipantTest {
         assertTrue(p1.toStringGendered().contains(", gender= male}"));
     }
 
-
-
-
-
-
-
+    @Test
+    public void testGroups() {
+        Participant p1 = new Participant("John", "Hopkins", "x", "f", "JH");
+        Groups group1 = new Groups("Dummy group");
+        Groups group2 = new Groups("Dummy group 2");
+        p1.enterGroup(group1);
+        p1.enterGroup(group2);
+        assertEquals(2,p1.getGroups().size());
+        p1.leaveGroup(group1);
+        assertEquals(group2,p1.getGroups().get(0));
+    }
 }
