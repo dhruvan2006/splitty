@@ -23,7 +23,20 @@
          </HBox.margin>
       </Label>
       <Button alignment="TOP_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Send Invites" />
-      <Label fx:id="inviteCodeLabel" />
+      <HBox prefHeight="41.0" prefWidth="217.0">
+         <children>
+            <Label alignment="TOP_RIGHT" prefHeight="27.0" prefWidth="141.0" text="Invite Code:" textAlignment="RIGHT">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="inviteCodeLabel" alignment="TOP_LEFT" contentDisplay="RIGHT" prefHeight="36.0" prefWidth="101.0" text="QWERTY" textAlignment="RIGHT">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
    </HBox>
    <HBox prefHeight="33.0" prefWidth="589.0">
       <Label text="Participants">
@@ -32,8 +45,11 @@
          </font>
       </Label>
       <Button mnemonicParsing="false" onAction="#handleAddParticipantButton" text="+" />
-      <TextField fx:id="participantFirstNameField" promptText="First name..." />
-      <TextField fx:id="participantLastNameField" promptText="Last name..." />
+      <TextField fx:id="participantFirstNameField" prefHeight="25.0" prefWidth="89.0" promptText="First name..." />
+      <TextField fx:id="participantLastNameField" prefHeight="25.0" prefWidth="89.0" promptText="Last name..." />
+      <TextField fx:id="participantEmailField" prefHeight="25.0" prefWidth="86.0" promptText="Email..." />
+      <TextField fx:id="participantIBANField" prefHeight="25.0" prefWidth="87.0" promptText="IBAN" />
+      <TextField fx:id="participantUsernameField" prefHeight="25.0" prefWidth="87.0" promptText="Username..." />
    </HBox>
    <Text fx:id="participantsText" strokeType="OUTSIDE" strokeWidth="0.0" />
    <Label text="Expenses">
@@ -42,7 +58,7 @@
       </font>
    </Label>
    <HBox prefHeight="35.0" prefWidth="589.0">
-      <ComboBox fx:id="participantsComboBox" prefWidth="150.0" promptText="John" />
+      <ComboBox fx:id="participantsComboBox" prefWidth="150.0" promptText="Participants..." />
       <Button mnemonicParsing="false" text="Add Expense" />
    </HBox>
    <VBox prefHeight="200.0" prefWidth="100.0">

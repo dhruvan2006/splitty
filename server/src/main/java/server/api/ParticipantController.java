@@ -34,7 +34,7 @@ public class ParticipantController {
     }
     @PostMapping({"", "/"})
     public ResponseEntity<Participant> postParticipant(@RequestBody Participant p) {
-        if (p != null && p.notNull())
+        if (p == null || !p.notNull())
             return ResponseEntity.badRequest().build();
         Participant saved = repo.save(p);
         return ResponseEntity.ok(saved);

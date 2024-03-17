@@ -33,16 +33,18 @@ public class MainCtrl {
     private StartScreenCtrl startScreenCtrl;
     private Scene start;
 
-    public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview) {
+    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start,Pair<OverviewCtrl, Parent> overview) {
 //            Pair<AddQuoteCtrl, Parent> add) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
+        this.startScreenCtrl = start.getKey();
+        this.start = new Scene(start.getValue());
 
 //        this.addCtrl = add.getKey();
 //        this.add = new Scene(add.getValue());
 
-        showOverview();
+        showStartScreen();
         primaryStage.show();
     }
 
