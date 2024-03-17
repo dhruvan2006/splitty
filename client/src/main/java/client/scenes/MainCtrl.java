@@ -25,7 +25,7 @@ public class MainCtrl {
     private Stage primaryStage;
 
     private OverviewCtrl overviewCtrl;
-    private Scene overview;
+    private Scene scene;
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
@@ -33,14 +33,10 @@ public class MainCtrl {
     private StartScreenCtrl startScreenCtrl;
     private Scene start;
 
-    public void initialize(Stage primaryStage, Pair<OverviewCtrl, Parent> overview) {
-//            Pair<AddQuoteCtrl, Parent> add) {
+    public void initialize(Stage primaryStage, Parent scene) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
-
-//        this.addCtrl = add.getKey();
-//        this.add = new Scene(add.getValue());
+        //this.overviewCtrl = overview.getKey();
+        this.scene = new Scene(scene);
 
         showOverview();
         primaryStage.show();
@@ -61,7 +57,7 @@ public class MainCtrl {
     }
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
+        primaryStage.setScene(scene);
 //        overviewCtrl.refresh();
     }
 
