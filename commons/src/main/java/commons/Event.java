@@ -1,6 +1,7 @@
 package commons;
 
 import jakarta.persistence.*;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private String inviteCode;
     private String title;
 
     @OneToMany(targetEntity = Participant.class)
@@ -20,7 +22,7 @@ public class Event {
     @OneToMany(targetEntity = Expense.class)
     private List<Expense> expenses;
 
-    private Event() {
+    public Event() {
         // for object mapper
     }
 
@@ -28,6 +30,11 @@ public class Event {
         this.title = title;
         this.participants = new ArrayList<>();
         this.expenses = new ArrayList<>();
+        this.inviteCode = generateInviteCode();
+    }
+
+    private String generateInviteCode() {
+        return this.id + RandomStringUtils.randomAlphanumeric(4).toUpperCase();
     }
 
     public long getId() {
@@ -37,6 +44,13 @@ public class Event {
         this.id = id;
     }
 
+    public String getInviteCode() {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode) {
+        this.inviteCode = inviteCode;
+    }
 
     public String getTitle() {
         return title;

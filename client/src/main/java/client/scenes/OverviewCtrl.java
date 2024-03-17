@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
@@ -7,6 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 public class OverviewCtrl {
+
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
 
     @FXML
     private Button sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
@@ -18,7 +23,7 @@ public class OverviewCtrl {
     private ToggleButton allExpensesToggle, fromJohnToggle, includingJohnToggle;
 
     @FXML
-    private TextField participantFirstNameField, participantLastNameField;
+    private TextField participantFirstNameField, participantLastNameField, participantEmailField, participantIBANField, participantUsernameField;
 
     @FXML
     private Text participantsText;
@@ -31,13 +36,17 @@ public class OverviewCtrl {
 
     private final Event event;
 
-    public OverviewCtrl() {
+    @Inject
+    public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.mainCtrl = mainCtrl;
+        this.server = server;
+//        TODO: Get the event from Start page
         this.event = new Event("New Year Party");
     }
 
     @FXML
     public void initialize() {
-        inviteCodeLabel.setText(event.getId() + "");
+        inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
     }
 
@@ -53,13 +62,27 @@ public class OverviewCtrl {
         // Get the new participant's name and reset the fields
         String participantFirstName = participantFirstNameField.getText().trim();
         String participantLastName = participantLastNameField.getText().trim();
+        String participantEmail = participantEmailField.getText().trim();
+        String participantIBAN = participantIBANField.getText().trim();
+        String participantUsername = participantUsernameField.getText().trim();
         participantFirstNameField.setText("");
         participantLastNameField.setText("");
+        participantEmailField.setText("");
+        participantIBANField.setText("");
+        participantUsernameField.setText("");
 
         // Add the participant
-        if (!participantFirstName.isEmpty() && !participantLastName.isEmpty()) {
-            // Giving dummy details for participant
-            Participant newParticipant = new Participant(participantFirstName, participantLastName, "email", "iban", "username");
+        if (!participantFirstName.isEmpty() && !participantLastName.isEmpty() && !participantEmail.isEmpty() && !participantIBAN.isEmpty() && !participantUsername.isEmpty()) {
+            System.out.println(participantFirstName);
+            System.out.println(participantLastName);
+            System.out.println(participantEmail);
+            System.out.println(participantIBAN);
+            System.out.println(participantUsername);
+            Participant newParticipant = new Participant(participantFirstName, participantLastName, participantEmail,
+                    participantIBAN, participantUsername);
+
+            server.addParticipant(newParticipant);
+
             event.addParticipant(newParticipant);
             updateParticipantsComboBox();
             if (participantsText.getText() != null && !participantsText.getText().isEmpty()) {
