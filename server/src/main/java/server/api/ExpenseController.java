@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.database.ExpensePayedRepository;
 import server.database.ExpensesRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/expense")
@@ -28,10 +32,20 @@ public class ExpenseController {
         this.payRepo = payRepo;
     }
 
-    @GetMapping(path = {"", "/"})
-    public List<Expense> getAll() {
-        return repo.findAll();
+    /**
+    * sorted by ID so the most recently created expenses show up first
+    */
+    @GetMapping(path = {""})
+    public ResponseEntity<List<Expense>> findAllExpenses(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size,
+                                                        @RequestParam(defaultValue = "id") String sortBy,
+                                                        @RequestParam(defaultValue = "desc") String sortOrder) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Page<Expense> expensePage = repo.findAll(pageable);
+        return ResponseEntity.ok(expensePage.getContent());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<List<Expense>> getById(@PathVariable("id") String id) {
@@ -69,4 +83,24 @@ public class ExpenseController {
         List<Expense> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
         return ResponseEntity.ok().build();
     }
+
+    /**
+    * when we need to edit an expense, the mapping needn't be altered here
+    */
+    @PutMapping("/{id}")
+    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense updatedExpense) {
+    Optional<Expense> expenseOptional = repo.findById(id);
+    if (expenseOptional.isPresent()) {
+        Expense existingExpense = expenseOptional.get();
+        existingExpense.setTitle(updatedExpense.getTitle());
+        existingExpense.setTotalExpense(updatedExpense.getTotalExpense());  
+        existingExpense.setExpensesPayed(updatedExpense.getExpensesPayed());
+
+        Expense savedExpense = repo.save(existingExpense);
+        return ResponseEntity.ok(savedExpense);
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+    }
+
 }

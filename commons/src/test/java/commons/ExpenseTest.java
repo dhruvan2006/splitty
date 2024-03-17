@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ExpenseTest {
     @Test
@@ -89,4 +90,14 @@ class ExpenseTest {
         assertEquals(e.hashCode(), e.hashCode());
         assertNotEquals(e1.hashCode(), e.hashCode());
     }
+
+    @Test
+    void testToString() {
+        Participant p = new Participant("Mara", "Tacenco", "L", "E", "MT","female");
+        p.setFormal(true);
+        Expense e = new Expense("Brunch in Delft", 1200, p);
+        assertTrue(e.toString().contains("Expense "));
+        assertTrue(e.toString().contains(" - Brunch in Delft, created by Ms. Mara Tacenco, known as MT"));
+    }
+
 }

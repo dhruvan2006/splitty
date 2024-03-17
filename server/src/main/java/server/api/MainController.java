@@ -9,7 +9,7 @@ import commons.Participant;
 
 @Controller
 @RequestMapping("/")
-public class SomeController {
+public class MainController {
 
     @GetMapping("/")
     @ResponseBody
@@ -17,9 +17,9 @@ public class SomeController {
         return "Welcome to the home page of team 78's project app!";
     }
 
-/**
- * for searching another user
- */
+    /**
+     * for searching another user
+    */
     @PostMapping("/")
     public void receiveData(Participant participant) {
        System.out.println("Here is the user: " + participant.getFullName());

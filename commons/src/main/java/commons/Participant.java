@@ -120,13 +120,17 @@ public class Participant{
         public String toString() {
             return "Participant{" +
                     "id=" + id +
-                    ", firstName='" + firstName + '\'' +
-                    ", lastName='" + lastName + '\'' +
-                    ", email='" + email + '\'' +
-                    ", IBAN='" + IBAN + '\'' +
-                    ", userName='" + userName + '\'' +
-                    ", expensesPayed=" + expensesPayed +
-                    '}';
+                    ", firstName= " + firstName +
+                    ", lastName= " + lastName +
+                    ", email= " + email  +
+                    ", IBAN= " + IBAN  +
+                    ", userName= " + userName  +
+                    ", expensesPayed= " + expensesPayed +
+                    "}\n";
+        }
+
+        public String toStringGendered() {
+            return toString().substring(0,toString().length()-2) + ", gender= " + gender + "}\n";
         }
 
         public boolean notNull(){

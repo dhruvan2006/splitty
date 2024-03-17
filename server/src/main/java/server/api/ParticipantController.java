@@ -6,18 +6,35 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.ParticipantRepository;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @Controller
 @RequestMapping("/api/participant")
 public class ParticipantController {
     private final ParticipantRepository repo;
+
     ParticipantController(ParticipantRepository repo){
         this.repo = repo;
     }
-    @GetMapping({"", "/"})
-    public ResponseEntity<List<Participant>> getAll() {
-        return ResponseEntity.ok(repo.findAll());
+
+    /**
+    * sorted by name, ascending
+    */
+    @GetMapping("")
+    public ResponseEntity<List<Participant>> findAllParticipants(@RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size,
+                                                                 @RequestParam(defaultValue = "name") String sortBy,
+                                                                 @RequestParam(defaultValue = "asc") String sortOrder) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        Page<Participant> participantPage = repo.findAll(pageable);
+        return ResponseEntity.ok(participantPage.getContent());
     }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<List<Participant>> getById(@PathVariable("id") String id) {
         long lid;
@@ -48,4 +65,23 @@ public class ParticipantController {
         List<Participant> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/searchName/{name}")
+    public ResponseEntity<List<Participant>> findByName(@PathVariable String name) {
+        List<Participant> participants = repo.findByUserName(name);
+        if (participants.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(participants);
+    }
+
+    @GetMapping("/searchPartial/{substring}")
+    public ResponseEntity<List<Participant>> findByPartialName(@PathVariable String substring) {
+        List<Participant> participants = repo.findByPartialName(substring);
+        if (participants.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(participants);
+    }
+
 }

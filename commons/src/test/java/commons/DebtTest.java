@@ -45,11 +45,11 @@ public class DebtTest {
         Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
         String output = "Debt: from persons, ";
         for (Participant person : debt.getPersonsOwnsFrom()) {
-            output += person;
+            output += person.getFullName();
             output += " ";
         }
         output += "to person: ";
-        output += debt.getPersonOwnsTo();
+        output += debt.getPersonOwnsTo().getFullName();
         output += " 0 of EUR debt not settled";
         assertEquals(output, debt.toString());
     }
@@ -62,11 +62,11 @@ public class DebtTest {
         Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
         String output = "Debt: from persons, ";
         for (Participant person : debt.getPersonsOwnsFrom()) {
-            output += person;
+            output += person.getFullName();
             output += " ";
         }
         output += "to person: ";
-        output += debt.getPersonOwnsTo();
+        output += debt.getPersonOwnsTo().getFullName();
         output += " 0 of EUR settled";
         debt.settleIt();
         assertEquals(output, debt.toString());

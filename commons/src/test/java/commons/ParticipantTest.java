@@ -1,5 +1,6 @@
 package commons;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 public class ParticipantTest {
@@ -78,8 +79,19 @@ public class ParticipantTest {
 	}
 
     @Test
-    public void testGroups() {
+    public void testToString() {
+        Participant p1 = new Participant("John", "Hopkins", "email", "JH13", "JH");
+        assertTrue(p1.toString().contains("firstName= John, lastName= Hopkins, email= email, IBAN= JH13, userName= JH"));
+    }
 
+    @Test
+    public void testToStringGendered() {
+        Participant p1 = new Participant("John", "Hopkins", "email", "JH13", "JH","male");
+        assertTrue(p1.toStringGendered().contains(", gender= male}"));
+    }
+
+    @Test
+    public void testGroups() {
         Participant p1 = new Participant("John", "Hopkins", "x", "f", "JH");
         Groups group1 = new Groups("Dummy group");
         Groups group2 = new Groups("Dummy group 2");
@@ -89,7 +101,4 @@ public class ParticipantTest {
         p1.leaveGroup(group1);
         assertEquals(group2,p1.getGroups().get(0));
     }
-
-
-
 }

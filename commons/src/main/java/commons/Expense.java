@@ -74,8 +74,12 @@ public class Expense {
         this.creator = creator;
     }
 
-    private ArrayList<ExpensePayed> getExpensesPayed() {
+    public ArrayList<ExpensePayed> getExpensesPayed() {
         return expensesPayed;
+    }
+
+    public void setExpensesPayed(ArrayList<ExpensePayed> newExpenses){
+        this.expensesPayed= newExpenses;
     }
 
     public int getTotalExpense() {
@@ -104,11 +108,9 @@ public class Expense {
 
     @Override
     public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                "created by" + creator + '\'' +
-                '}';
+        return "Expense " + id +
+                " - " + title +
+                ", created by " + creator.getFullName() + "\n";
     }
 }
 
