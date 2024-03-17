@@ -25,7 +25,7 @@ public class MainCtrl {
     private Stage primaryStage;
 
     private OverviewCtrl overviewCtrl;
-    private Scene scene;
+    private Scene overview;
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
@@ -63,7 +63,7 @@ public class MainCtrl {
     }
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(overview);
 //        overviewCtrl.refresh();
     }
 
