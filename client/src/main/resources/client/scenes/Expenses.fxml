@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ExpensesCtrl">
+    <children>
+        <Button layoutX="419.0" layoutY="300.0" mnemonicParsing="false" onAction="#add" text="Add" />
+        <Button layoutX="350.0" layoutY="300.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+        <TextField fx:id="username" layoutX="109.0" layoutY="24.0"  />
+        <TextField fx:id="description" layoutX="109.0" layoutY="61.0" />
+        <TextField fx:id="amount" layoutX="109.0" layoutY="98.0" />
+        <TextField fx:id="date" layoutX="109.0" layoutY="135.0"/>
+        <Label layoutX="28.0" layoutY="29.0" text="Who paid" />
+        <Label layoutX="28.0" layoutY="66.0" text="For what" />
+        <Label layoutX="28.0" layoutY="103.0" text="amount" />
+        <Label layoutX="28.0" layoutY="140.0" text="date"/>
+    </children>
+</AnchorPane>

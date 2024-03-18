@@ -5,10 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -21,14 +17,15 @@ public class EventController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Event>> getAllEvents(@RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "10") int size,
-                                                    @RequestParam(defaultValue = "id") String sortBy,
-                                                    @RequestParam(defaultValue = "asc") String sortOrder) {
-        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        Page<Event> eventPage = repo.findAll(pageable);
-        return ResponseEntity.ok(eventPage.getContent());
+    public ResponseEntity<List<Event>> getAllEvents() {
+//        @RequestParam(defaultValue = "0") int page,
+//        @RequestParam(defaultValue = "10") int size,
+//        @RequestParam(defaultValue = "id") String sortBy,
+//        @RequestParam(defaultValue = "asc") String sortOrder
+//        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+//        Page<Event> eventPage = repo.findAll(pageable);
+        return ResponseEntity.ok(repo.findAll());
     }
     
     @GetMapping("/{id}")
@@ -47,7 +44,7 @@ public class EventController {
     }
     //initially expenses are empty
     @PostMapping({"", "/"})
-    public ResponseEntity<Event> postParticipant(@RequestBody Event e) {
+    public ResponseEntity<Event> postEvent(@RequestBody Event e) {
         if (e == null || !e.isInit())
             return ResponseEntity.badRequest().build();
         Event saved = repo.save(e);
