@@ -1,9 +1,6 @@
 package server.api;
 
 import commons.Participant;
-import commons.Quote;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -154,7 +151,7 @@ public class TestParticipantRepository implements ParticipantRepository {
 
     @Override
     public void deleteById(Long aLong) {
-
+        call("deleted");
     }
 
     @Override
