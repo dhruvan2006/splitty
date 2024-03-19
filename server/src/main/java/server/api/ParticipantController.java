@@ -6,10 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.ParticipantRepository;
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 @Controller
 @RequestMapping("/api/participant")
@@ -24,14 +20,15 @@ public class ParticipantController {
     * sorted by name, ascending
     */
     @GetMapping("")
-    public ResponseEntity<List<Participant>> findAllParticipants(@RequestParam(defaultValue = "0") int page,
-                                                                 @RequestParam(defaultValue = "10") int size,
-                                                                 @RequestParam(defaultValue = "name") String sortBy,
-                                                                 @RequestParam(defaultValue = "asc") String sortOrder) {
-        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        Page<Participant> participantPage = repo.findAll(pageable);
-        return ResponseEntity.ok(participantPage.getContent());
+    public ResponseEntity<List<Participant>> findAllParticipants() {
+//        @RequestParam(defaultValue = "0") int page,
+//        @RequestParam(defaultValue = "10") int size,
+//        @RequestParam(defaultValue = "name") String sortBy,
+//        @RequestParam(defaultValue = "asc") String sortOrde
+//        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+//        Page<Participant> participantPage = repo.findAll(pageable);
+        return ResponseEntity.ok(repo.findAll());
     }
 
 
