@@ -1,7 +1,6 @@
 package server.service;
 
 import commons.Expense;
-import commons.ExpensePayedKey;
 import org.springframework.stereotype.Service;
 import server.database.ExpensePayedRepository;
 import server.database.ExpensesRepository;
