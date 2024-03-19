@@ -5,12 +5,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 public class Expense {
@@ -78,7 +73,7 @@ public class Expense {
     public void setTotalExpense(int totalExpense) {
         this.totalExpense = totalExpense;
     }
-    
+
     public int hashCode() {
         return Objects.hash(id, title, creator);//, expenses);
     }

@@ -31,9 +31,6 @@ public class ExpenseService {
         return expensesRepository.save(expense);
     }
 
-    public void payExpense(ExpensePayedKey key) {
-        expensePayedRepository.Pay(key.getParticipantId(), key.getExpenseId());
-    }
 
     public void deleteExpense(Long id) {
         expensesRepository.deleteById(id);
@@ -45,7 +42,6 @@ public class ExpenseService {
             Expense existingExpense = expenseOptional.get();
             existingExpense.setTitle(updatedExpense.getTitle());
             existingExpense.setTotalExpense(updatedExpense.getTotalExpense());
-            existingExpense.setExpensesPayed(updatedExpense.getExpensesPayed());
 
             Expense savedExpense = expensesRepository.save(existingExpense);
             return Optional.of(savedExpense);

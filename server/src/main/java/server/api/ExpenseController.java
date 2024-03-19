@@ -68,11 +68,6 @@ public class ExpenseController {
         return ResponseEntity.ok(saved);
     }
 
-    @PutMapping(path = "/pay")
-    public void pay(@RequestBody ExpensePayedKey key) {
-        payRepo.Pay(key.getParticipantId(), key.getExpenseId());
-    }
-
     @DeleteMapping({"", "/"})
     public ResponseEntity<Expense> deleteIt(@RequestParam("id") Long id) {
         if (id < 0 || !repo.existsById(id))
@@ -92,8 +87,7 @@ public class ExpenseController {
     if (expenseOptional.isPresent()) {
         Expense existingExpense = expenseOptional.get();
         existingExpense.setTitle(updatedExpense.getTitle());
-        existingExpense.setTotalExpense(updatedExpense.getTotalExpense());  
-        existingExpense.setExpensesPayed(updatedExpense.getExpensesPayed());
+        existingExpense.setTotalExpense(updatedExpense.getTotalExpense());
 
         Expense savedExpense = repo.save(existingExpense);
         return ResponseEntity.ok(savedExpense);
