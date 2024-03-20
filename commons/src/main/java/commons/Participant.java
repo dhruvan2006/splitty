@@ -78,7 +78,7 @@ public class Participant{
     }
 
     public boolean notNull(){
-        return getUserName() != null || !getUserName().isEmpty();
+        return getUserName() != null;
     }
 
 
