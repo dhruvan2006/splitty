@@ -5,8 +5,11 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 
 public class OverviewCtrl {
 
@@ -36,12 +39,19 @@ public class OverviewCtrl {
 
     private final Event event;
 
+    private ExpensesCtrl expensesCtrl;
+    private Scene expense;
+
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
 //        TODO: Get the event from Start page
         this.event = new Event("New Year Party");
+    }
+    public void initialize(Pair<ExpensesCtrl, Parent> pe) {
+        this.expensesCtrl = pe.getKey();
+        this.expense = new Scene(pe.getValue());
     }
 
     @FXML
@@ -55,6 +65,11 @@ public class OverviewCtrl {
         participantsComboBox.getItems().addAll(
                 event.getParticipants().stream().map(Participant::getFirstName).toList()
         );
+    }
+
+    @FXML
+    private void  addExpense() {
+        mainCtrl.showScene(expense, "Expenses");
     }
 
     @FXML

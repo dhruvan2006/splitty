@@ -40,10 +40,6 @@ public class MainCtrl {
         this.overview = new Scene(overview.getValue());
         this.startScreenCtrl = start.getKey();
         this.start = new Scene(start.getValue());
-
-//        this.addCtrl = add.getKey();
-//        this.add = new Scene(add.getValue());
-
         showStartScreen();
         primaryStage.show();
     }
@@ -65,6 +61,10 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
 //        overviewCtrl.refresh();
+    }
+    public void showScene(Scene scene, String title) {
+        primaryStage.setTitle(title);
+        primaryStage.setScene(scene);
     }
 
     public void showAdd() {
