@@ -118,7 +118,7 @@ public class Event {
         Map<Participant,Integer> map = new HashMap<>();
 
         for (Participant participant : participants) {
-            Map<Participant, Integer> debts = calculateIndividualDebts().get(participant);
+            Map<Participant, Integer> debts = calculateIndividualDebt().get(participant);
             int totalSum = 0;
             for (Participant other : participants) {
 
@@ -136,7 +136,7 @@ public class Event {
     /**
      * does the same, but for each participant within the event
      */
-    public Map<Participant, Map<Participant, Integer>> calculateIndividualDebts() {
+    public Map<Participant, Map<Participant, Integer>> calculateIndividualDebt() {
         Map<Participant, Map<Participant, Integer>> indDebtsMap = new HashMap<>();
 
         for (Participant participant : participants) {

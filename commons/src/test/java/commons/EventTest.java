@@ -181,7 +181,7 @@ class EventTest {
         event.addExpense(expense);
         event.addExpense(expense2);
 
-        Map<Participant,Map<Participant,Integer>> result = event.calculateTotalDebt();
+        Map<Participant,Map<Participant,Integer>> result = event.calculateIndividualDebt();
         
         assertEquals(result.get(a).get(e),5);
         assertEquals(result.get(a).get(b),0);
@@ -238,7 +238,7 @@ class EventTest {
         event.addExpense(expense);
         event.addExpense(expense2);
 
-        Map<Participant,Map<Participant,Integer>> result = event.calculateTotalOwned();
+        Map<Participant,Map<Participant,Integer>> result = event.calculateIndividualOwned();
         
         assertEquals(result.get(a).get(e),4);
         assertEquals(result.get(a).get(b),4);
