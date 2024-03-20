@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Expense;
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import java.util.*;
