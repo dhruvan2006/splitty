@@ -37,14 +37,14 @@ public class ExpensesCtrl {
     public void add() {
         String title = description.getText();
         int value = Integer.parseInt(amount.getText());
-        String creatorName = username.getText();
+        String creatorUsername = username.getText();
 
-        if (title.isEmpty() || value<=0 || creatorName.isEmpty()) {
+        if (title.isEmpty() || value<=0 || creatorUsername.isEmpty()) {
             showAlert("Please fill in all fields!");
             return;
         }
 
-        Expense expense = new Expense(title, value, creatorName);
+        Expense expense = new Expense(title, value, new Participant(null,null,null,null,creatorUsername));
 
         server.addExpense(expense);
         clearFields();
