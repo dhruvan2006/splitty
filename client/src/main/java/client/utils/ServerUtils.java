@@ -78,4 +78,20 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
+
+	 public Expense addExpense(Expense expense) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(SERVER).path("api/expenses") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+    }
+
+    public List<Expense> getExpenses() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(SERVER).path("api/expenses") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(new GenericType<List<Expense>>() {});
+    }
 }

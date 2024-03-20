@@ -5,6 +5,8 @@ import com.google.inject.Inject;
 import commons.Expense;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import java.util.*;
+import javafx.scene.control.Alert;
 
 public class ExpensesCtrl {
     private final ServerUtils server;
@@ -32,17 +34,17 @@ public class ExpensesCtrl {
         amount.clear();
     }
 
-     public void add() {
-        String participantName = username.getText();
-        String expenseDescription = description.getText();
-        double expenseAmount = Double.parseDouble(amount.getText());
+    public void add() {
+        String title = description.getText();
+        double amount = Double.parseDouble(amount.getText());
+        String creatorName = username.getText();
 
-        if (participantName.isEmpty() || expenseDescription.isEmpty() || amount.getText().isEmpty()) {
-            showAlert("Please fill in all fields.");
+        if (title.isEmpty() || amount.getText().isEmpty() || creatorName.isEmpty()) {
+            showAlert("Please fill in all fields!");
             return;
         }
 
-        Expense expense = new Expense(participantName, expenseDescription, expenseAmount);
+        Expense expense = new Expense(title, amount, creatorName);
 
         server.addExpense(expense);
         clearFields();
