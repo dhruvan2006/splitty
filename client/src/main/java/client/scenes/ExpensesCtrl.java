@@ -16,8 +16,6 @@ public class ExpensesCtrl {
     private TextField description;
     @FXML
     private TextField amount;
-    @FXML
-    private TextField date;
     @Inject
     public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -32,10 +30,11 @@ public class ExpensesCtrl {
         username.clear();
         description.clear();
         amount.clear();
-        date.clear();
     }
     //to be done
     public void add(){}
     //@TODO
-    public Expense getExpenses() {return null;}
+    public Expense getExpenses() {
+        return null;
+    }
 }

@@ -78,6 +78,4 @@ public class StartScreenCtrl {
         }
         recentlyViewedEvents.setItems(observableEvents);
     }
-
-
 }

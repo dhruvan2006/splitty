@@ -12,10 +12,8 @@
         <TextField fx:id="username" layoutX="109.0" layoutY="24.0"  />
         <TextField fx:id="description" layoutX="109.0" layoutY="61.0" />
         <TextField fx:id="amount" layoutX="109.0" layoutY="98.0" />
-        <TextField fx:id="date" layoutX="109.0" layoutY="135.0"/>
         <Label layoutX="28.0" layoutY="29.0" text="Who paid" />
         <Label layoutX="28.0" layoutY="66.0" text="For what" />
         <Label layoutX="28.0" layoutY="103.0" text="amount" />
-        <Label layoutX="28.0" layoutY="140.0" text="date"/>
     </children>
 </AnchorPane>
