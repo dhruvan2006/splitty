@@ -109,4 +109,42 @@ class GroupTest {
         assertTrue(group.toString().contains("Ms. Jane Doe, known as JD"));
     }
 
+    @Test
+    void addAndGetExpenses() {
+        Expense e = new Expense();
+        Expense f = new Expense();
+        group.addExpense(e);
+        group.addExpense(f);
+
+        List<Expense> result = new ArrayList<>();
+        result.add(e);
+        result.add(f);
+
+        assertEquals(group.getExpenses(),result);
+
+    }
+
+    @Test
+    void setExpenses() {
+        Expense e = new Expense();
+        Expense f = new Expense();
+        List<Expense> settingList = new ArrayList<>();
+        settingList.add(e);
+        settingList.add(f);
+        
+        group.setExpenses(settingList);
+        
+        List<Expense> result = new ArrayList<>();
+        result.add(e);
+        result.add(f);
+
+        assertEquals(group.getExpenses(),result);
+
+    }
+
+
+
+
+
+
 }

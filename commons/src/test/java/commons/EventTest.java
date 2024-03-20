@@ -135,4 +135,117 @@ class EventTest {
         assertTrue(e.toString().contains("with the title: X, with the following participants:"));
         assertTrue(e.toString().contains("with the following expenses:"));
     }
+
+    @Test
+    void totalDebtTest()
+    {
+        Event event = new Event("z");
+        Participant a = new Participant();
+        Participant b = new Participant();
+        Participant c = new Participant();
+        Participant d = new Participant();
+        Participant e = new Participant();
+        event.addParticipant(a);
+        event.addParticipant(b);
+        event.addParticipant(c);
+        event.addParticipant(d);
+        event.addParticipant(e);
+        Expense expense = new Expense("TEST",20,e);
+        Expense expense2 = new Expense("TEST",16,a);
+        event.addExpense(expense);
+        event.addExpense(expense2);
+
+        Map<Participant,Integer> result = event.calculateTotalDebt();
+
+        assertEquals(result.get(a),5);
+        assertEquals(result.get(b),9);
+        assertEquals(result.get(e),4);
+    }
+
+    
+    @Test
+    void individualDebtTest()
+    {
+        Event event = new Event("z");
+        Participant a = new Participant();
+        Participant b = new Participant();
+        Participant c = new Participant();
+        Participant d = new Participant();
+        Participant e = new Participant();
+        event.addParticipant(a);
+        event.addParticipant(b);
+        event.addParticipant(c);
+        event.addParticipant(d);
+        event.addParticipant(e);
+        Expense expense = new Expense("TEST",20,e);
+        Expense expense2 = new Expense("TEST",16,a);
+        event.addExpense(expense);
+        event.addExpense(expense2);
+
+        Map<Participant,Map<Participant,Integer>> result = event.calculateTotalDebt();
+        
+        assertEquals(result.get(a).get(e),5);
+        assertEquals(result.get(a).get(b),0);
+        assertEquals(result.get(b).get(a),4);
+        assertEquals(result.get(b).get(e),5);
+        assertEquals(result.get(e).get(a),4);
+    }
+
+
+    @Test
+    void totalOwnedTest()
+    {
+        Event event = new Event("z");
+        Participant a = new Participant();
+        Participant b = new Participant();
+        Participant c = new Participant();
+        Participant d = new Participant();
+        Participant e = new Participant();
+        event.addParticipant(a);
+        event.addParticipant(b);
+        event.addParticipant(c);
+        event.addParticipant(d);
+        event.addParticipant(e);
+        Expense expense = new Expense("TEST",20,e);
+        Expense expense2 = new Expense("TEST",16,a);
+        event.addExpense(expense);
+        event.addExpense(expense2);
+
+        Map<Participant,Integer> result = event.calculateTotalOwned();
+
+        assertEquals(result.get(a),16);
+        assertEquals(result.get(b),0);
+        assertEquals(result.get(e),20);
+        // for now that's all we can test since there is no settling the debt mechanic
+      
+    }
+
+    @Test
+    void individualOwnedTest()
+    {
+        Event event = new Event("z");
+        Participant a = new Participant();
+        Participant b = new Participant();
+        Participant c = new Participant();
+        Participant d = new Participant();
+        Participant e = new Participant();
+        event.addParticipant(a);
+        event.addParticipant(b);
+        event.addParticipant(c);
+        event.addParticipant(d);
+        event.addParticipant(e);
+        Expense expense = new Expense("TEST",20,e);
+        Expense expense2 = new Expense("TEST",16,a);
+        event.addExpense(expense);
+        event.addExpense(expense2);
+
+        Map<Participant,Map<Participant,Integer>> result = event.calculateTotalOwned();
+        
+        assertEquals(result.get(a).get(e),4);
+        assertEquals(result.get(a).get(b),4);
+        assertEquals(result.get(b).get(a),0);
+        assertEquals(result.get(b).get(e),0);
+        assertEquals(result.get(e).get(a),5);
+        assertEquals(result.get(e).get(b),5);
+    }
 }

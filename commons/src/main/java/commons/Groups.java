@@ -19,11 +19,14 @@ public class Groups {
     private boolean pinned;
     @ManyToOne
     private Participant groupLeader;
+    @ManyToMany
+    private List<Expense> expenses;
 
 
     public Groups(String groupName) {
         this.groupName = groupName;
         this.participants = new ArrayList<>();
+        this.expenses = new ArrayList<>();
         this.pinned = false; // Set a pin so that a group is displayed first
         this.groupLeader = null; // Initially, no group leader
     }
@@ -42,6 +45,18 @@ public class Groups {
 
     public List<Participant> getParticipants() {
         return participants;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
+
+    public void addExpense(Expense expense) {
+        expenses.add(expense);
     }
 
     /**
@@ -104,4 +119,5 @@ public class Groups {
         }
         return result;
     }
+
 }
