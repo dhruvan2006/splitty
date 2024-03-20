@@ -139,11 +139,11 @@ class EventTest {
     void totalDebtTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant();
-        Participant b = new Participant();
-        Participant c = new Participant();
-        Participant d = new Participant();
-        Participant e = new Participant();
+        Participant a = new Participant("a","a","a","a","a");
+        Participant b = new Participant("b","b","b","b","b");
+        Participant c = new Participant("c","c","c","c","c");
+        Participant d = new Participant("d","d","d","d","d");
+        Participant e = new Participant("e","e","e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -166,11 +166,11 @@ class EventTest {
     void individualDebtTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant();
-        Participant b = new Participant();
-        Participant c = new Participant();
-        Participant d = new Participant();
-        Participant e = new Participant();
+        Participant a = new Participant("a","a","a","a","a");
+        Participant b = new Participant("b","b","b","b","b");
+        Participant c = new Participant("c","c","c","c","c");
+        Participant d = new Participant("d","d","d","d","d");
+        Participant e = new Participant("e","e","e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -184,7 +184,7 @@ class EventTest {
         Map<Participant,Map<Participant,Integer>> result = event.calculateIndividualDebt();
         
         assertEquals(result.get(a).get(e),5);
-        assertEquals(result.get(a).get(b),0);
+        assertEquals(result.get(a).get(b),null);
         assertEquals(result.get(b).get(a),4);
         assertEquals(result.get(b).get(e),5);
         assertEquals(result.get(e).get(a),4);
@@ -195,11 +195,11 @@ class EventTest {
     void totalOwnedTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant();
-        Participant b = new Participant();
-        Participant c = new Participant();
-        Participant d = new Participant();
-        Participant e = new Participant();
+        Participant a = new Participant("a","a","a","a","a");
+        Participant b = new Participant("b","b","b","b","b");
+        Participant c = new Participant("c","c","c","c","c");
+        Participant d = new Participant("d","d","d","d","d");
+        Participant e = new Participant("e","e","e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -213,7 +213,7 @@ class EventTest {
         Map<Participant,Integer> result = event.calculateTotalOwned();
 
         assertEquals(result.get(a),16);
-        assertEquals(result.get(b),0);
+        assertEquals(result.get(b),null);
         assertEquals(result.get(e),20);
         // for now that's all we can test since there is no settling the debt mechanic
       
@@ -223,11 +223,11 @@ class EventTest {
     void individualOwnedTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant();
-        Participant b = new Participant();
-        Participant c = new Participant();
-        Participant d = new Participant();
-        Participant e = new Participant();
+        Participant a = new Participant("a","a","a","a","a");
+        Participant b = new Participant("b","b","b","b","b");
+        Participant c = new Participant("c","c","c","c","c");
+        Participant d = new Participant("d","d","d","d","d");
+        Participant e = new Participant("e","e","e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -242,8 +242,8 @@ class EventTest {
         
         assertEquals(result.get(a).get(e),4);
         assertEquals(result.get(a).get(b),4);
-        assertEquals(result.get(b).get(a),0);
-        assertEquals(result.get(b).get(e),0);
+        assertEquals(result.get(b).get(a),null);
+        assertEquals(result.get(b).get(e),null);
         assertEquals(result.get(e).get(a),5);
         assertEquals(result.get(e).get(b),5);
     }

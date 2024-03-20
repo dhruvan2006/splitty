@@ -123,7 +123,7 @@ public class Event {
             for (Participant other : participants) {
 
                 if (other.equals(participant)) continue;
-                totalSum+= debts.get(other);
+                totalSum+= debts.getOrDefault(other,0);
             }
 
             map.put(participant,totalSum);
@@ -173,7 +173,7 @@ public class Event {
             for (Participant other : participants) {
 
                 if (other.equals(participant)) continue;
-                totalOwned+= owned.get(other);
+                totalOwned+= owned.getOrDefault(other,0);
             }
 
             map.put(participant,totalOwned);
