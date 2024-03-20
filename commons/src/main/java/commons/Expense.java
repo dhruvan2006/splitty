@@ -5,21 +5,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
-
-    @OneToMany(mappedBy = "expense")
-    ArrayList<ExpensePayed> expensesPayed;
 
     @ManyToOne()
     Participant creator;
@@ -43,7 +35,6 @@ public class Expense {
         this.title = title;
         this.totalExpense = totalExpense;
         this.creator = creator;
-        this.expensesPayed = new ArrayList<>();
     }
 
     public Event getEvent() {
@@ -74,13 +65,6 @@ public class Expense {
         this.creator = creator;
     }
 
-    public ArrayList<ExpensePayed> getExpensesPayed() {
-        return expensesPayed;
-    }
-
-    public void setExpensesPayed(ArrayList<ExpensePayed> newExpenses){
-        this.expensesPayed= newExpenses;
-    }
 
     public int getTotalExpense() {
         return totalExpense;
@@ -88,18 +72,6 @@ public class Expense {
 
     public void setTotalExpense(int totalExpense) {
         this.totalExpense = totalExpense;
-    }
-
-    public List<Participant> getParticipantsWhoPayed(){
-        return expensesPayed.stream().filter((expensePayed -> expensePayed.payed))
-                .map((expensePayed -> expensePayed.participant))
-                .collect(Collectors.toList());
-    }
-
-    public List<Participant> getParticipantsWhoNotPayed(){
-        return expensesPayed.stream().filter((expensePayed -> !expensePayed.payed))
-                .map((expensePayed -> expensePayed.participant))
-                .collect(Collectors.toList());
     }
 
     public int hashCode() {

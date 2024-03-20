@@ -53,10 +53,6 @@ public class Participant{
             return IBAN;
         }
 
-        public Set<ExpensePayed> getExpensesPayed() {
-            return expensesPayed;
-        }
-
         public void setEmail(String email) {
             this.email = email;
         }
@@ -64,10 +60,6 @@ public class Participant{
         public void setIBAN(String IBAN) {
             this.IBAN = IBAN;
         }
-
-    @OneToMany(mappedBy = "participant")
-    Set<ExpensePayed> expensesPayed;
-
     public Participant() {
 
     }
@@ -108,12 +100,12 @@ public class Participant{
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof Participant that)) return false;
-            return getId() == that.getId() && Objects.equals(getFirstName(), that.getFirstName()) && Objects.equals(getLastName(), that.getLastName()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getIBAN(), that.getIBAN()) && Objects.equals(getUserName(), that.getUserName()) && Objects.equals(getExpensesPayed(), that.getExpensesPayed());
+            return getId() == that.getId() && Objects.equals(getFirstName(), that.getFirstName()) && Objects.equals(getLastName(), that.getLastName()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getIBAN(), that.getIBAN()) && Objects.equals(getUserName(), that.getUserName());
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(getId(), getFirstName(), getLastName(), getEmail(), getIBAN(), getUserName(), getExpensesPayed());
+            return Objects.hash(getId(), getFirstName(), getLastName(), getEmail(), getIBAN(), getUserName());
         }
 
         @Override
@@ -125,7 +117,6 @@ public class Participant{
                     ", email= " + email  +
                     ", IBAN= " + IBAN  +
                     ", userName= " + userName  +
-                    ", expensesPayed= " + expensesPayed +
                     "}\n";
         }
 
