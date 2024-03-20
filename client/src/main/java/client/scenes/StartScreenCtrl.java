@@ -4,11 +4,14 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Event;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 
 import java.util.List;
 
@@ -37,8 +40,19 @@ public class StartScreenCtrl {
         //Will code after API is created
         String createEventText = createEventTextField.getText().trim();
         Event newEvent = new Event(createEventText);
-//        server.addEvent(newEvent);
-        mainCtrl.showOverview();
+        try {
+            server.addEvent(newEvent);
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
+        clearFields();
+        mainCtrl.showStartScreen();
     }
 
     public void join(){

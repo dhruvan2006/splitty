@@ -25,7 +25,7 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
-        if (event.isInit()) {
+        if (event.checkNull()) {
             // Perform validation or additional logic if needed
             return eventRepository.save(event);
         } else {

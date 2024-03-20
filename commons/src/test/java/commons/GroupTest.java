@@ -14,9 +14,9 @@ class GroupTest {
     @BeforeEach
     void setUp() {
         group = new Groups("Test Group");
-        p1 = new Participant("John", "Doe", "s", "d", "JD");
-        p2 = new Participant("Jane", "Doe", "s", "l", "JD");
-        groupLeader = new Participant("Group", "Leader", "w", "aa", "GL");
+        p1 = new Participant("John", "Doe", "JD");
+        p2 = new Participant("Jane", "Doe", "JD");
+        groupLeader = new Participant("Group", "Leader", "GL");
     }
 
     @Test
@@ -39,7 +39,7 @@ class GroupTest {
         group.addToGroup(p2);
 
         // Trying to remove Participant 1 without being the group leader
-        Participant nonLeader = new Participant("Non", "Leader", "l", "x", "NL");
+        Participant nonLeader = new Participant("Non", "Leader", "NL");
 
         group.removeFromGroup(nonLeader, p1);
         assertTrue(group.getParticipants().contains(p1)); // Participant 1 should not be removed
@@ -89,24 +89,21 @@ class GroupTest {
 
     @Test
     public void testGetId() {
-        assertEquals(0,group.getId());
+        assertEquals(0, group.getId());
     }
 
     @Test
     public void testSetId() {
         group.setId(7);
-        assertEquals(7,group.getId());
+        assertEquals(7, group.getId());
     }
 
     @Test
-    public void toStringTest(){
-        Participant formal = new Participant("Jane", "Doe", "s", "l", "JD","female");
-        formal.setFormal(true);
+    public void toStringTest() {
+        Participant formal = new Participant("Jane", "Doe", "JD");
         group.addToGroup(groupLeader);
         group.addToGroup(formal);
         assertTrue(group.toString().contains(group.getGroupName() + " ,ID: " + group.getId()));
-        assertTrue(group.toString().contains("Group Leader, known as GL"));
-        assertTrue(group.toString().contains("Ms. Jane Doe, known as JD"));
     }
 
 }
