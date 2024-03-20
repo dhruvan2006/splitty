@@ -26,6 +26,7 @@ import java.util.List;
 
 import commons.Event;
 import commons.Participant;
+import commons.Expense;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
