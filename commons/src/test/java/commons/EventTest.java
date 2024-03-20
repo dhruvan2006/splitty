@@ -213,7 +213,7 @@ class EventTest {
         Map<Participant,Integer> result = event.calculateTotalOwned();
 
         assertEquals(result.get(a),16);
-        assertEquals(result.get(b),null);
+        assertEquals(result.get(b),0);
         assertEquals(result.get(e),20);
         // for now that's all we can test since there is no settling the debt mechanic
       
