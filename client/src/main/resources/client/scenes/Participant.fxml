@@ -1,50 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Button?>
 
-<GridPane prefHeight="250" prefWidth="450" alignment="center" hgap="10" vgap="10"
-          fx:controller="client.scenes.ParticipantCtrl" xmlns:fx="http://javafx.com/fxml/1">
-    <Label text="Configure Participant" textAlignment="CENTER"
-           style="-fx-padding: 0 0 10 5;"
-           GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="0">
+<GridPane alignment="center" hgap="10" prefHeight="250" prefWidth="450" vgap="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ParticipantCtrl">
+    <Label style="-fx-padding: 0 0 10 5;" text="Configure Participant" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
         <font>
             <Font name="System Bold" size="30.0" />
         </font>
     </Label>
-    <Label text="Name"
-           GridPane.columnIndex="0" GridPane.rowIndex="1">
+    <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="1">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
     </Label>
 
-    <Label text="Email"
-           GridPane.columnIndex="0" GridPane.rowIndex="2">
+    <Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="2">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
     </Label>
 
-    <Label text="IBAN"
-           GridPane.columnIndex="0" GridPane.rowIndex="3">
+    <Label text="IBAN" GridPane.columnIndex="0" GridPane.rowIndex="3">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
     </Label>
 
-    <TextField promptText="Fill in your name" prefWidth="250"
-               GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="nameField"/>
-    <TextField promptText="Fill in your email"
-               GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="emailField"/>
-    <TextField promptText="Fill in your bank account number"
-               GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="bnrField"/>
+    <TextField fx:id="nameField" prefWidth="250" promptText="Fill in your name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <TextField fx:id="emailField" promptText="Fill in your email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <TextField fx:id="bnrField" promptText="Fill in your bank account number" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-    <Button mnemonicParsing="false" text="Cancel" onMouseClicked="#Cancel"
-            GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-    <Button mnemonicParsing="false" text="Finish" onMouseClicked="#HandleFinish"
-            GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    <Button fx:id="cancel" mnemonicParsing="false" onAction="#Cancel" text="Cancel" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <Button fx:id="finish" mnemonicParsing="false" onAction="#Finish" text="Finish" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
 </GridPane>
