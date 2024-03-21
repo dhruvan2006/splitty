@@ -53,7 +53,7 @@ public class StartScreenCtrl {
 
         clearFields();
         mainCtrl.setCurrent(newEvent);
-        mainCtrl.showConfigParticipant();
+        mainCtrl.showOverview();
     }
 
     public void join(){
