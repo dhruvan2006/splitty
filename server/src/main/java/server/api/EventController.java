@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Event;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,8 @@ import java.util.List;
 @RequestMapping("/api/event")
 public class EventController {
     private final EventRepository repo;
+
+    @Autowired
     EventController(EventRepository repo){
         this.repo = repo;
     }
@@ -45,7 +48,7 @@ public class EventController {
     //initially expenses are empty
     @PostMapping({"", "/"})
     public ResponseEntity<Event> postEvent(@RequestBody Event e) {
-        if (e == null || !e.isInit())
+        if (e == null || !e.checkNull())
             return ResponseEntity.badRequest().build();
         Event saved = repo.save(e);
         return ResponseEntity.ok(saved);

@@ -20,9 +20,9 @@ public class DebtTest {
     void getterPersonsFrom(){
         Participant[] participants = new Participant[3];
 
-        participants[0] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[1] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[2] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
+        participants[0] = new Participant("Eduardas", "Eduardas", "k");
+        participants[1] = new Participant("Eduardas", "Eduardas", "k");
+        participants[2] = new Participant("Eduardas", "Eduardas", "k");
 
         Debt debt = new Debt(0, 0, participants, null, "EUR", null);
         assertEquals(debt.getPersonsOwnsFrom(), participants);
@@ -30,43 +30,43 @@ public class DebtTest {
     @Test
     void getterPersonsTo(){
         Participant[] participants = new Participant[3];
-        participants[0] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[1] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[2] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
+        participants[0] = new Participant("Eduardas", "Eduardas", "k");
+        participants[1] = new Participant("Eduardas", "Eduardas", "k");
+        participants[2] = new Participant("Eduardas", "Eduardas", "k");
         Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
         assertEquals(debt.getPersonOwnsTo(), participants[0]);
     }
     @Test
     void toStringTest() {
         Participant[] participants = new Participant[3];
-        participants[0] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[1] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[2] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
+        participants[0] = new Participant("Eduardas", "Eduardas", "k");
+        participants[1] = new Participant("Eduardas", "Eduardas", "k");
+        participants[2] = new Participant("Eduardas", "Eduardas", "k");
         Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
         String output = "Debt: from persons, ";
         for (Participant person : debt.getPersonsOwnsFrom()) {
-            output += person.getFullName();
+            output += person.getUserName();
             output += " ";
         }
         output += "to person: ";
-        output += debt.getPersonOwnsTo().getFullName();
+        output += debt.getPersonOwnsTo().getUserName();
         output += " 0 of EUR debt not settled";
         assertEquals(output, debt.toString());
     }
     @Test
     void toStringAfterSettleTest() {
         Participant[] participants = new Participant[3];
-        participants[0] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[1] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
-        participants[2] = new Participant("Eduardas", "Eduardas", "s", "a", "k");
+        participants[0] = new Participant("Eduardas", "Eduardas", "k");
+        participants[1] = new Participant("Eduardas", "Eduardas", "k");
+        participants[2] = new Participant("Eduardas", "Eduardas", "k");
         Debt debt = new Debt(0, 0, participants, participants[0], "EUR", null);
         String output = "Debt: from persons, ";
         for (Participant person : debt.getPersonsOwnsFrom()) {
-            output += person.getFullName();
+            output += person.getUserName();
             output += " ";
         }
         output += "to person: ";
-        output += debt.getPersonOwnsTo().getFullName();
+        output += debt.getPersonOwnsTo().getUserName();
         output += " 0 of EUR settled";
         debt.settleIt();
         assertEquals(output, debt.toString());

@@ -83,11 +83,11 @@ public class Debt {
     public String toString() {
         String output = "Debt: from persons, ";
         for (Participant person : personsOwnsFrom) {
-            output += person.getFullName();
+            output += person.getUserName();
             output += " ";
         }
         output += "to person: ";
-        output += personOwnsTo.getFullName();
+        output += personOwnsTo.getUserName();
         output += " ";
         output += amount;
         output += " of ";
