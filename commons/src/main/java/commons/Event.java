@@ -29,14 +29,7 @@ public class Event {
     public Event(String title, boolean ...useMockData) {
         this.title = title;
         this.participants = new ArrayList<>();
-        this.expenses = useMockData.length > 0 && useMockData[0] ? new ArrayList<>() {
-            {
-                for (int i = 0; i < 10; i ++) {
-                    add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
-                    add(new Expense("title2", 22, new Participant("hi2@hi2.com", "iban2", "klaasjanpiet")));
-                }
-            };
-        } : new ArrayList<>();
+        this.expenses = new ArrayList<>();
         this.inviteCode = generateInviteCode();
     }
 

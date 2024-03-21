@@ -62,11 +62,6 @@
       <Button mnemonicParsing="false" text="Add Expense" onAction="#addExpense"/>
    </HBox>
    <VBox prefHeight="200.0" prefWidth="100.0">
-      <HBox prefHeight="10.0" prefWidth="200.0">
-         <ToggleButton mnemonicParsing="false" text="All" />
-         <ToggleButton mnemonicParsing="false" text="From John" />
-         <ToggleButton mnemonicParsing="false" text="Including John" />
-      </HBox>
       <ScrollPane>
          <VBox fx:id="expenseListVBox"/>
       </ScrollPane>

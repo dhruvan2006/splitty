@@ -19,6 +19,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+
 public class OverviewCtrl {
 
     private final ServerUtils server;
@@ -33,9 +35,6 @@ public class OverviewCtrl {
 
     @FXML
     private ComboBox<String> participantsComboBox;
-
-    @FXML
-    private ToggleButton allExpensesToggle, fromJohnToggle, includingJohnToggle;
 
     @FXML
     private TextField participantFirstNameField, participantLastNameField, participantEmailField, participantIBANField, participantUsernameField;
@@ -67,6 +66,14 @@ public class OverviewCtrl {
         }
         inviteCodeLabel.setText(current.getInviteCode());
         updateParticipantsComboBox();
+        current.setExpenses(new ArrayList<>() {
+            {
+                for (int i = 0; i < 10; i ++) {
+                    add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
+                    add(new Expense("title2", 22, new Participant("hi2@hi2.com", "iban2", "klaasjanpiet")));
+                }
+            };
+        }); // TODO: Remove this mock data when you can add expenses via the expense scene
         updateExpenseList();
     }
 
