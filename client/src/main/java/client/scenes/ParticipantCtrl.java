@@ -42,7 +42,7 @@ public class ParticipantCtrl {
     public void Cancel() {
         clearFields();
         System.out.println("Canceled creation of event");
-        mainCtrl.showStartScreen();
+        mainCtrl.showOverview();
     }
 
     private void clearFields(){
