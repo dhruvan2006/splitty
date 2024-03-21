@@ -45,7 +45,7 @@ public class ExpensesCtrl {
             return;
         }
 
-        Expense expense = new Expense(title, value, new Participant(null,null,null,null,creatorUsername));
+        Expense expense = new Expense(title, value, new Participant(null,null,creatorUsername));
 
         server.addExpense(expense);
         clearFields();
