@@ -72,13 +72,14 @@ public class MainCtrl {
     public void showConfigParticipant(){
         primaryStage.setTitle("Participant config");
         primaryStage.setScene(configParticipant);
-        participantCtrl.setCurrent(current);
     }
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
-        overviewCtrl.setCurrent(current);
-        overviewCtrl.initialize();
+        if(overviewCtrl.getCurrent() == null) {
+            overviewCtrl.setCurrent(current);
+            overviewCtrl.initialize();
+        }
     }
     public void showScene(Scene scene, String title) {
         primaryStage.setTitle(title);

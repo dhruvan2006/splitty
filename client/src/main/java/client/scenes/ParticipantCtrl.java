@@ -13,8 +13,6 @@ public class ParticipantCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private Event current;
-
     @FXML
     private TextField bnrField;
     @FXML
@@ -71,11 +69,4 @@ public class ParticipantCtrl {
     }
 
 
-    public Event getCurrent() {
-        return current;
-    }
-
-    public void setCurrent(Event current) {
-        this.current = current;
-    }
 }
