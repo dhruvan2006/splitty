@@ -1,11 +1,17 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class ParticipantCtrl {
+
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+
     @FXML
     private TextField bnrField;
     @FXML
@@ -13,7 +19,13 @@ public class ParticipantCtrl {
     @FXML
     private TextField nameField;
     private ArrayList<TextField> fields;
-    @FXML
+
+    @Inject
+    public ParticipantCtrl(ServerUtils server, MainCtrl mainCtrl) {
+        this.server = server;
+        this.mainCtrl = mainCtrl;
+    }
+
     public void initialize() {
          fields = new ArrayList<>() {
             {
@@ -23,18 +35,19 @@ public class ParticipantCtrl {
             }
         };
     }
-    @FXML
-    private void Cancel() {
-        System.out.println("Configuring Participant Canceled");
+
+    public void Cancel() {
+        clearFields();
+        System.out.println("Canceled creation of event");
+        mainCtrl.showOverview();
     }
-    @FXML
-    private void HandleFinish(){
-        if (!Validate()){
-            return;
-        }
-        Finish();
+
+    private void clearFields(){
+        bnrField.clear();
+        emailField.clear();
+        nameField.clear();
     }
-    private boolean Validate() {
+    public boolean Validate() {
         boolean valid = true;
         for (TextField field : fields) {
             if (Objects.equals(field.getText(), "")){
@@ -47,7 +60,12 @@ public class ParticipantCtrl {
         }
         return valid;
     }
-    private void Finish(){
-        System.out.println("Configuring Participant Finished");
+    public void Finish(){
+        if(!Validate()){
+            return;
+        }
+        mainCtrl.showOverview();
     }
+
+
 }
