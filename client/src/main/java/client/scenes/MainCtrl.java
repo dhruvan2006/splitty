@@ -76,10 +76,6 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
-        if(overviewCtrl.getCurrent() == null) {
-            overviewCtrl.setCurrent(current);
-            overviewCtrl.initialize();
-        }
     }
     public void showScene(Scene scene, String title) {
         primaryStage.setTitle(title);
@@ -99,5 +95,7 @@ public class MainCtrl {
 
     public void setCurrent(Event current) {
         this.current = current;
+        overviewCtrl.setCurrent(current);
+        overviewCtrl.initialize();
     }
 }

@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import commons.Event;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Objects;
