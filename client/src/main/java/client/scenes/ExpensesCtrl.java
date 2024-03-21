@@ -37,4 +37,10 @@ public class ExpensesCtrl {
     public Expense getExpenses() {
         return null;
     }
+
+    public void initializeWithExpense(Expense expense) {
+        username.setText(expense.getCreator().getUserName());
+        description.setText(expense.getTitle());
+        amount.setText(Integer.toString(expense.getTotalExpense()));
+    }
 }
