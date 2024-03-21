@@ -63,7 +63,7 @@ public class OverviewCtrl {
     private void updateParticipantsComboBox() {
         participantsComboBox.getItems().clear();
         participantsComboBox.getItems().addAll(
-                event.getParticipants().stream().map(Participant::getFirstName).toList()
+                event.getParticipants().stream().map(Participant::getUserName).toList()
         );
     }
 
@@ -93,17 +93,17 @@ public class OverviewCtrl {
             System.out.println(participantEmail);
             System.out.println(participantIBAN);
             System.out.println(participantUsername);
-            Participant newParticipant = new Participant(participantFirstName, participantLastName, participantEmail,
-                    participantIBAN, participantUsername);
+            Participant newParticipant = new Participant(participantEmail,
+                    participantIBAN, participantUsername, event);
 
             server.addParticipant(newParticipant);
 
             event.addParticipant(newParticipant);
             updateParticipantsComboBox();
             if (participantsText.getText() != null && !participantsText.getText().isEmpty()) {
-                participantsText.setText(participantsText.getText() + ", " + newParticipant.getFirstName());
+                participantsText.setText(participantsText.getText() + ", " + newParticipant.getUserName());
             } else {
-                participantsText.setText(participantsText.getText() + newParticipant.getFirstName());
+                participantsText.setText(participantsText.getText() + newParticipant.getUserName());
             }
             System.out.println("Participant added: " + newParticipant);
         }

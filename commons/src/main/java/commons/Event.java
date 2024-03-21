@@ -16,10 +16,10 @@ public class Event {
     private String inviteCode;
     private String title;
 
-    @OneToMany(targetEntity = Participant.class)
+    @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
     private List<Participant> participants;
 
-    @OneToMany(targetEntity = Expense.class)
+    @OneToMany(targetEntity = Expense.class, cascade = CascadeType.ALL)
     private List<Expense> expenses;
 
     public Event() {
@@ -95,8 +95,8 @@ public class Event {
                 && Objects.equals(expenses, event.expenses);
     }
 
-    public boolean isInit(){
-        return title != null && participants.stream().allMatch(Participant::notNull) && expenses.isEmpty();
+    public boolean checkNull(){
+        return title != null;
     }
     @Override
     public int hashCode() {
@@ -106,7 +106,7 @@ public class Event {
     @Override
     public String toString() {
         String participant = "";
-        for(Participant p:participants) participant+=p.getFullName() + " ";
+        for(Participant p:participants) participant+=p.getUserName() + " ";
         return "Event " + id +
                 ", with the title: " + title +
                 ", with the following participants: " + participant +

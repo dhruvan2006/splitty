@@ -100,7 +100,7 @@ public class Groups {
     public String toString(){
         String result = groupName + " ,ID: " + id + " ,with the following participants:\n";
         for (Participant p:participants){
-            result+= p.getFullName() + "\n";
+            result+= p.getUserName() + "\n";
         }
         return result;
     }

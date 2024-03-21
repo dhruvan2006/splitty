@@ -1,10 +1,6 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -35,6 +31,13 @@ public class Expense {
         this.title = title;
         this.totalExpense = totalExpense;
         this.creator = creator;
+    }
+
+    public Expense(String title, int totalExpense, Participant creator, Event event){
+        this.title = title;
+        this.totalExpense = totalExpense;
+        this.creator = creator;
+        this.event = event;
     }
 
     public Event getEvent() {
@@ -82,7 +85,7 @@ public class Expense {
     public String toString() {
         return "Expense " + id +
                 " - " + title +
-                ", created by " + creator.getFullName() + "\n";
+                ", created by " + creator.toString() + "\n";
     }
 }
 
