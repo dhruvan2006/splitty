@@ -138,11 +138,11 @@ class EventTest {
     void totalDebtTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant("a","a","a","a","a");
-        Participant b = new Participant("b","b","b","b","b");
-        Participant c = new Participant("c","c","c","c","c");
-        Participant d = new Participant("d","d","d","d","d");
-        Participant e = new Participant("e","e","e","e","e");
+        Participant a = new Participant("a","a","a");
+        Participant b = new Participant("b","b","b");
+        Participant c = new Participant("c","c","c");
+        Participant d = new Participant("d","d","d");
+        Participant e = new Participant("e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -165,11 +165,11 @@ class EventTest {
     void individualDebtTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant("a","a","a","a","a");
-        Participant b = new Participant("b","b","b","b","b");
-        Participant c = new Participant("c","c","c","c","c");
-        Participant d = new Participant("d","d","d","d","d");
-        Participant e = new Participant("e","e","e","e","e");
+        Participant a = new Participant("a","a","a");
+        Participant b = new Participant("b","b","b");
+        Participant c = new Participant("c","c","c");
+        Participant d = new Participant("d","d","d");
+        Participant e = new Participant("e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -194,11 +194,11 @@ class EventTest {
     void totalOwnedTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant("a","a","a","a","a");
-        Participant b = new Participant("b","b","b","b","b");
-        Participant c = new Participant("c","c","c","c","c");
-        Participant d = new Participant("d","d","d","d","d");
-        Participant e = new Participant("e","e","e","e","e");
+        Participant a = new Participant("a","a","a");
+        Participant b = new Participant("b","b","b");
+        Participant c = new Participant("c","c","c");
+        Participant d = new Participant("d","d","d");
+        Participant e = new Participant("e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
@@ -222,11 +222,11 @@ class EventTest {
     void individualOwnedTest()
     {
         Event event = new Event("z");
-        Participant a = new Participant("a","a","a","a","a");
-        Participant b = new Participant("b","b","b","b","b");
-        Participant c = new Participant("c","c","c","c","c");
-        Participant d = new Participant("d","d","d","d","d");
-        Participant e = new Participant("e","e","e","e","e");
+        Participant a = new Participant("a","a","a");
+        Participant b = new Participant("b","b","b");
+        Participant c = new Participant("c","c","c");
+        Participant d = new Participant("d","d","d");
+        Participant e = new Participant("e","e","e");
         event.addParticipant(a);
         event.addParticipant(b);
         event.addParticipant(c);
