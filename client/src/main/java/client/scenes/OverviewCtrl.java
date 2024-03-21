@@ -54,7 +54,7 @@ public class OverviewCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
         //TODO: Get the event from Start page
-        this.event = new Event("New Year Party");
+        this.event = new Event("New Year Party", true);
     }
 
     public void initialize(Pair<ExpensesCtrl, Parent> pe) {
