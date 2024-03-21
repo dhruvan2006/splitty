@@ -16,6 +16,8 @@ public class OverviewCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private Event current;
+
     @FXML
     private Button sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
 
@@ -37,8 +39,6 @@ public class OverviewCtrl {
     @FXML
     private TextArea expensesTextArea;
 
-    private final Event event;
-
     private ExpensesCtrl expensesCtrl;
     private Scene expense;
 
@@ -46,8 +46,6 @@ public class OverviewCtrl {
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-//        TODO: Get the event from Start page
-        this.event = new Event("New Year Party");
     }
     public void initialize(Pair<ExpensesCtrl, Parent> pe) {
         this.expensesCtrl = pe.getKey();
@@ -56,14 +54,17 @@ public class OverviewCtrl {
 
     @FXML
     public void initialize() {
-        inviteCodeLabel.setText(event.getInviteCode());
+        if(current == null){
+            return;
+        }
+        inviteCodeLabel.setText(current.getInviteCode());
         updateParticipantsComboBox();
     }
 
     private void updateParticipantsComboBox() {
         participantsComboBox.getItems().clear();
         participantsComboBox.getItems().addAll(
-                event.getParticipants().stream().map(Participant::getUserName).toList()
+                current.getParticipants().stream().map(Participant::getUserName).toList()
         );
     }
 
@@ -94,11 +95,11 @@ public class OverviewCtrl {
             System.out.println(participantIBAN);
             System.out.println(participantUsername);
             Participant newParticipant = new Participant(participantEmail,
-                    participantIBAN, participantUsername, event);
+                    participantIBAN, participantUsername, current);
 
             server.addParticipant(newParticipant);
 
-            event.addParticipant(newParticipant);
+            current.addParticipant(newParticipant);
             updateParticipantsComboBox();
             if (participantsText.getText() != null && !participantsText.getText().isEmpty()) {
                 participantsText.setText(participantsText.getText() + ", " + newParticipant.getUserName());
@@ -112,5 +113,14 @@ public class OverviewCtrl {
     @FXML
     public void handleSettleDebtsButton() {
         System.out.println("Settling debts among participants");
+    }
+
+
+    public Event getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Event current) {
+        this.current = current;
     }
 }

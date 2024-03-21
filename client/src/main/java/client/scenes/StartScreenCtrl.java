@@ -37,7 +37,7 @@ public class StartScreenCtrl {
 
 
     public void create(){
-        //Will code after API is created
+        if(!validateCreate()) return;
         String createEventText = createEventTextField.getText().trim();
         Event newEvent = new Event(createEventText);
         try {
@@ -52,11 +52,14 @@ public class StartScreenCtrl {
         }
 
         clearFields();
-        mainCtrl.showStartScreen();
+        mainCtrl.setCurrent(newEvent);
+        mainCtrl.showConfigParticipant();
     }
 
     public void join(){
-        //Will code after API is created
+        if (validateJoin()) return;
+        String inviteCode = joinEventTextField.getText().trim();
+
     }
     private Event createEvent(){
         var eventTitle = createEventTextField.getText();
@@ -78,4 +81,27 @@ public class StartScreenCtrl {
         }
         recentlyViewedEvents.setItems(observableEvents);
     }
+
+
+    public boolean validateCreate(){
+        boolean valid = true;
+        if(createEventTextField.getText().isEmpty()){
+            valid = false;
+            createEventTextField.setStyle("-fx-border-color: #E80C0C");
+            joinEventTextField.setStyle("-fx-border-color: gray");
+        }
+        return valid;
+    }
+
+
+    public boolean validateJoin(){
+        boolean valid = true;
+        if(joinEventTextField.getText().isEmpty()){
+            valid = false;
+            joinEventTextField.setStyle("-fx-border-color: #E80C0C");
+            createEventTextField.setStyle("-fx-border-color: gray");
+        }
+        return valid;
+    }
+
 }

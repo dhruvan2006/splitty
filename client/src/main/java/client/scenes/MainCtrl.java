@@ -15,12 +15,17 @@
  */
 package client.scenes;
 
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
+
+
+    private Event current;
+
 
     private Stage primaryStage;
 
@@ -30,16 +35,21 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private ParticipantCtrl participantCtrl;
+
+    private Scene configParticipant;
     private StartScreenCtrl startScreenCtrl;
     private Scene start;
 
-    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start,Pair<OverviewCtrl, Parent> overview) {
+    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview) {
 //            Pair<AddQuoteCtrl, Parent> add) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
         this.startScreenCtrl = start.getKey();
         this.start = new Scene(start.getValue());
+        this.participantCtrl = cParticipant.getKey();
+        this.configParticipant = new Scene(cParticipant.getValue());
         showStartScreen();
         primaryStage.show();
     }
@@ -57,10 +67,18 @@ public class MainCtrl {
         primaryStage.setScene(start);
         startScreenCtrl.updateEventsList();
     }
+
+
+    public void showConfigParticipant(){
+        primaryStage.setTitle("Participant config");
+        primaryStage.setScene(configParticipant);
+        participantCtrl.setCurrent(current);
+    }
     public void showOverview() {
         primaryStage.setTitle("Quotes: Overview");
         primaryStage.setScene(overview);
-//        overviewCtrl.refresh();
+        overviewCtrl.setCurrent(current);
+        overviewCtrl.initialize();
     }
     public void showScene(Scene scene, String title) {
         primaryStage.setTitle(title);
@@ -71,5 +89,14 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+
+    public Event getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Event current) {
+        this.current = current;
     }
 }
