@@ -1,6 +1,7 @@
 package commons;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +16,7 @@ class ExpenseTest {
 
     @Test
     void testGetID_testSetID() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         e.setId(13);
         assertEquals(13, e.getId());
@@ -23,14 +24,14 @@ class ExpenseTest {
 
     @Test
     void testGetTitle() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         assertEquals("title", e.getTitle());
     }
 
     @Test
     void testSetTitle() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         e.setTitle("q");
         assertEquals("q", e.getTitle());
@@ -38,14 +39,14 @@ class ExpenseTest {
 
     @Test
     void testGetTotal() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         assertEquals(1200, e.getTotalExpense());
     }
 
     @Test
     void testSetTotal() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         e.setTotalExpense(1300);
         assertEquals(1300, e.getTotalExpense());
@@ -53,29 +54,30 @@ class ExpenseTest {
 
     @Test
     void testGetCreator() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         assertEquals(p, e.getCreator());
     }
 
+    @Test
     void testSetCreator() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
-        Participant q = new Participant("qZ", "qX", "qL", "qE", "qZX");
+        Participant q = new Participant("qZ", "qX", "qZX");
         e.setCreator(q);
         assertEquals(q, e.getCreator());
     }
 
     @Test
     void testEqualsTrue() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         assertEquals(e, e);
     }
 
     @Test
     void testEqualsFalse() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         Expense e1 = new Expense("tittttle", 1800, p);
         assertNotEquals(e, e1);
@@ -84,7 +86,7 @@ class ExpenseTest {
 
     @Test
     void testHashCode() {
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         Expense e1 = new Expense("tittttle", 1800, p);
         assertEquals(e.hashCode(), e.hashCode());
@@ -93,11 +95,9 @@ class ExpenseTest {
 
     @Test
     void testToString() {
-        Participant p = new Participant("Mara", "Tacenco", "L", "E", "MT","female");
-        p.setFormal(true);
+        Participant p = new Participant("Mara", "Tacenco", "MT");
         Expense e = new Expense("Brunch in Delft", 1200, p);
         assertTrue(e.toString().contains("Expense "));
-        assertTrue(e.toString().contains(" - Brunch in Delft, created by Ms. Mara Tacenco, known as MT"));
     }
 
 }

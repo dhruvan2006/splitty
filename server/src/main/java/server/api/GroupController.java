@@ -23,7 +23,7 @@ public class GroupController {
     }
 
     /**
-     * to be used instead of the usual findAll method, the sorting order is decreasing so you can 
+     * to be used instead of the usual findAll method, the sorting order is decreasing so you can
      * see the most recently created groups first
      */
     @GetMapping("")
@@ -36,7 +36,7 @@ public class GroupController {
     Page<Groups> groupPage = repository.findAll(pageable);
     return ResponseEntity.ok(groupPage.getContent());
     }
-    
+
 
     @PostMapping("/searchName/{id}")
     public Optional<?> findById(@PathVariable Long id){

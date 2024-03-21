@@ -6,7 +6,6 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class EventTest {
 
     @Test
@@ -46,7 +45,7 @@ class EventTest {
         Event e = new Event("s");
 
         List<Participant> participants = new ArrayList<>();
-        Participant p = new Participant("Z", "X", "L", "E", "ZX");
+        Participant p = new Participant("Z", "X", "L");
         participants.add(p);
 
         e.setParticipants(participants);
