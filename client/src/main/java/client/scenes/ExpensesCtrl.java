@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 public class ExpensesCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private OverviewCtrl overviewCtrl;
     private Scene thisScene;
     private Event current;
     @FXML
@@ -27,6 +28,10 @@ public class ExpensesCtrl {
 
     public void setThisScene(Scene thisScene) {this.thisScene = thisScene;}
 
+    public void setOverviewCtrl(OverviewCtrl overviewCtrl) {
+        this.overviewCtrl = overviewCtrl;
+    }
+
     @Inject
     public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -34,7 +39,7 @@ public class ExpensesCtrl {
     }
     public void cancel() {
         clearFields();
-        mainCtrl.showOverview();
+        back();
     }
 
     private void clearFields() {
@@ -53,7 +58,8 @@ public class ExpensesCtrl {
             alert.showAndWait();
             return;
         }
-
+        clearFields();
+        back();
     }
 
     public Expense getExpenses() {
@@ -67,4 +73,5 @@ public class ExpensesCtrl {
         amount.setText(Integer.toString(expense.getTotalExpense()));
     }
     public void show() {mainCtrl.showScene(thisScene, "Add Expense");}
+    public void back() {overviewCtrl.show();}
 }

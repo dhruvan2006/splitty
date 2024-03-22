@@ -29,9 +29,6 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private OverviewCtrl overviewCtrl;
-    private Scene overview;
-
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
@@ -41,22 +38,17 @@ public class MainCtrl {
     private StartScreenCtrl startScreenCtrl;
     private Scene start;
 
-    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview) {
+    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start) {
 //            Pair<AddQuoteCtrl, Parent> add) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
         this.startScreenCtrl = start.getKey();
         this.start = new Scene(start.getValue());
-        this.participantCtrl = cParticipant.getKey();
-        this.configParticipant = new Scene(cParticipant.getValue());
         showStartScreen();
         primaryStage.show();
     }
 
     public void initialize2(Stage primaryStage, Pair<OverviewCtrl, Parent> startScreen){
         this.primaryStage = primaryStage;
-        this.overviewCtrl = startScreen.getKey();
         this.start = new Scene(startScreen.getValue());
         showStartScreen();
         primaryStage.show();
@@ -72,10 +64,6 @@ public class MainCtrl {
     public void showConfigParticipant(){
         primaryStage.setTitle("Participant config");
         primaryStage.setScene(configParticipant);
-    }
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
     }
     public void showScene(Scene scene, String title) {
         primaryStage.setTitle(title);
@@ -93,9 +81,4 @@ public class MainCtrl {
         return current;
     }
 
-    public void setCurrent(Event current) {
-        this.current = current;
-        overviewCtrl.setCurrent(current);
-        overviewCtrl.initialize();
-    }
 }

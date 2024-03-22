@@ -26,6 +26,14 @@ public class OverviewCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    public void setThisScene(Scene thisScene) {
+        this.thisScene = thisScene;
+    }
+
+    public void setStart(StartScreenCtrl start) {
+        this.start = start;
+    }
+
     @FXML
     public VBox expenseListVBox;
 
@@ -49,6 +57,9 @@ public class OverviewCtrl {
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
     private Scene thisScene;
+    private StartScreenCtrl start;
+    private ParticipantCtrl participantCtrl;
+    private Scene participant;
 
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -56,9 +67,11 @@ public class OverviewCtrl {
         this.server = server;
     }
 
-    public void initialize(Pair<ExpensesCtrl, Parent> pe) {
+    public void initialize(Pair<ExpensesCtrl, Parent> pe, Pair<ParticipantCtrl, Parent> pp) {
         this.expensesCtrl = pe.getKey();
         this.expenseScene = new Scene(pe.getValue());
+        this.participantCtrl = pp.getKey();
+        this.participant = new Scene(pp.getValue());
     }
     @FXML
     public void initialize() {
@@ -139,8 +152,7 @@ public class OverviewCtrl {
 
     @FXML
     private void addExpense() {
-        expensesCtrl.setEvent(current);
-        expensesCtrl.setThisScene(expenseScene);
+        giveToAddExpense();
         expensesCtrl.show();
     }
 
@@ -197,5 +209,6 @@ public class OverviewCtrl {
     public void show() {
         mainCtrl.showScene(thisScene, "Overview");
     }
-
+    public void giveToAddExpense() {expensesCtrl.setOverviewCtrl(this); expensesCtrl.setThisScene(expenseScene); expensesCtrl.setEvent(current);}
+    public void giveToAParticipant() {participantCtrl.setOverviewCtrl(this); participantCtrl.setThisScene(expenseScene);}
 }

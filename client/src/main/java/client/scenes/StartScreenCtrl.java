@@ -8,10 +8,13 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
+import javafx.util.Pair;
 
 import java.util.List;
 
@@ -27,7 +30,8 @@ public class StartScreenCtrl {
     private TextField joinEventTextField;
     @FXML
     private ListView<Event> recentlyViewedEvents;
-
+    private OverviewCtrl overviewCtrl;
+    private Scene overview;
 
     @Inject
     public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -51,8 +55,9 @@ public class StartScreenCtrl {
             return;
         }
         clearFields();
-        mainCtrl.setCurrent(added);
-        mainCtrl.showOverview();
+        giveToOverview();
+        overviewCtrl.setCurrent(added);
+        overviewCtrl.show();
     }
 
     public void join(){
@@ -102,5 +107,10 @@ public class StartScreenCtrl {
         }
         return valid;
     }
-
+    public void initialize(Pair<OverviewCtrl, Parent> po) {
+        overviewCtrl = po.getKey();
+        overview = new Scene(po.getValue());
+    }
+    public void show(){}
+    public void giveToOverview(){overviewCtrl.setStart(this); overviewCtrl.setThisScene(overview);}
 }

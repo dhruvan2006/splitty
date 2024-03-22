@@ -42,8 +42,9 @@ public class Main extends Application {
         var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var cParticipant = FXML.load(ParticipantCtrl.class, "client", "scenes", "Participant.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        overview.getKey().initialize(expense);
-        mainCtrl.initialize(primaryStage, start, cParticipant, overview);
+        overview.getKey().initialize(expense, cParticipant);
+        start.getKey().initialize(overview);
+        mainCtrl.initialize(primaryStage, start);
     }
 
 
