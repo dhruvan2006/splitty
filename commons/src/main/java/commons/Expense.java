@@ -7,25 +7,20 @@ import java.util.Objects;
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
+    public long id;
 
     @ManyToOne()
-    Participant creator;
+    public Participant creator;
 
     @ManyToOne()
-    Event event; // the event this expense belongs to
+    public Event event; // the event this expense belongs to
 
     public Expense() {
     }
 
-    //to indicate if object ready to be added to database
-    public boolean ready(){
-        return true;
-    }
+    public int totalExpense;
 
-    private int totalExpense;
-
-    private String title;
+    public String title;
 
     public Expense(String title, int totalExpense, Participant creator) {
         this.title = title;
@@ -83,9 +78,13 @@ public class Expense {
 
     @Override
     public String toString() {
-        return "Expense " + id +
-                " - " + title +
-                ", created by " + creator.toString() + "\n";
+        return "commons.Expense{" +
+                "id=" + id +
+                ", creator=" + creator +
+                ", event=" + event +
+                ", totalExpense=" + totalExpense +
+                ", title='" + title + '\'' +
+                '}';
     }
 }
 

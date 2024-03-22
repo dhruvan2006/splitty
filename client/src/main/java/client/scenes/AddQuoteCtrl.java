@@ -32,6 +32,7 @@ public class AddQuoteCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    
     @FXML
     private TextField firstName;
 

@@ -140,7 +140,8 @@ public class OverviewCtrl {
     @FXML
     private void addExpense() {
         expensesCtrl.setEvent(current);
-        mainCtrl.showScene(expenseScene, "Expenses");
+        expensesCtrl.setThisScene(expenseScene);
+        expensesCtrl.show();
     }
 
     @FXML

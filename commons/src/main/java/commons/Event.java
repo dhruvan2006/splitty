@@ -26,7 +26,7 @@ public class Event {
         // for object mapper
     }
 
-    public Event(String title, boolean ...useMockData) {
+    public Event(String title) {
         this.title = title;
         this.participants = new ArrayList<>();
         this.expenses = new ArrayList<>();

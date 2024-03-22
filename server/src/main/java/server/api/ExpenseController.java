@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import server.database.ExpensePayedRepository;
 import server.database.ExpensesRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,11 +23,9 @@ import java.util.*;
 @RequestMapping("/api/expense")
 public class ExpenseController {
     private final ExpensesRepository repo;
-    private final ExpensePayedRepository payRepo;
 
-    public ExpenseController(ExpensesRepository repo, ExpensePayedRepository payRepo) {
+    public ExpenseController(ExpensesRepository repo) {
         this.repo = repo;
-        this.payRepo = payRepo;
     }
 
     /**
@@ -62,7 +59,7 @@ public class ExpenseController {
 
     }
 
-    @PostMapping(path = {"add", "/"})
+    @PostMapping({"add", "/", ""})
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
         Expense saved = repo.save(expense);
         return ResponseEntity.ok(saved);

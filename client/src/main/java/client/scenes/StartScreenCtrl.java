@@ -40,10 +40,10 @@ public class StartScreenCtrl {
         if(!validateCreate()) return;
         String createEventText = createEventTextField.getText().trim();
         Event newEvent = new Event(createEventText);
+        Event added;
         try {
-            server.addEvent(newEvent);
+            added = server.addEvent(newEvent);
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -51,7 +51,7 @@ public class StartScreenCtrl {
             return;
         }
         clearFields();
-        mainCtrl.setCurrent(newEvent);
+        mainCtrl.setCurrent(added);
         mainCtrl.showOverview();
     }
 
