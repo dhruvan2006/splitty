@@ -78,13 +78,9 @@ public class Expense {
 
     @Override
     public String toString() {
-        return "commons.Expense{" +
-                "id=" + id +
-                ", creator=" + creator +
-                ", event=" + event +
-                ", totalExpense=" + totalExpense +
-                ", title='" + title + '\'' +
-                '}';
+        return "Expense " + id +
+                " - " + title +
+                ", created by " + creator.toString() + "\n";
     }
 }
 
