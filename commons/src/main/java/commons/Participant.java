@@ -15,8 +15,6 @@ public class Participant{
 
     public String userName;
 
-    private boolean init;
-
     @ManyToOne
     public Event event;
 
@@ -77,7 +75,7 @@ public class Participant{
         this.event = event;
     }
 
-    public boolean notNull(){
+    public boolean checkNull(){
         return getUserName() != null;
     }
 

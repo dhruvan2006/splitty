@@ -25,6 +25,7 @@ public class OverviewCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
     @FXML
     public VBox expenseListVBox;
 
@@ -47,6 +48,7 @@ public class OverviewCtrl {
 
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
+    private Scene thisScene;
 
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -58,7 +60,6 @@ public class OverviewCtrl {
         this.expensesCtrl = pe.getKey();
         this.expenseScene = new Scene(pe.getValue());
     }
-
     @FXML
     public void initialize() {
         if(current == null){
@@ -138,6 +139,7 @@ public class OverviewCtrl {
 
     @FXML
     private void addExpense() {
+        expensesCtrl.setEvent(current);
         mainCtrl.showScene(expenseScene, "Expenses");
     }
 
@@ -191,4 +193,8 @@ public class OverviewCtrl {
     public void setCurrent(Event current) {
         this.current = current;
     }
+    public void show() {
+        mainCtrl.showScene(thisScene, "Overview");
+    }
+
 }

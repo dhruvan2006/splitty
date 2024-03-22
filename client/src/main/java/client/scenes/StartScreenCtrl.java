@@ -50,7 +50,6 @@ public class StartScreenCtrl {
             alert.showAndWait();
             return;
         }
-
         clearFields();
         mainCtrl.setCurrent(newEvent);
         mainCtrl.showOverview();

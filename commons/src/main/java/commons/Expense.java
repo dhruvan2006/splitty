@@ -19,7 +19,7 @@ public class Expense {
     }
 
     //to indicate if object ready to be added to database
-    public boolean isInit(){
+    public boolean ready(){
         return true;
     }
 
