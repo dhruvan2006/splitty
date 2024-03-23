@@ -29,7 +29,7 @@ public class OverviewCtrl {
     private Event event;
 
     @FXML
-    public VBox expenseListVBox;
+    public VBox expenseListVBox, participantsVBox;
 
     @FXML
     public HBox titleHBox;
@@ -41,10 +41,7 @@ public class OverviewCtrl {
     private ComboBox<String> participantsComboBox;
 
     @FXML
-    private TextField titleTextField, participantFirstNameField, participantLastNameField, participantEmailField, participantIBANField, participantUsernameField;
-
-    @FXML
-    private Text participantsText;
+    private TextField titleTextField;
 
     @FXML
     private Label titleLabel, inviteCodeLabel;
@@ -74,6 +71,7 @@ public class OverviewCtrl {
         titleLabel.setText(event.getTitle());
         inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
+        updateParticipantsList();
         event.setExpenses(new ArrayList<>() {
             {
                 for (int i = 0; i < 10; i ++) {
@@ -90,6 +88,36 @@ public class OverviewCtrl {
         participantsComboBox.getItems().addAll(
                 event.getParticipants().stream().map(Participant::getUserName).toList()
         );
+    }
+
+    private void updateParticipantsList() {
+        if (event == null || participantsVBox == null) {
+            return;
+        }
+
+        participantsVBox.getChildren().clear();
+
+        for (Participant participant : event.getParticipants()) {
+            Label nameLabel = new Label();
+            Button editButton = new Button("Edit");
+            Button removeButton = new Button("Remove");
+
+            editButton.setOnAction(e -> editParticipant(participant));
+            removeButton.setOnAction(e -> removeParticipant(participant));
+
+            HBox participantHBox = new HBox(10, nameLabel, editButton, removeButton);
+            participantHBox.setAlignment(Pos.CENTER_LEFT);
+
+            participantsVBox.getChildren().add(participantHBox);
+        }
+    }
+
+    private void editParticipant(Participant participant) {
+        // TODO:
+    }
+
+    private void removeParticipant(Participant participant) {
+        // TODO:
     }
 
     private void updateExpenseList() {
@@ -151,39 +179,7 @@ public class OverviewCtrl {
 
     @FXML
     public void handleAddParticipantButton() {
-        // Get the new participant's name and reset the fields
-        String participantFirstName = participantFirstNameField.getText().trim();
-        String participantLastName = participantLastNameField.getText().trim();
-        String participantEmail = participantEmailField.getText().trim();
-        String participantIBAN = participantIBANField.getText().trim();
-        String participantUsername = participantUsernameField.getText().trim();
-        participantFirstNameField.setText("");
-        participantLastNameField.setText("");
-        participantEmailField.setText("");
-        participantIBANField.setText("");
-        participantUsernameField.setText("");
-
-        // Add the participant
-        if (!participantFirstName.isEmpty() && !participantLastName.isEmpty() && !participantEmail.isEmpty() && !participantIBAN.isEmpty() && !participantUsername.isEmpty()) {
-            System.out.println(participantFirstName);
-            System.out.println(participantLastName);
-            System.out.println(participantEmail);
-            System.out.println(participantIBAN);
-            System.out.println(participantUsername);
-            Participant newParticipant = new Participant(participantEmail,
-                    participantIBAN, participantUsername, event);
-
-            server.addParticipant(newParticipant);
-
-            event.addParticipant(newParticipant);
-            updateParticipantsComboBox();
-            if (participantsText.getText() != null && !participantsText.getText().isEmpty()) {
-                participantsText.setText(participantsText.getText() + ", " + newParticipant.getUserName());
-            } else {
-                participantsText.setText(participantsText.getText() + newParticipant.getUserName());
-            }
-            System.out.println("Participant added: " + newParticipant);
-        }
+        // TODO:
     }
 
     @FXML
@@ -193,7 +189,6 @@ public class OverviewCtrl {
 
     @FXML
     public void handleTitleButton() {
-//        TODO: add db connectivity
         if (!titleHBox.getChildren().contains(titleTextField)) {
             titleHBox.getChildren().add(0, titleTextField);
             titleTextField.setText(titleLabel.getText());
