@@ -28,10 +28,10 @@ public class OverviewCtrl {
     @FXML
     public VBox expenseListVBox;
 
-    private Event current;
+    private Event event;
 
     @FXML
-    private Button sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
+    private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
 
     @FXML
     private ComboBox<String> participantsComboBox;
@@ -43,7 +43,7 @@ public class OverviewCtrl {
     private Text participantsText;
 
     @FXML
-    private Label inviteCodeLabel;
+    private Label titleLabel, inviteCodeLabel;
 
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
@@ -61,12 +61,13 @@ public class OverviewCtrl {
 
     @FXML
     public void initialize() {
-        if(current == null){
+        if(event == null){
             return;
         }
-        inviteCodeLabel.setText(current.getInviteCode());
+        titleLabel.setText(event.getTitle());
+        inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
-        current.setExpenses(new ArrayList<>() {
+        event.setExpenses(new ArrayList<>() {
             {
                 for (int i = 0; i < 10; i ++) {
                     add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
@@ -80,20 +81,20 @@ public class OverviewCtrl {
     private void updateParticipantsComboBox() {
         participantsComboBox.getItems().clear();
         participantsComboBox.getItems().addAll(
-                current.getParticipants().stream().map(Participant::getUserName).toList()
+                event.getParticipants().stream().map(Participant::getUserName).toList()
         );
     }
 
     private void updateExpenseList() {
         expenseListVBox.getChildren().clear();
 
-        if (current.getExpenses().isEmpty()) {
+        if (event.getExpenses().isEmpty()) {
             Label label = new Label("No expenses yet");
             label.setStyle("-fx-font-size: 20");
             expenseListVBox.getChildren().add(label);
         }
 
-        for (Expense expense : current.getExpenses()) {
+        for (Expense expense : event.getExpenses()) {
             TextFlow flow = new TextFlow();
 
             Text payer = new Text(expense.getCreator().getUserName());
@@ -131,7 +132,7 @@ public class OverviewCtrl {
     }
 
     private void deleteExpense(Expense expense) {
-        current.getExpenses().remove(expense);
+        event.getExpenses().remove(expense);
         updateExpenseList();
     }
 
@@ -163,11 +164,11 @@ public class OverviewCtrl {
             System.out.println(participantIBAN);
             System.out.println(participantUsername);
             Participant newParticipant = new Participant(participantEmail,
-                    participantIBAN, participantUsername, current);
+                    participantIBAN, participantUsername, event);
 
             server.addParticipant(newParticipant);
 
-            current.addParticipant(newParticipant);
+            event.addParticipant(newParticipant);
             updateParticipantsComboBox();
             if (participantsText.getText() != null && !participantsText.getText().isEmpty()) {
                 participantsText.setText(participantsText.getText() + ", " + newParticipant.getUserName());
@@ -183,12 +184,16 @@ public class OverviewCtrl {
         System.out.println("Settling debts among participants");
     }
 
-
-    public Event getCurrent() {
-        return current;
+    @FXML
+    public void handleTitleButton() {
+        return;
     }
 
-    public void setCurrent(Event current) {
-        this.current = current;
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

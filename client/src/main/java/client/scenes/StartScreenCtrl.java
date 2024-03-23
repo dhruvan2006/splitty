@@ -42,6 +42,8 @@ public class StartScreenCtrl {
         Event newEvent = new Event(createEventText);
         try {
             server.addEvent(newEvent);
+            clearFields();
+            mainCtrl.showOverviewWithEvent(newEvent);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -50,10 +52,6 @@ public class StartScreenCtrl {
             alert.showAndWait();
             return;
         }
-
-        clearFields();
-        mainCtrl.setCurrent(newEvent);
-        mainCtrl.showOverview();
     }
 
     public void join(){
