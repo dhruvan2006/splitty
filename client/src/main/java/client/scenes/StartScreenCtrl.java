@@ -55,8 +55,38 @@ public class StartScreenCtrl {
     }
 
     public void join(){
-        if (validateJoin()) return;
+        if (!validateJoin()) return;
+        Event event;
         String inviteCode = joinEventTextField.getText().trim();
+        try{
+            List<Event> eventFromServer = server.getEventByInviteCode(inviteCode);
+            if(eventFromServer.size() > 1){
+                System.out.println("There is a problem on inviteCode");
+                return;
+            }
+            if(eventFromServer.isEmpty()){
+                joinEventTextField.setStyle("-fx-border-color: #E80C0C");
+                System.out.println("Event does not exists");
+                createEventTextField.setStyle("-fx-border-color: gray");
+                return;
+            }
+            event = eventFromServer.get(0);
+        }
+        catch (WebApplicationException e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            joinEventTextField.setStyle("-fx-border-color: #E80C0C");
+            System.out.println("Event does not exists");
+            createEventTextField.setStyle("-fx-border-color: gray");
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Event does not exists \n " +
+                            "Please enter a valid invite code");
+            alert.showAndWait();
+            return;
+        }
+
+        clearFields();
+        mainCtrl.setCurrent(event);
+        mainCtrl.showOverview();
 
     }
     private Event createEvent(){

@@ -31,7 +31,7 @@ public class EventController {
         return ResponseEntity.ok(repo.findAll());
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<List<Event>> getById(@PathVariable("id") String id) {
         long lid;
         try {
@@ -43,6 +43,17 @@ public class EventController {
             return ResponseEntity.badRequest().build();
 
         List<Event> resp = repo.findAll().stream().filter(x -> x.getId() == lid).toList();
+        return ResponseEntity.ok(resp);
+    }
+
+
+    @GetMapping("/invite/{inviteCode}")
+    public ResponseEntity<List<Event>> getByInviteCode(@PathVariable("inviteCode") String inviteCode){
+        if(inviteCode.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<Event> resp = repo.findAll().stream().filter(x -> x.getInviteCode().equals(inviteCode)).toList();
         return ResponseEntity.ok(resp);
     }
     //initially expenses are empty
