@@ -25,10 +25,14 @@ public class OverviewCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private Event event;
+
     @FXML
     public VBox expenseListVBox;
 
-    private Event event;
+    @FXML
+    public HBox titleHBox;
 
     @FXML
     private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
@@ -37,7 +41,7 @@ public class OverviewCtrl {
     private ComboBox<String> participantsComboBox;
 
     @FXML
-    private TextField participantFirstNameField, participantLastNameField, participantEmailField, participantIBANField, participantUsernameField;
+    private TextField titleTextField, participantFirstNameField, participantLastNameField, participantEmailField, participantIBANField, participantUsernameField;
 
     @FXML
     private Text participantsText;
@@ -64,6 +68,9 @@ public class OverviewCtrl {
         if(event == null){
             return;
         }
+        titleTextField = new TextField();
+        titleTextField.setPromptText("Enter title here...");
+
         titleLabel.setText(event.getTitle());
         inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
@@ -186,7 +193,18 @@ public class OverviewCtrl {
 
     @FXML
     public void handleTitleButton() {
-        return;
+//        TODO: add db connectivity
+        if (!titleHBox.getChildren().contains(titleTextField)) {
+            titleHBox.getChildren().add(0, titleTextField);
+            titleTextField.setText(titleLabel.getText());
+            titleHBox.getChildren().remove(titleLabel);
+            titleButton.setText("Apply changes");
+        } else {
+            titleLabel.setText(titleTextField.getText());
+            titleHBox.getChildren().remove(titleTextField);
+            titleHBox.getChildren().add(0, titleLabel);
+            titleButton.setText("Edit Title");
+        }
     }
 
     public Event getEvent() {
