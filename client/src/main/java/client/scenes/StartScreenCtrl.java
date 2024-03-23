@@ -41,7 +41,7 @@ public class StartScreenCtrl {
         String createEventText = createEventTextField.getText().trim();
         Event newEvent = new Event(createEventText);
         try {
-            server.addEvent(newEvent);
+            newEvent = server.addEvent(newEvent);
             clearFields();
             mainCtrl.showOverviewWithEvent(newEvent);
         } catch (WebApplicationException e) {

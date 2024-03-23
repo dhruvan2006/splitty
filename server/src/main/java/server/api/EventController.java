@@ -63,17 +63,16 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping({"/{id}/title"})
-    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") Long id, @RequestBody String title) {
-        if (id <= 0 || title == null || title.trim().isEmpty()) {
+    @PutMapping("/{id}/title")
+    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") long id, @RequestBody String newTitle) {
+        if (newTitle == null || newTitle.trim().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        return repo.findById(id)
-                .map(event -> {
-                    event.setTitle(title);
-                    repo.save(event);
-                    return ResponseEntity.ok(event);
-                }).orElseGet(() -> ResponseEntity.notFound().build()); // return not found if event doesn't exist
+        return repo.findById(id).map(event -> {
+            event.setTitle(newTitle);
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

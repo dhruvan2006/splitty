@@ -79,11 +79,11 @@ public class ServerUtils {
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 
-	public Event editTitleofEvent(long id, String title) {
+	public Event updateEventTitle(long id, String newTitle) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/event/" + id + "/title") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.post(Entity.entity(title, APPLICATION_JSON), Event.class);
+				.target(SERVER).path("api/event/" + id + "/title")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.text(newTitle), Event.class);
 	}
 }

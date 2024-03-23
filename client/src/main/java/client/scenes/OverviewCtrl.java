@@ -200,7 +200,10 @@ public class OverviewCtrl {
             titleHBox.getChildren().remove(titleLabel);
             titleButton.setText("Apply changes");
         } else {
-            titleLabel.setText(titleTextField.getText());
+            System.out.println(event.getId());
+            Event updatedEvent = server.updateEventTitle(event.getId(), titleTextField.getText());
+            this.event = updatedEvent;
+            titleLabel.setText(event.getTitle());
             titleHBox.getChildren().remove(titleTextField);
             titleHBox.getChildren().add(0, titleLabel);
             titleButton.setText("Edit Title");
