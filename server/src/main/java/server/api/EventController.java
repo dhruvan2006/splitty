@@ -58,19 +58,32 @@ public class EventController {
     }
     //initially expenses are empty
     @PostMapping({"", "/"})
-    public ResponseEntity<Event> postEvent(@RequestBody Event e) {
+    public ResponseEntity<Event> createEvent(@RequestBody Event e) {
         if (e == null || !e.checkNull())
             return ResponseEntity.badRequest().build();
         Event saved = repo.save(e);
         return ResponseEntity.ok(saved);
     }
     @DeleteMapping({"", "/"})
-    public ResponseEntity<Event> deleteIt(@RequestParam("id") Long id) {
+    public ResponseEntity<Event> deleteEvent(@RequestParam("id") Long id) {
         if (id < 0 || !repo.existsById(id))
             return ResponseEntity.badRequest().build();
 
         repo.deleteById(id);
         List<Event> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/title")
+    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") long id, @RequestBody String newTitle) {
+        if (newTitle == null || newTitle.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return repo.findById(id).map(event -> {
+            event.setTitle(newTitle);
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

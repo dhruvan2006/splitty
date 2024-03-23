@@ -79,6 +79,13 @@ public class ServerUtils {
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 
+	public Event updateEventTitle(long id, String newTitle) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/event/" + id + "/title")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.text(newTitle), Event.class);
+	}
 
 	public List<Event> getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig()) //

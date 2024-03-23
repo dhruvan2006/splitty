@@ -23,10 +23,6 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
-
-    private Event current;
-
-
     private Stage primaryStage;
 
     private OverviewCtrl overviewCtrl;
@@ -73,10 +69,18 @@ public class MainCtrl {
         primaryStage.setTitle("Participant config");
         primaryStage.setScene(configParticipant);
     }
+
     public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
+        primaryStage.setTitle("Overview");
         primaryStage.setScene(overview);
     }
+
+    public void showOverviewWithEvent(Event event) {
+        overviewCtrl.setEvent(event);
+        overviewCtrl.initialize();
+        showOverview();
+    }
+
     public void showScene(Scene scene, String title) {
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
@@ -86,16 +90,5 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
-
-
-    public Event getCurrent() {
-        return current;
-    }
-
-    public void setCurrent(Event current) {
-        this.current = current;
-        overviewCtrl.setCurrent(current);
-        overviewCtrl.initialize();
     }
 }
