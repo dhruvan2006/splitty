@@ -86,7 +86,7 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
-
+	}
 
 	public List<Event> getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig()) //

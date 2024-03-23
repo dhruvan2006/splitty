@@ -91,9 +91,8 @@ public class StartScreenCtrl {
         }
 
         clearFields();
-        mainCtrl.setCurrent(event);
-        mainCtrl.showOverview();
-
+        overviewCtrl.setCurrent(event);
+        overviewCtrl.show();
     }
     private Event createEvent(){
         var eventTitle = createEventTextField.getText();
