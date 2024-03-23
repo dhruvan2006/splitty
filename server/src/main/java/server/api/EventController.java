@@ -111,4 +111,16 @@ public class EventController {
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{eventId}/participants/{participantId}")
+    public ResponseEntity<Event> updateParticipantInEvent(@PathVariable("eventId") Long eventId, @PathVariable("participantId") Long participantId, @RequestBody Participant updatedParticipant) {
+        return repo.findById(eventId).map(event -> {
+            boolean updated = event.updateParticipant(participantId, updatedParticipant);
+            if (!updated) {
+                return new ResponseEntity<Event>(HttpStatus.NOT_FOUND); // had problems with type casting
+            }
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
 }

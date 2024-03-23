@@ -58,6 +58,10 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    public ParticipantCtrl getParticipantCtrl() {
+        return participantCtrl;
+    }
+
     public void showStartScreen(){
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(start);

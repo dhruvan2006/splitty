@@ -105,6 +105,14 @@ public class ServerUtils {
 				.put(Entity.text(newTitle), Event.class);
 	}
 
+	public Event updateParticipantInEvent(long eventId, Participant updatedParticipant) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/event/" + eventId + "/participants/" + updatedParticipant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(updatedParticipant, APPLICATION_JSON), Event.class);
+	}
+
 	public List<Event> getEventByInviteCode(String inviteCode) {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/event/invite/" + inviteCode) //

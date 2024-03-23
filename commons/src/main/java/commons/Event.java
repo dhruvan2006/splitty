@@ -77,6 +77,18 @@ public class Event {
         return participants.removeIf(participant -> Objects.equals(participant.getId(), participantId));
     }
 
+    public boolean updateParticipant(long participantId, Participant updatedParticipant) {
+        for (int i = 0; i < this.participants.size(); i++) {
+            Participant current = this.participants.get(i);
+            if (current.getId() == participantId) {
+                updatedParticipant.setId(participantId);
+                this.participants.set(i, updatedParticipant);
+                return true;
+            }
+        }
+        return false; // if the participant is not found
+    }
+
     public List<Expense> getExpenses() {
         return expenses;
     }

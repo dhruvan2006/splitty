@@ -113,14 +113,21 @@ public class OverviewCtrl {
     }
 
     public void addParticipant(Participant participant) {
-        System.out.println(event.getId());
         this.event = server.addParticipantToEvent(event.getId(), participant);
         updateParticipantsList();
         updateParticipantsComboBox();
     }
 
+    public void updateParticipant(Participant updatedParticipant) {
+        this.event = server.updateParticipantInEvent(event.getId(), updatedParticipant);
+        updateParticipantsList();
+        updateParticipantsComboBox();
+    }
+
     private void editParticipant(Participant participant) {
-        // TODO:
+        ParticipantCtrl participantCtrl = mainCtrl.getParticipantCtrl();
+        participantCtrl.initializeWithParticipant(participant);
+        mainCtrl.showConfigParticipant(this);
     }
 
     private void removeParticipant(Participant participant) {
@@ -187,6 +194,7 @@ public class OverviewCtrl {
 
     @FXML
     public void handleAddParticipantButton() {
+        mainCtrl.getParticipantCtrl().initialize();
         mainCtrl.showConfigParticipant(this);
     }
 
