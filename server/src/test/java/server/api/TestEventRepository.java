@@ -177,8 +177,4 @@ public class TestEventRepository implements EventRepository {
         return null;
     }
 
-    @Override
-    public boolean existsByInviteCode(String inviteCode) {
-        return false;
-    }
 }
