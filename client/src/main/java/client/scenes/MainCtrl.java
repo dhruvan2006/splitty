@@ -65,7 +65,8 @@ public class MainCtrl {
     }
 
 
-    public void showConfigParticipant(){
+    public void showConfigParticipant(OverviewCtrl overviewCtrl) {
+        participantCtrl.setOverviewCtrl(overviewCtrl);
         primaryStage.setTitle("Participant config");
         primaryStage.setScene(configParticipant);
     }

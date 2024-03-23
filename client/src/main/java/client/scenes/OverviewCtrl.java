@@ -98,7 +98,7 @@ public class OverviewCtrl {
         participantsVBox.getChildren().clear();
 
         for (Participant participant : event.getParticipants()) {
-            Label nameLabel = new Label();
+            Label nameLabel = new Label(participant.getUserName());
             Button editButton = new Button("Edit");
             Button removeButton = new Button("Remove");
 
@@ -110,6 +110,13 @@ public class OverviewCtrl {
 
             participantsVBox.getChildren().add(participantHBox);
         }
+    }
+
+    public void addParticipant(Participant participant) {
+        System.out.println(event.getId());
+        this.event = server.addParticipantToEvent(event.getId(), participant);
+        updateParticipantsList();
+        updateParticipantsComboBox();
     }
 
     private void editParticipant(Participant participant) {
@@ -171,7 +178,6 @@ public class OverviewCtrl {
         updateExpenseList();
     }
 
-
     @FXML
     private void addExpense() {
         mainCtrl.showScene(expenseScene, "Expenses");
@@ -179,7 +185,7 @@ public class OverviewCtrl {
 
     @FXML
     public void handleAddParticipantButton() {
-        // TODO:
+        mainCtrl.showConfigParticipant(this);
     }
 
     @FXML

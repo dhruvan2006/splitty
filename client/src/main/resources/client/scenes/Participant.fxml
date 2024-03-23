@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="center" hgap="10" prefHeight="250" prefWidth="450" vgap="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ParticipantCtrl">
+<GridPane alignment="center" hgap="10" prefHeight="250" prefWidth="450" vgap="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ParticipantCtrl">
     <Label style="-fx-padding: 0 0 10 5;" text="Configure Participant" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
         <font>
             <Font name="System Bold" size="30.0" />
@@ -37,7 +33,7 @@
     <TextField fx:id="bnrField" promptText="Fill in your bank account number" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
     <Button fx:id="cancel" mnemonicParsing="false" onAction="#Cancel" text="Cancel" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <Button fx:id="finish" mnemonicParsing="false" onAction="#Finish" text="Finish" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Button fx:id="finish" mnemonicParsing="false" onAction="#handleFinishButton" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="4" />
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />

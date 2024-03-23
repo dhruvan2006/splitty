@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javax.inject.Inject;
@@ -11,6 +12,8 @@ public class ParticipantCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private OverviewCtrl overviewCtrl;
 
     @FXML
     private TextField bnrField;
@@ -34,6 +37,10 @@ public class ParticipantCtrl {
                 add(nameField);
             }
         };
+    }
+
+    public void setOverviewCtrl(OverviewCtrl overviewCtrl) {
+        this.overviewCtrl = overviewCtrl;
     }
 
     public void Cancel() {
@@ -60,10 +67,13 @@ public class ParticipantCtrl {
         }
         return valid;
     }
-    public void Finish(){
+
+    public void handleFinishButton(){
         if(!Validate()){
             return;
         }
+        Participant newParticipant = new Participant(emailField.getText(), bnrField.getText(), nameField.getText());
+        overviewCtrl.addParticipant(newParticipant);
         mainCtrl.showOverview();
     }
 

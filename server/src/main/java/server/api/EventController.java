@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Event;
+import commons.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,7 @@ public class EventController {
         List<Event> resp = repo.findAll().stream().filter(x -> x.getInviteCode().equals(inviteCode)).toList();
         return ResponseEntity.ok(resp);
     }
+
     //initially expenses are empty
     @PostMapping({"", "/"})
     public ResponseEntity<Event> createEvent(@RequestBody Event e) {
@@ -64,6 +66,7 @@ public class EventController {
         Event saved = repo.save(e);
         return ResponseEntity.ok(saved);
     }
+
     @DeleteMapping({"", "/"})
     public ResponseEntity<Event> deleteEvent(@RequestParam("id") Long id) {
         if (id < 0 || !repo.existsById(id))
@@ -84,6 +87,15 @@ public class EventController {
             event.setTitle(newTitle);
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{eventId}/participants")
+    public ResponseEntity<Event> addParticipantToEvent(@PathVariable("eventId") Long eventId, @RequestBody Participant participant) {
+        return repo.findById(eventId).map(event -> {
+            event.addParticipant(participant);
+            Event updateEvent = repo.save(event);
+            return ResponseEntity.ok(updateEvent);
         }).orElse(ResponseEntity.notFound().build());
     }
 }

@@ -63,12 +63,22 @@ public class ServerUtils {
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
 	}
 
-	public Participant addParticipant(Participant participant) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participant")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+//	According to definition a participant can exist only with an event
+//	Therefore, there is never a need to create a lone participant
+//	public Participant addParticipant(Participant participant) {
+//		return ClientBuilder.newClient(new ClientConfig())
+//				.target(SERVER).path("api/participant")
+//				.request(APPLICATION_JSON)
+//				.accept(APPLICATION_JSON)
+//				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+//	}
+
+	public Event addParticipantToEvent(long eventId, Participant participant) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/event/" + eventId + "/participants") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.post(Entity.entity(participant, APPLICATION_JSON), Event.class);
 	}
 
 	public Event addEvent(Event event) {
