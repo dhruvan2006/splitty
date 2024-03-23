@@ -124,7 +124,9 @@ public class OverviewCtrl {
     }
 
     private void removeParticipant(Participant participant) {
-        // TODO:
+        this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
+        updateParticipantsList();
+        updateParticipantsComboBox();
     }
 
     private void updateExpenseList() {

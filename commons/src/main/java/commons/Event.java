@@ -40,6 +40,7 @@ public class Event {
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -70,6 +71,10 @@ public class Event {
 
     public void addParticipant(Participant participant) {
         participants.add(participant);
+    }
+
+    public boolean removeParticipant(Long participantId) {
+        return participants.removeIf(participant -> Objects.equals(participant.getId(), participantId));
     }
 
     public List<Expense> getExpenses() {

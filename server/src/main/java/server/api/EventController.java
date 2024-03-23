@@ -3,6 +3,7 @@ package server.api;
 import commons.Event;
 import commons.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -96,6 +97,18 @@ public class EventController {
             event.addParticipant(participant);
             Event updateEvent = repo.save(event);
             return ResponseEntity.ok(updateEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{eventId}/participants/{participantId}")
+    public ResponseEntity<Event> removeParticipantFromEvent(@PathVariable("eventId") Long eventId, @PathVariable("participantId") Long participantId) {
+        return repo.findById(eventId).map(event -> {
+            boolean removed = event.removeParticipant(participantId);
+            if (!removed) {
+                return new ResponseEntity<Event>(HttpStatus.NOT_FOUND); // had problems with type casting
+            }
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
     }
 }
