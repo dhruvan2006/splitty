@@ -49,6 +49,7 @@ public class ExpensesCtrl {
     }
     public void add(){
         try {
+            getExpenses();
             server.addExpense(getExpenses());
         } catch (WebApplicationException e) {
 

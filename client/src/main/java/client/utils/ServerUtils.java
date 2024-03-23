@@ -65,10 +65,10 @@ public class ServerUtils {
 	}
 
 	public Participant addParticipant(Participant participant) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participant")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/participant") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
 	}
 
