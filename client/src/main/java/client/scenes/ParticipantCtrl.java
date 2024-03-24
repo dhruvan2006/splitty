@@ -35,17 +35,21 @@ public class ParticipantCtrl {
         this.mainCtrl = mainCtrl;
     }
 
+    @FXML
     public void initialize() {
-        clearFields();
-        editingParticipant = null;
-        finishButton.setText("Add");
-         fields = new ArrayList<>() {
+        fields = new ArrayList<>() {
             {
                 add(bnrField);
                 add(emailField);
                 add(nameField);
             }
         };
+        for (TextField field : fields) {
+            field.setStyle("-fx-border-color: grey");
+        }
+        clearFields();
+        editingParticipant = null;
+        finishButton.setText("Add");
     }
 
     public void initializeWithParticipant(Participant participant) {

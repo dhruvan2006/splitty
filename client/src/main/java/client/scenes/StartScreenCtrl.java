@@ -27,12 +27,25 @@ public class StartScreenCtrl {
     private TextField joinEventTextField;
     @FXML
     private ListView<Event> recentlyViewedEvents;
+    ObservableList<Event> observableEvents;
 
 
     @Inject
     public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    @FXML
+    public void initialize(){
+        List<Event> events = List.of();
+        observableEvents = FXCollections.observableArrayList(events);
+        if (recentlyViewedEvents == null){
+            recentlyViewedEvents = new ListView<>();
+        }
+        recentlyViewedEvents.setItems(observableEvents);
+        createEventTextField.setStyle("-fx-border-color: grey");
+        joinEventTextField.setStyle("-fx-border-color: grey");
     }
 
 
@@ -44,6 +57,7 @@ public class StartScreenCtrl {
             newEvent = server.addEvent(newEvent);
             clearFields();
             mainCtrl.showOverviewWithEvent(newEvent);
+            observableEvents.addFirst(newEvent);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -86,24 +100,16 @@ public class StartScreenCtrl {
 
         clearFields();
         mainCtrl.showOverviewWithEvent(event);
+        if (!observableEvents.contains(event)) observableEvents.addFirst(event);
 
     }
 
     private void clearFields() {
         createEventTextField.clear();
         joinEventTextField.clear();
+        createEventTextField.setStyle("-fx-border-color: grey");
+        joinEventTextField.setStyle("-fx-border-color: grey");
     }
-
-
-    public void updateEventsList() {
-        List<Event> events = List.of(new Event("New Year"), new Event("X")); // Hardcoded when API is formed it will be fetched from there
-        ObservableList<Event> observableEvents = FXCollections.observableArrayList(events);
-        if(recentlyViewedEvents == null){
-            recentlyViewedEvents = new ListView<>();
-        }
-        recentlyViewedEvents.setItems(observableEvents);
-    }
-
 
     public boolean validateCreate(){
         boolean valid = true;
@@ -126,4 +132,17 @@ public class StartScreenCtrl {
         return valid;
     }
 
+    public void updateRecentEvents() {
+        OverviewCtrl overviewCtrl = mainCtrl.getOverviewCtrl();
+        Event currentEvent = overviewCtrl.getEvent();
+        if (currentEvent == null) return;
+        for (Event event: observableEvents){
+            if (event.getId() == currentEvent.getId()){
+                int index = observableEvents.indexOf(event);
+                observableEvents.remove(event);
+                observableEvents.add(index, currentEvent);
+            }
+            break;
+        }
+    }
 }

@@ -211,17 +211,16 @@ public class OverviewCtrl {
     @FXML
     public void handleTitleButton() {
         if (!titleHBox.getChildren().contains(titleTextField)) {
-            titleHBox.getChildren().add(0, titleTextField);
+            titleHBox.getChildren().addFirst(titleTextField);
             titleTextField.setText(titleLabel.getText());
             titleHBox.getChildren().remove(titleLabel);
             titleButton.setText("Apply Changes");
         } else {
             System.out.println(event.getId());
-            Event updatedEvent = server.updateEventTitle(event.getId(), titleTextField.getText());
-            this.event = updatedEvent;
+            this.event = server.updateEventTitle(event.getId(), titleTextField.getText());
             titleLabel.setText(event.getTitle());
             titleHBox.getChildren().remove(titleTextField);
-            titleHBox.getChildren().add(0, titleLabel);
+            titleHBox.getChildren().addFirst(titleLabel);
             titleButton.setText("Change Title");
         }
     }

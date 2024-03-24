@@ -106,10 +106,7 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return id == event.id
-                && Objects.equals(title, event.title)
-                && Objects.equals(participants, event.participants)
-                && Objects.equals(expenses, event.expenses);
+        return id == event.id;
     }
 
     public boolean checkNull(){
@@ -122,12 +119,10 @@ public class Event {
 
     @Override
     public String toString() {
-        String participant = "";
-        for(Participant p:participants) participant+=p.getUserName() + " ";
-        return "Event " + id +
-                ", with the title: " + title +
-                ", with the following participants: " + participant +
-                ", with the following expenses: " + expenses.toString() + "\n" ;
+        return title +
+                " (code: "
+                + inviteCode +
+                ")";
     }
 
 }
