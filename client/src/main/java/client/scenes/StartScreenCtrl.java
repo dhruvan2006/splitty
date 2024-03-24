@@ -57,6 +57,7 @@ public class StartScreenCtrl {
         clearFields();
         giveToOverview();
         overviewCtrl.setEvent(added);
+        overviewCtrl.initialize();
         overviewCtrl.show();
     }
 
@@ -93,6 +94,7 @@ public class StartScreenCtrl {
         clearFields();
         giveToOverview();
         overviewCtrl.setEvent(event);
+        overviewCtrl.initialize();
         overviewCtrl.show();
     }
 
