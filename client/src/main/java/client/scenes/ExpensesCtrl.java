@@ -48,9 +48,10 @@ public class ExpensesCtrl {
         amount.clear();
     }
     public void add(){
+        Expense added;
         try {
             getExpenses();
-            server.addExpense(getExpenses());
+            added = server.addExpense(getExpenses());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -59,6 +60,7 @@ public class ExpensesCtrl {
             alert.showAndWait();
             return;
         }
+        current.addExpense(added);
         clearFields();
         back();
     }
