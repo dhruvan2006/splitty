@@ -55,8 +55,8 @@ public class MainCtrl {
 
     public void showStartScreen(){
         primaryStage.setTitle("StartScreen");
+        startScreenCtrl.updateRecentEvents();
         primaryStage.setScene(start);
-        startScreenCtrl.updateEventsList();
     }
 
 
@@ -75,5 +75,9 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public OverviewCtrl getOverviewCtrl() {
+        return overviewCtrl;
     }
 }
