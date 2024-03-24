@@ -35,9 +35,6 @@ public class Participant{
         this.userName = userName;
     }
 
-    public Participant() {
-    }
-
     public long getId() {
         return id;
     }

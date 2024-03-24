@@ -47,9 +47,6 @@ public class StartScreenCtrl {
         Event added;
         try {
             added = server.addEvent(newEvent);
-            newEvent = server.addEvent(newEvent);
-            clearFields();
-            mainCtrl.showOverviewWithEvent(newEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -59,7 +56,7 @@ public class StartScreenCtrl {
         }
         clearFields();
         giveToOverview();
-        overviewCtrl.setCurrent(added);
+        overviewCtrl.setEvent(added);
         overviewCtrl.show();
     }
 
@@ -94,9 +91,9 @@ public class StartScreenCtrl {
         }
 
         clearFields();
-        overviewCtrl.setCurrent(event);
+        giveToOverview();
+        overviewCtrl.setEvent(event);
         overviewCtrl.show();
-        mainCtrl.showOverviewWithEvent(event);
     }
 
     private void clearFields() {

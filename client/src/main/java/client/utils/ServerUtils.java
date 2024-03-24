@@ -70,6 +70,7 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+	}
 //	According to definition a participant can exist only with an event
 //	Therefore, there is never a need to create a lone participant
 //	public Participant addParticipant(Participant participant) {
@@ -94,7 +95,6 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.delete(Event.class); //
->>>>>>> client/src/main/java/client/utils/ServerUtils.java
 	}
 
 	public Event addEvent(Event event) {
@@ -105,12 +105,14 @@ public class ServerUtils {
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 
-	public Expense addExpense(Expense expense) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/expense") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	public Expense addExpense(Expense expense){
+			return ClientBuilder.newClient(new ClientConfig()) //
+					.target(SERVER).path("api/expense") //
+					.request(APPLICATION_JSON) //
+					.accept(APPLICATION_JSON) //
+					.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	}
+
 	public Event updateEventTitle(long id, String newTitle) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/event/" + id + "/title")

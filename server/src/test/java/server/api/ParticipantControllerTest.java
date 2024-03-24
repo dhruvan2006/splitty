@@ -13,7 +13,7 @@ public class ParticipantControllerTest {
     public void cannotAddNullPerson() {
         TestParticipantRepository repo = new TestParticipantRepository();
         ParticipantController sut = new ParticipantController(repo);
-        var actual = sut.createParticipant(null);
+        var actual = sut.postParticipant(null);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
@@ -22,7 +22,7 @@ public class ParticipantControllerTest {
         TestParticipantRepository repo = new TestParticipantRepository();
         ParticipantController sut = new ParticipantController(repo);
         Participant participant = new Participant(null, null, null);
-        var actual = sut.createParticipant(participant);
+        var actual = sut.postParticipant(participant);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
@@ -31,7 +31,7 @@ public class ParticipantControllerTest {
         TestParticipantRepository repo = new TestParticipantRepository();
         ParticipantController sut = new ParticipantController(repo);
         Participant participant = new Participant("x", "y", "z");
-        var actual = sut.createParticipant(participant);
+        var actual = sut.postParticipant(participant);
         assertEquals(OK, actual.getStatusCode());
     }
 
@@ -40,7 +40,7 @@ public class ParticipantControllerTest {
         TestParticipantRepository repo = new TestParticipantRepository();
         ParticipantController sut = new ParticipantController(repo);
         Participant participant = new Participant("x", "y", "z");
-        var actual = sut.createParticipant(participant);
+        var actual = sut.postParticipant(participant);
         assertEquals(participant, actual.getBody());
     }
 
@@ -49,7 +49,7 @@ public class ParticipantControllerTest {
         TestParticipantRepository repo = new TestParticipantRepository();
         ParticipantController sut = new ParticipantController(repo);
         Participant participant = new Participant("x", "y", "z");
-        sut.createParticipant(participant);
+        sut.postParticipant(participant);
         assertEquals(true, repo.calledMethods.contains("save"));
     }
 
@@ -66,7 +66,7 @@ public class ParticipantControllerTest {
         TestParticipantRepository repo = new TestParticipantRepository();
         ParticipantController sut = new ParticipantController(repo);
         Participant participant = new Participant("x", "y", "z");
-        Participant posted = sut.createParticipant(participant).getBody();
+        Participant posted = sut.postParticipant(participant).getBody();
         assert posted != null;
         var actual = sut.deleteIt(posted.getId());
         assertEquals(OK, actual.getStatusCode());

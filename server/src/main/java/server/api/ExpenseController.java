@@ -80,17 +80,17 @@ public class ExpenseController {
     */
     @PutMapping("/{id}")
     public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense updatedExpense) {
-    Optional<Expense> expenseOptional = repo.findById(id);
-    if (expenseOptional.isPresent()) {
-        Expense existingExpense = expenseOptional.get();
-        existingExpense.setTitle(updatedExpense.getTitle());
-        existingExpense.setTotalExpense(updatedExpense.getTotalExpense());
+        Optional<Expense> expenseOptional = repo.findById(id);
+        if (expenseOptional.isPresent()) {
+            Expense existingExpense = expenseOptional.get();
+            existingExpense.setTitle(updatedExpense.getTitle());
+            existingExpense.setTotalExpense(updatedExpense.getTotalExpense());
 
-        Expense savedExpense = repo.save(existingExpense);
-        return ResponseEntity.ok(savedExpense);
-    } else {
-        return ResponseEntity.notFound().build();
-    }
+            Expense savedExpense = repo.save(existingExpense);
+            return ResponseEntity.ok(savedExpense);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

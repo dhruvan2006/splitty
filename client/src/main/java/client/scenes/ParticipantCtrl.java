@@ -17,8 +17,6 @@ public class ParticipantCtrl {
     private Scene thisScene;
     private OverviewCtrl overviewCtrl;
 
-    private OverviewCtrl overviewCtrl;
-
     @FXML
     private Button finishButton;
 
@@ -32,10 +30,10 @@ public class ParticipantCtrl {
     public void setThisScene(Scene thisScene) {
         this.thisScene = thisScene;
     }
-
     public void setOverviewCtrl(OverviewCtrl overviewCtrl) {
         this.overviewCtrl = overviewCtrl;
     }
+
     private Participant editingParticipant;
 
     @Inject
@@ -65,10 +63,6 @@ public class ParticipantCtrl {
             emailField.setText(participant.getEmail());
             nameField.setText(participant.getUserName());
         }
-    }
-
-    public void setOverviewCtrl(OverviewCtrl overviewCtrl) {
-        this.overviewCtrl = overviewCtrl;
     }
 
     public void Cancel() {
@@ -110,8 +104,7 @@ public class ParticipantCtrl {
             Participant participant = new Participant(emailField.getText(), bnrField.getText(), nameField.getText());
             overviewCtrl.addParticipant(participant);
         }
-        mainCtrl.showOverview();
->>>>>>> client/src/main/java/client/scenes/ParticipantCtrl.java
+        overviewCtrl.show();
     }
 
 }

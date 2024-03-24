@@ -40,7 +40,7 @@ public class OverviewCtrl {
     private Event event;
 
     @FXML
-    public VBox expenseListVBox, participantsVBox;
+    public VBox participantsVBox;
 
     @FXML
     public HBox titleHBox;
@@ -229,8 +229,7 @@ public class OverviewCtrl {
             titleButton.setText("Apply changes");
         } else {
             System.out.println(event.getId());
-            Event updatedEvent = server.updateEventTitle(event.getId(), titleTextField.getText());
-            this.event = updatedEvent;
+            this.event = server.updateEventTitle(event.getId(), titleTextField.getText());
             titleLabel.setText(event.getTitle());
             titleHBox.getChildren().remove(titleTextField);
             titleHBox.getChildren().add(0, titleLabel);
@@ -248,6 +247,6 @@ public class OverviewCtrl {
     public void show() {
         mainCtrl.showScene(thisScene, "Overview");
     }
-    public void giveToAddExpense() {expensesCtrl.setOverviewCtrl(this); expensesCtrl.setThisScene(expenseScene); expensesCtrl.setEvent(current);}
+    public void giveToAddExpense() {expensesCtrl.setOverviewCtrl(this); expensesCtrl.setThisScene(expenseScene); expensesCtrl.setEvent(event);}
     public void giveToAParticipant() {participantCtrl.setOverviewCtrl(this); participantCtrl.setThisScene(expenseScene);}
 }
