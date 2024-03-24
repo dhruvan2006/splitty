@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
 import java.util.List;
@@ -99,8 +100,9 @@ public class StartScreenCtrl {
         }
 
         clearFields();
+        observableEvents.remove(event);
+        observableEvents.addFirst(event);
         mainCtrl.showOverviewWithEvent(event);
-        if (!observableEvents.contains(event)) observableEvents.addFirst(event);
 
     }
 
@@ -144,5 +146,14 @@ public class StartScreenCtrl {
             }
             break;
         }
+    }
+
+    @FXML
+    public void handleRecentEventClick(MouseEvent arg0) {
+        Event event = recentlyViewedEvents.getSelectionModel().getSelectedItem();
+        if (event == null) return;
+        observableEvents.remove(event);
+        observableEvents.addFirst(event);
+        mainCtrl.showOverviewWithEvent(event);
     }
 }
