@@ -76,8 +76,4 @@ public class MainCtrl {
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
-
-    public OverviewCtrl getOverviewCtrl() {
-        return overviewCtrl;
-    }
 }

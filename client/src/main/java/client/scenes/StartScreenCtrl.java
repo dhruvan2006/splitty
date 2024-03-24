@@ -61,14 +61,7 @@ public class StartScreenCtrl {
         Event newEvent = new Event(createEventText);
         Event added;
         try {
-<<<<<<< client/src/main/java/client/scenes/StartScreenCtrl.java
             added = server.addEvent(newEvent);
-=======
-            newEvent = server.addEvent(newEvent);
-            clearFields();
-            mainCtrl.showOverviewWithEvent(newEvent);
-            observableEvents.addFirst(newEvent);
->>>>>>> client/src/main/java/client/scenes/StartScreenCtrl.java
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -78,6 +71,7 @@ public class StartScreenCtrl {
         }
         clearFields();
         giveToOverview();
+        observableEvents.addFirst(added);
         overviewCtrl.setEvent(added);
         overviewCtrl.initialize();
         overviewCtrl.show();
@@ -114,17 +108,12 @@ public class StartScreenCtrl {
         }
 
         clearFields();
-<<<<<<< client/src/main/java/client/scenes/StartScreenCtrl.java
         giveToOverview();
         overviewCtrl.setEvent(event);
         overviewCtrl.initialize();
         overviewCtrl.show();
-=======
         observableEvents.remove(event);
         observableEvents.addFirst(event);
-        mainCtrl.showOverviewWithEvent(event);
-
->>>>>>> client/src/main/java/client/scenes/StartScreenCtrl.java
     }
 
     private void clearFields() {
@@ -154,17 +143,14 @@ public class StartScreenCtrl {
         }
         return valid;
     }
-<<<<<<< client/src/main/java/client/scenes/StartScreenCtrl.java
     public void initialize(Pair<OverviewCtrl, Parent> po) {
         overviewCtrl = po.getKey();
         overview = new Scene(po.getValue());
     }
     public void show(){}
     public void giveToOverview(){overviewCtrl.setStart(this); overviewCtrl.setThisScene(overview);}
-=======
 
     public void updateRecentEvents() {
-        OverviewCtrl overviewCtrl = mainCtrl.getOverviewCtrl();
         Event currentEvent = overviewCtrl.getEvent();
         if (currentEvent == null) return;
         for (Event event: observableEvents){
@@ -183,7 +169,8 @@ public class StartScreenCtrl {
         if (event == null) return;
         observableEvents.remove(event);
         observableEvents.addFirst(event);
-        mainCtrl.showOverviewWithEvent(event);
+        overviewCtrl.setEvent(event);
+        overviewCtrl.initialize();
+        overviewCtrl.show();
     }
->>>>>>> client/src/main/java/client/scenes/StartScreenCtrl.java
 }
