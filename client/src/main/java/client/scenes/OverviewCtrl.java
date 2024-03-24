@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -105,7 +106,11 @@ public class OverviewCtrl {
             editButton.setOnAction(e -> editParticipant(participant));
             removeButton.setOnAction(e -> removeParticipant(participant));
 
-            HBox participantHBox = new HBox(10, nameLabel, editButton, removeButton);
+            final Pane spacer = new Pane();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            spacer.setMinSize(20, 1);
+
+            HBox participantHBox = new HBox(10, nameLabel, spacer, editButton, removeButton);
             participantHBox.setAlignment(Pos.CENTER_LEFT);
 
             participantsVBox.getChildren().add(participantHBox);
@@ -206,18 +211,17 @@ public class OverviewCtrl {
     @FXML
     public void handleTitleButton() {
         if (!titleHBox.getChildren().contains(titleTextField)) {
-            titleHBox.getChildren().add(0, titleTextField);
+            titleHBox.getChildren().addFirst(titleTextField);
             titleTextField.setText(titleLabel.getText());
             titleHBox.getChildren().remove(titleLabel);
-            titleButton.setText("Apply changes");
+            titleButton.setText("Apply Changes");
         } else {
             System.out.println(event.getId());
-            Event updatedEvent = server.updateEventTitle(event.getId(), titleTextField.getText());
-            this.event = updatedEvent;
+            this.event = server.updateEventTitle(event.getId(), titleTextField.getText());
             titleLabel.setText(event.getTitle());
             titleHBox.getChildren().remove(titleTextField);
-            titleHBox.getChildren().add(0, titleLabel);
-            titleButton.setText("Edit Title");
+            titleHBox.getChildren().addFirst(titleLabel);
+            titleButton.setText("Change Title");
         }
     }
 
@@ -227,5 +231,9 @@ public class OverviewCtrl {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public void back(MouseEvent mouseEvent) {
+        mainCtrl.showStartScreen();
     }
 }
