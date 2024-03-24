@@ -1,7 +1,9 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -12,6 +14,11 @@ public class ParticipantCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private OverviewCtrl overviewCtrl;
+
+    @FXML
+    private Button finishButton;
+
     @FXML
     private TextField bnrField;
     @FXML
@@ -20,6 +27,8 @@ public class ParticipantCtrl {
     private TextField nameField;
     private ArrayList<TextField> fields;
 
+    private Participant editingParticipant;
+
     @Inject
     public ParticipantCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -27,6 +36,9 @@ public class ParticipantCtrl {
     }
 
     public void initialize() {
+        clearFields();
+        editingParticipant = null;
+        finishButton.setText("Add");
          fields = new ArrayList<>() {
             {
                 add(bnrField);
@@ -34,6 +46,20 @@ public class ParticipantCtrl {
                 add(nameField);
             }
         };
+    }
+
+    public void initializeWithParticipant(Participant participant) {
+        this.editingParticipant = participant;
+        finishButton.setText("Edit");
+        if (participant != null) {
+            bnrField.setText(participant.getIBAN());
+            emailField.setText(participant.getEmail());
+            nameField.setText(participant.getUserName());
+        }
+    }
+
+    public void setOverviewCtrl(OverviewCtrl overviewCtrl) {
+        this.overviewCtrl = overviewCtrl;
     }
 
     public void Cancel() {
@@ -55,14 +81,24 @@ public class ParticipantCtrl {
                 field.setStyle("-fx-border-color: #E80C0C");
             }
             else {
-                field.setStyle("-fx-border-color: gray");
+                field.setStyle("-fx-border-color: grey");
             }
         }
         return valid;
     }
-    public void Finish(){
+
+    public void handleFinishButton(){
         if(!Validate()){
             return;
+        }
+        if (editingParticipant != null) {
+            editingParticipant.setIBAN(bnrField.getText());
+            editingParticipant.setEmail(emailField.getText());
+            editingParticipant.setUserName(nameField.getText());
+            overviewCtrl.updateParticipant(editingParticipant);
+        } else {
+            Participant participant = new Participant(emailField.getText(), bnrField.getText(), nameField.getText());
+            overviewCtrl.addParticipant(participant);
         }
         mainCtrl.showOverview();
     }

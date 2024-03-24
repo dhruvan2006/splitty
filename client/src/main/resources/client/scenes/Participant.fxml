@@ -37,7 +37,7 @@
     <TextField fx:id="bnrField" promptText="Fill in your bank account number" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
     <Button fx:id="cancel" mnemonicParsing="false" onAction="#Cancel" text="Cancel" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <Button fx:id="finish" mnemonicParsing="false" onAction="#Finish" text="Finish" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Button fx:id="finishButton" mnemonicParsing="false" onAction="#handleFinishButton" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="4" />
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />

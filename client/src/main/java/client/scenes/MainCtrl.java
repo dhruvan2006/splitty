@@ -58,6 +58,10 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    public ParticipantCtrl getParticipantCtrl() {
+        return participantCtrl;
+    }
+
     public void showStartScreen(){
         primaryStage.setTitle("StartScreen");
         primaryStage.setScene(start);
@@ -65,7 +69,8 @@ public class MainCtrl {
     }
 
 
-    public void showConfigParticipant(){
+    public void showConfigParticipant(OverviewCtrl overviewCtrl) {
+        participantCtrl.setOverviewCtrl(overviewCtrl);
         primaryStage.setTitle("Participant config");
         primaryStage.setScene(configParticipant);
     }
