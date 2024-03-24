@@ -62,7 +62,7 @@ public class ExpenseController {
 
     }
 
-    @PostMapping(path = {"add", "/"})
+    @PostMapping(path = {"add", "/", ""})
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
         Expense saved = repo.save(expense);
         return ResponseEntity.ok(saved);

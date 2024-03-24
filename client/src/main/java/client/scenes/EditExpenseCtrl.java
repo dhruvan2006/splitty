@@ -11,10 +11,12 @@ import javafx.stage.Modality;
 
 import java.util.Objects;
 
-public class ExpensesCtrl {
+public class EditExpenseCtrl {
+
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private long id;
     @FXML
     private TextField username;
     @FXML
@@ -22,7 +24,7 @@ public class ExpensesCtrl {
     @FXML
     private TextField amount;
     @Inject
-    public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditExpenseCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -30,16 +32,16 @@ public class ExpensesCtrl {
         clearFields();
         mainCtrl.showOverview();
     }
-
     private void clearFields() {
         username.clear();
         description.clear();
         amount.clear();
     }
     //to be done
-    public void add(){}
-    //@TODO
-    public Expense getExpenses() {
+    public void update(){
+        server.updateExpense(getExpense(), id);
+    }
+    public Expense getExpense() {
         var participants = server.getParticipants();
         var filtered = participants.stream().filter(x -> Objects.equals(username.getText(), x.getUserName()));
         var any = filtered.findAny();
@@ -72,5 +74,9 @@ public class ExpensesCtrl {
         username.setText(expense.getCreator().getUserName());
         description.setText(expense.getTitle());
         amount.setText(Integer.toString(expense.getTotalExpense()));
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

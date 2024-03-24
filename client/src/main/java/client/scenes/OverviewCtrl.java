@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class OverviewCtrl {
 
+    private EditExpenseCtrl editExpenseCtrl;
+    private Scene editExpense;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -56,9 +58,11 @@ public class OverviewCtrl {
         this.server = server;
     }
 
-    public void initialize(Pair<ExpensesCtrl, Parent> pe) {
+    public void initialize(Pair<ExpensesCtrl, Parent> pe, Pair<EditExpenseCtrl, Parent> pee) {
         this.expensesCtrl = pe.getKey();
         this.expenseScene = new Scene(pe.getValue());
+        this.editExpenseCtrl = pee.getKey();
+        this.editExpense = new Scene(pee.getValue());
     }
 
     @FXML
@@ -184,7 +188,8 @@ public class OverviewCtrl {
 
     private void editExpense(Expense expense) {
         expensesCtrl.initializeWithExpense(expense);
-        mainCtrl.showScene(expenseScene, "Edit Expense");
+        editExpenseCtrl.setId(expense.getId());
+        mainCtrl.showScene(editExpense, "Edit Expense");
     }
 
     private void deleteExpense(Expense expense) {

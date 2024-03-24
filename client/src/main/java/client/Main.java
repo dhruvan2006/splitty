@@ -38,11 +38,12 @@ public class Main extends Application {
 
     public void start(Stage primaryStage) throws IOException {
         var expense = FXML.load(ExpensesCtrl.class, "client", "scenes", "Expenses.fxml");
+        var expenseEdit = FXML.load(EditExpenseCtrl.class, "client", "scene", "Expenses.fxml");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var cParticipant = FXML.load(ParticipantCtrl.class, "client", "scenes", "Participant.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        overview.getKey().initialize(expense);
+        overview.getKey().initialize(expense, expenseEdit);
         mainCtrl.initialize(primaryStage, start, cParticipant, overview);
     }
 

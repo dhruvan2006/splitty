@@ -15,16 +15,11 @@
  */
 package client;
 
-import client.scenes.OverviewCtrl;
-import client.scenes.ParticipantCtrl;
-import client.scenes.StartScreenCtrl;
+import client.scenes.*;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-
-import client.scenes.AddQuoteCtrl;
-import client.scenes.MainCtrl;
 
 public class MyModule implements Module {
 
@@ -35,5 +30,6 @@ public class MyModule implements Module {
         binder.bind(OverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ParticipantCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EditExpenseCtrl.class).in(Scopes.SINGLETON);
     }
 }
