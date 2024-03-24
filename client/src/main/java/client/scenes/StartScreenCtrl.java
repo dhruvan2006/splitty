@@ -47,6 +47,9 @@ public class StartScreenCtrl {
         Event added;
         try {
             added = server.addEvent(newEvent);
+            newEvent = server.addEvent(newEvent);
+            clearFields();
+            mainCtrl.showOverviewWithEvent(newEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -73,7 +76,7 @@ public class StartScreenCtrl {
             if(eventFromServer.isEmpty()){
                 joinEventTextField.setStyle("-fx-border-color: #E80C0C");
                 System.out.println("Event does not exists");
-                createEventTextField.setStyle("-fx-border-color: gray");
+                createEventTextField.setStyle("-fx-border-color: grey");
                 return;
             }
             event = eventFromServer.get(0);
@@ -82,7 +85,7 @@ public class StartScreenCtrl {
             var alert = new Alert(Alert.AlertType.ERROR);
             joinEventTextField.setStyle("-fx-border-color: #E80C0C");
             System.out.println("Event does not exists");
-            createEventTextField.setStyle("-fx-border-color: gray");
+            createEventTextField.setStyle("-fx-border-color: grey");
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("Event does not exists \n " +
                             "Please enter a valid invite code");
@@ -93,11 +96,7 @@ public class StartScreenCtrl {
         clearFields();
         overviewCtrl.setCurrent(event);
         overviewCtrl.show();
-    }
-    private Event createEvent(){
-        var eventTitle = createEventTextField.getText();
-        Event x = new Event(eventTitle);
-        return x;
+        mainCtrl.showOverviewWithEvent(event);
     }
 
     private void clearFields() {
@@ -121,7 +120,7 @@ public class StartScreenCtrl {
         if(createEventTextField.getText().isEmpty()){
             valid = false;
             createEventTextField.setStyle("-fx-border-color: #E80C0C");
-            joinEventTextField.setStyle("-fx-border-color: gray");
+            joinEventTextField.setStyle("-fx-border-color: grey");
         }
         return valid;
     }
@@ -132,7 +131,7 @@ public class StartScreenCtrl {
         if(joinEventTextField.getText().isEmpty()){
             valid = false;
             joinEventTextField.setStyle("-fx-border-color: #E80C0C");
-            createEventTextField.setStyle("-fx-border-color: gray");
+            createEventTextField.setStyle("-fx-border-color: grey");
         }
         return valid;
     }

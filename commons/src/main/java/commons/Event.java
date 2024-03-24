@@ -40,6 +40,7 @@ public class Event {
     public long getId() {
         return id;
     }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -70,6 +71,22 @@ public class Event {
 
     public void addParticipant(Participant participant) {
         participants.add(participant);
+    }
+
+    public boolean removeParticipant(Long participantId) {
+        return participants.removeIf(participant -> Objects.equals(participant.getId(), participantId));
+    }
+
+    public boolean updateParticipant(long participantId, Participant updatedParticipant) {
+        for (int i = 0; i < this.participants.size(); i++) {
+            Participant current = this.participants.get(i);
+            if (current.getId() == participantId) {
+                updatedParticipant.setId(participantId);
+                this.participants.set(i, updatedParticipant);
+                return true;
+            }
+        }
+        return false; // if the participant is not found
     }
 
     public List<Expense> getExpenses() {

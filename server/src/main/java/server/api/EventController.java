@@ -1,7 +1,9 @@
 package server.api;
 
 import commons.Event;
+import commons.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -56,21 +58,69 @@ public class EventController {
         List<Event> resp = repo.findAll().stream().filter(x -> x.getInviteCode().equals(inviteCode)).toList();
         return ResponseEntity.ok(resp);
     }
+
     //initially expenses are empty
     @PostMapping({"", "/"})
-    public ResponseEntity<Event> postEvent(@RequestBody Event e) {
+    public ResponseEntity<Event> createEvent(@RequestBody Event e) {
         if (e == null || !e.checkNull())
             return ResponseEntity.badRequest().build();
         Event saved = repo.save(e);
         return ResponseEntity.ok(saved);
     }
+
     @DeleteMapping({"", "/"})
-    public ResponseEntity<Event> deleteIt(@RequestParam("id") Long id) {
+    public ResponseEntity<Event> deleteEvent(@RequestParam("id") Long id) {
         if (id < 0 || !repo.existsById(id))
             return ResponseEntity.badRequest().build();
 
         repo.deleteById(id);
         List<Event> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/title")
+    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") long id, @RequestBody String newTitle) {
+        if (newTitle == null || newTitle.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return repo.findById(id).map(event -> {
+            event.setTitle(newTitle);
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{eventId}/participants")
+    public ResponseEntity<Event> addParticipantToEvent(@PathVariable("eventId") Long eventId, @RequestBody Participant participant) {
+        return repo.findById(eventId).map(event -> {
+            event.addParticipant(participant);
+            Event updateEvent = repo.save(event);
+            return ResponseEntity.ok(updateEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{eventId}/participants/{participantId}")
+    public ResponseEntity<Event> removeParticipantFromEvent(@PathVariable("eventId") Long eventId, @PathVariable("participantId") Long participantId) {
+        return repo.findById(eventId).map(event -> {
+            boolean removed = event.removeParticipant(participantId);
+            if (!removed) {
+                return new ResponseEntity<Event>(HttpStatus.NOT_FOUND); // had problems with type casting
+            }
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{eventId}/participants/{participantId}")
+    public ResponseEntity<Event> updateParticipantInEvent(@PathVariable("eventId") Long eventId, @PathVariable("participantId") Long participantId, @RequestBody Participant updatedParticipant) {
+        return repo.findById(eventId).map(event -> {
+            boolean updated = event.updateParticipant(participantId, updatedParticipant);
+            if (!updated) {
+                return new ResponseEntity<Event>(HttpStatus.NOT_FOUND); // had problems with type casting
+            }
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

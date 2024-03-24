@@ -37,22 +37,25 @@ public class OverviewCtrl {
     @FXML
     public VBox expenseListVBox;
 
-    private Event current;
+    private Event event;
 
     @FXML
-    private Button sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
+    public VBox expenseListVBox, participantsVBox;
+
+    @FXML
+    public HBox titleHBox;
+
+    @FXML
+    private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
 
     @FXML
     private ComboBox<String> participantsComboBox;
 
     @FXML
-    private TextField participantFirstNameField, participantLastNameField, participantEmailField, participantIBANField, participantUsernameField;
+    private TextField titleTextField;
 
     @FXML
-    private Text participantsText;
-
-    @FXML
-    private Label inviteCodeLabel;
+    private Label titleLabel, inviteCodeLabel;
 
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
@@ -75,12 +78,17 @@ public class OverviewCtrl {
     }
     @FXML
     public void initialize() {
-        if(current == null){
+        if(event == null){
             return;
         }
-        inviteCodeLabel.setText(current.getInviteCode());
+        titleTextField = new TextField();
+        titleTextField.setPromptText("Enter title here...");
+
+        titleLabel.setText(event.getTitle());
+        inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
-        current.setExpenses(new ArrayList<>() {
+        updateParticipantsList();
+        event.setExpenses(new ArrayList<>() {
             {
                 for (int i = 0; i < 10; i ++) {
                     add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
@@ -94,20 +102,66 @@ public class OverviewCtrl {
     private void updateParticipantsComboBox() {
         participantsComboBox.getItems().clear();
         participantsComboBox.getItems().addAll(
-                current.getParticipants().stream().map(Participant::getUserName).toList()
+                event.getParticipants().stream().map(Participant::getUserName).toList()
         );
+    }
+
+    private void updateParticipantsList() {
+        if (event == null || participantsVBox == null) {
+            return;
+        }
+
+        participantsVBox.getChildren().clear();
+
+        for (Participant participant : event.getParticipants()) {
+            Label nameLabel = new Label(participant.getUserName());
+            Button editButton = new Button("Edit");
+            Button removeButton = new Button("Remove");
+
+            editButton.setOnAction(e -> editParticipant(participant));
+            removeButton.setOnAction(e -> removeParticipant(participant));
+
+            HBox participantHBox = new HBox(10, nameLabel, editButton, removeButton);
+            participantHBox.setAlignment(Pos.CENTER_LEFT);
+
+            participantsVBox.getChildren().add(participantHBox);
+        }
+    }
+
+    public void addParticipant(Participant participant) {
+        this.event = server.addParticipantToEvent(event.getId(), participant);
+        updateParticipantsList();
+        updateParticipantsComboBox();
+    }
+
+    public void updateParticipant(Participant updatedParticipant) {
+        this.event = server.updateParticipantInEvent(event.getId(), updatedParticipant);
+        updateParticipantsList();
+        updateParticipantsComboBox();
+    }
+
+    private void editParticipant(Participant participant) {
+        ParticipantCtrl participantCtrl = mainCtrl.getParticipantCtrl();
+        participantCtrl.initializeWithParticipant(participant);
+        mainCtrl.showConfigParticipant(this);
+    }
+
+    private void removeParticipant(Participant participant) {
+        this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
+        updateParticipantsList();
+        updateParticipantsComboBox();
     }
 
     private void updateExpenseList() {
         expenseListVBox.getChildren().clear();
 
-        if (current.getExpenses().isEmpty()) {
+        if (event.getExpenses().isEmpty()) {
             Label label = new Label("No expenses yet");
             label.setStyle("-fx-font-size: 20");
             expenseListVBox.getChildren().add(label);
         }
 
-        for (Expense expense : current.getExpenses()) {
+        for (Expense expense : event.getExpenses()) {
             TextFlow flow = new TextFlow();
 
             Text payer = new Text(expense.getCreator().getUserName());
@@ -145,10 +199,9 @@ public class OverviewCtrl {
     }
 
     private void deleteExpense(Expense expense) {
-        current.getExpenses().remove(expense);
+        event.getExpenses().remove(expense);
         updateExpenseList();
     }
-
 
     @FXML
     private void addExpense() {
@@ -158,39 +211,8 @@ public class OverviewCtrl {
 
     @FXML
     public void handleAddParticipantButton() {
-        // Get the new participant's name and reset the fields
-        String participantFirstName = participantFirstNameField.getText().trim();
-        String participantLastName = participantLastNameField.getText().trim();
-        String participantEmail = participantEmailField.getText().trim();
-        String participantIBAN = participantIBANField.getText().trim();
-        String participantUsername = participantUsernameField.getText().trim();
-        participantFirstNameField.setText("");
-        participantLastNameField.setText("");
-        participantEmailField.setText("");
-        participantIBANField.setText("");
-        participantUsernameField.setText("");
-
-        // Add the participant
-        if (!participantFirstName.isEmpty() && !participantLastName.isEmpty() && !participantEmail.isEmpty() && !participantIBAN.isEmpty() && !participantUsername.isEmpty()) {
-            System.out.println(participantFirstName);
-            System.out.println(participantLastName);
-            System.out.println(participantEmail);
-            System.out.println(participantIBAN);
-            System.out.println(participantUsername);
-            Participant newParticipant = new Participant(participantEmail,
-                    participantIBAN, participantUsername, current);
-
-            server.addParticipant(newParticipant);
-
-            current.addParticipant(newParticipant);
-            updateParticipantsComboBox();
-            if (participantsText.getText() != null && !participantsText.getText().isEmpty()) {
-                participantsText.setText(participantsText.getText() + ", " + newParticipant.getUserName());
-            } else {
-                participantsText.setText(participantsText.getText() + newParticipant.getUserName());
-            }
-            System.out.println("Participant added: " + newParticipant);
-        }
+        mainCtrl.getParticipantCtrl().initialize();
+        mainCtrl.showConfigParticipant(this);
     }
 
     @FXML
@@ -198,13 +220,30 @@ public class OverviewCtrl {
         System.out.println("Settling debts among participants");
     }
 
-
-    public Event getCurrent() {
-        return current;
+    @FXML
+    public void handleTitleButton() {
+        if (!titleHBox.getChildren().contains(titleTextField)) {
+            titleHBox.getChildren().add(0, titleTextField);
+            titleTextField.setText(titleLabel.getText());
+            titleHBox.getChildren().remove(titleLabel);
+            titleButton.setText("Apply changes");
+        } else {
+            System.out.println(event.getId());
+            Event updatedEvent = server.updateEventTitle(event.getId(), titleTextField.getText());
+            this.event = updatedEvent;
+            titleLabel.setText(event.getTitle());
+            titleHBox.getChildren().remove(titleTextField);
+            titleHBox.getChildren().add(0, titleLabel);
+            titleButton.setText("Edit Title");
+        }
     }
 
-    public void setCurrent(Event current) {
-        this.current = current;
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
     public void show() {
         mainCtrl.showScene(thisScene, "Overview");

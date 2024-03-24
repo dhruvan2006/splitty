@@ -35,6 +35,9 @@ public class Participant{
         this.userName = userName;
     }
 
+    public Participant() {
+    }
+
     public long getId() {
         return id;
     }
@@ -49,10 +52,6 @@ public class Participant{
 
     public String getUserName() {
         return userName;
-    }
-
-    public Event getEvent() {
-        return event;
     }
 
     public void setId(long id) {
@@ -84,12 +83,12 @@ public class Participant{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Participant that)) return false;
-        return getId() == that.getId() && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getIBAN(), that.getIBAN()) && Objects.equals(getUserName(), that.getUserName()) && Objects.equals(getEvent(), that.getEvent());
+        return getId() == that.getId() && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getIBAN(), that.getIBAN()) && Objects.equals(getUserName(), that.getUserName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getIBAN(), getUserName(), getEvent());
+        return Objects.hash(getId(), getEmail(), getIBAN(), getUserName());
     }
 
 
@@ -100,7 +99,6 @@ public class Participant{
                 ", email='" + email +
                 ", IBAN='" + IBAN +
                 ", userName='" + userName +
-                ", event=" + event +
                 '}';
     }
 }

@@ -70,6 +70,31 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+//	According to definition a participant can exist only with an event
+//	Therefore, there is never a need to create a lone participant
+//	public Participant addParticipant(Participant participant) {
+//		return ClientBuilder.newClient(new ClientConfig())
+//				.target(SERVER).path("api/participant")
+//				.request(APPLICATION_JSON)
+//				.accept(APPLICATION_JSON)
+//				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+//	}
+
+	public Event addParticipantToEvent(long eventId, Participant participant) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/event/" + eventId + "/participants") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.post(Entity.entity(participant, APPLICATION_JSON), Event.class);
+	}
+
+	public Event removeParticipantFromEvent(long eventId, long participantId) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/event/" + eventId + "/participants/" + participantId) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.delete(Event.class); //
+>>>>>>> client/src/main/java/client/utils/ServerUtils.java
 	}
 
 	public Event addEvent(Event event) {
@@ -86,6 +111,20 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);
+	public Event updateEventTitle(long id, String newTitle) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/event/" + id + "/title")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.text(newTitle), Event.class);
+	}
+
+	public Event updateParticipantInEvent(long eventId, Participant updatedParticipant) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/event/" + eventId + "/participants/" + updatedParticipant.getId())
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.entity(updatedParticipant, APPLICATION_JSON), Event.class);
 	}
 
 	public List<Event> getEventByInviteCode(String inviteCode) {
