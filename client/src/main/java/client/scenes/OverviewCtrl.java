@@ -6,6 +6,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -20,9 +21,11 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Pair;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class OverviewCtrl {
+public class OverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -49,6 +52,7 @@ public class OverviewCtrl {
 
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
+    private ResourceBundle bundle;
 
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -61,7 +65,6 @@ public class OverviewCtrl {
         this.expenseScene = new Scene(pe.getValue());
     }
 
-    @FXML
     public void initialize() {
         if(event == null){
             return;
@@ -100,8 +103,8 @@ public class OverviewCtrl {
 
         for (Participant participant : event.getParticipants()) {
             Label nameLabel = new Label(participant.getUserName());
-            Button editButton = new Button("Edit");
-            Button removeButton = new Button("Remove");
+            Button editButton = new Button(bundle.getString("globals.edit"));
+            Button removeButton = new Button(bundle.getString("globals.remove"));
 
             editButton.setOnAction(e -> editParticipant(participant));
             removeButton.setOnAction(e -> removeParticipant(participant));
@@ -170,9 +173,9 @@ public class OverviewCtrl {
 
             HBox expenseHBox = new HBox(10);
             HBox.setMargin(flow, new Insets(0, 0, 0, 10));
-            Button editButton = new Button("Edit");
+            Button editButton = new Button(bundle.getString("globals.edit"));
             editButton.setAlignment(Pos.BASELINE_RIGHT);
-            Button deleteButton = new Button("Delete");
+            Button deleteButton = new Button(bundle.getString("globals.remove"));
 
             editButton.setOnAction(e -> editExpense(expense));
             deleteButton.setOnAction(e -> deleteExpense(expense));
@@ -214,14 +217,14 @@ public class OverviewCtrl {
             titleHBox.getChildren().addFirst(titleTextField);
             titleTextField.setText(titleLabel.getText());
             titleHBox.getChildren().remove(titleLabel);
-            titleButton.setText("Apply Changes");
+            titleButton.setText(bundle.getString("overview.apply_changes"));
         } else {
             System.out.println(event.getId());
             this.event = server.updateEventTitle(event.getId(), titleTextField.getText());
             titleLabel.setText(event.getTitle());
             titleHBox.getChildren().remove(titleTextField);
             titleHBox.getChildren().addFirst(titleLabel);
-            titleButton.setText("Change Title");
+            titleButton.setText(bundle.getString("overview.change_title"));
         }
     }
 
@@ -235,5 +238,10 @@ public class OverviewCtrl {
 
     public void back(MouseEvent mouseEvent) {
         mainCtrl.showStartScreen();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resources) {
+        this.bundle = resources;
     }
 }
