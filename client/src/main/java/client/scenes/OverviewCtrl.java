@@ -146,9 +146,9 @@ public class OverviewCtrl {
     }
 
     private void editParticipant(Participant participant) {
-        ParticipantCtrl participantCtrl = mainCtrl.getParticipantCtrl();
         participantCtrl.initializeWithParticipant(participant);
-        mainCtrl.showConfigParticipant(this);
+        giveToAParticipant();
+        participantCtrl.show();
     }
 
     private void removeParticipant(Participant participant) {
@@ -216,8 +216,9 @@ public class OverviewCtrl {
 
     @FXML
     public void handleAddParticipantButton() {
-        mainCtrl.getParticipantCtrl().initialize();
-        mainCtrl.showConfigParticipant(this);
+        giveToAParticipant();
+        participantCtrl.initialize();
+        participantCtrl.show();
     }
 
     @FXML
@@ -253,10 +254,10 @@ public class OverviewCtrl {
         mainCtrl.showScene(thisScene, "Overview");
     }
     public void giveToAddExpense() {expensesCtrl.setOverviewCtrl(this); expensesCtrl.setThisScene(expenseScene); expensesCtrl.setEvent(event);}
-    public void giveToAParticipant() {participantCtrl.setOverviewCtrl(this); participantCtrl.setThisScene(expenseScene);}
+    public void giveToAParticipant() {participantCtrl.setOverviewCtrl(this); participantCtrl.setThisScene(participant);}
 
 
     public void back(MouseEvent mouseEvent) {
-        mainCtrl.showStartScreen();
+        start.show();
     }
 }

@@ -110,5 +110,7 @@ public class ParticipantCtrl {
         }
         overviewCtrl.show();
     }
-
+    public void show(){
+        mainCtrl.showScene(thisScene, "Participant config");
+    }
 }

@@ -27,9 +27,6 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
-    private ParticipantCtrl participantCtrl;
-
-    private Scene configParticipant;
     private StartScreenCtrl startScreenCtrl;
     private Scene start;
 
@@ -49,9 +46,6 @@ public class MainCtrl {
         primaryStage.show();
     }
 
-    public ParticipantCtrl getParticipantCtrl() {
-        return participantCtrl;
-    }
 
     public void showStartScreen(){
         primaryStage.setTitle("StartScreen");
@@ -60,11 +54,11 @@ public class MainCtrl {
     }
 
 
-    public void showConfigParticipant(OverviewCtrl overviewCtrl) {
-        participantCtrl.setOverviewCtrl(overviewCtrl);
-        primaryStage.setTitle("Participant config");
-        primaryStage.setScene(configParticipant);
-    }
+//    public void showConfigParticipant(OverviewCtrl overviewCtrl) {
+//        participantCtrl.setOverviewCtrl(overviewCtrl);
+//        primaryStage.setTitle("Participant config");
+//        primaryStage.setScene(configParticipant);
+//    }
 
     public void showScene(Scene scene, String title) {
         primaryStage.setTitle(title);
