@@ -15,10 +15,15 @@
  */
 package client;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 import com.google.inject.Injector;
 
@@ -32,14 +37,25 @@ import javafx.util.Pair;
 public class MyFXML {
 
     private Injector injector;
+    private String language;
 
     public MyFXML(Injector injector) {
         this.injector = injector;
+        Properties prop = new Properties();
+        String fileName = "client/config.properties";
+        try (FileInputStream fis = new FileInputStream(fileName)) {
+            prop.load(fis);
+            language = prop.getProperty("LANGUAGE");
+            System.out.println(language);
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
     }
 
     public <T> Pair<T, Parent> load(Class<T> c, String... parts) {
         try {
             var loader = new FXMLLoader(getLocation(parts), null, null, new MyFactory(), StandardCharsets.UTF_8);
+            loader.setResources(ResourceBundle.getBundle("bundles.Bundle", Locale.of(language)));
             Parent parent = loader.load();
             T ctrl = loader.getController();
             return new Pair<>(ctrl, parent);
