@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class ParticipantCtrl {
 
+    //TODO add event attribute and construct participant with event
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 

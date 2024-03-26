@@ -73,14 +73,14 @@ public class OverviewCtrl {
         inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
         updateParticipantsList();
-        event.setExpenses(new ArrayList<>() {
-            {
-                for (int i = 0; i < 10; i ++) {
-                    add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
-                    add(new Expense("title2", 22, new Participant("hi2@hi2.com", "iban2", "klaasjanpiet")));
-                }
-            };
-        }); // TODO: Remove this mock data when you can add expenses via the expense scene
+//        event.setExpenses(new ArrayList<>() {
+//            {
+//                for (int i = 0; i < 10; i ++) {
+//                    add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
+//                    add(new Expense("title2", 22, new Participant("hi2@hi2.com", "iban2", "klaasjanpiet")));
+//                }
+//            };
+//        }); // TODO: Remove this mock data when you can add expenses via the expense scene
         updateExpenseList();
     }
 
@@ -190,10 +190,12 @@ public class OverviewCtrl {
     private void deleteExpense(Expense expense) {
         event.getExpenses().remove(expense);
         updateExpenseList();
+        server.deleteExpense(expense.getId());
     }
 
     @FXML
     private void addExpense() {
+        expensesCtrl.setEvent(event);
         mainCtrl.showScene(expenseScene, "Expenses");
     }
 

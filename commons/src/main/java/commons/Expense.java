@@ -19,7 +19,7 @@ public class Expense {
     }
 
     //to indicate if object ready to be added to database
-    public boolean isInit(){
+    public boolean checkNull(){
         return true;
     }
 
@@ -88,4 +88,3 @@ public class Expense {
                 ", created by " + creator.toString() + "\n";
     }
 }
-
