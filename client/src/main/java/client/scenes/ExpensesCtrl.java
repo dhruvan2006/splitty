@@ -80,8 +80,18 @@ public class ExpensesCtrl {
             return null;
         }
         int totalExpense;
+        String[] twoParts = amount.getText().split("\\.");
+        if(twoParts.length > 2) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("At most one \".\"");
+            alert.showAndWait();
+            return null;
+        }
+        String first = twoParts[0];
+        int centum;
         try {
-            totalExpense = Integer.parseInt(amount.getText());
+            centum = Integer.parseInt(first);
         }
         catch (Exception e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -90,6 +100,30 @@ public class ExpensesCtrl {
             alert.showAndWait();
             return null;
         }
+        int unit = 0;
+        if(twoParts.length > 1) {
+            String second = twoParts[1];
+            try {
+                unit = Integer.parseInt(second);
+            }
+            catch (Exception e) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Have to be Integer");
+                alert.showAndWait();
+                return null;
+            }
+            if(unit > 100) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("Have to at most two digits after \".\"");
+                alert.showAndWait();
+                return null;
+            }
+            if(second.length() == 1)
+                unit*=10;
+        }
+        totalExpense = centum*100+unit;
         Expense expense = new Expense(description.getText(), totalExpense, any.get(), event);
         clearFields();
         return expense;
@@ -98,6 +132,10 @@ public class ExpensesCtrl {
     public void initializeWithExpense(Expense expense) {
         username.setText(expense.getCreator().getUserName());
         description.setText(expense.getTitle());
-        amount.setText(Integer.toString(expense.getTotalExpense()));
+        String amountInEur = "";
+        amountInEur += (expense.getTotalExpense()/100);
+        amountInEur += ".";
+        amountInEur += (expense.getTotalExpense()%100);
+        amount.setText(amountInEur);
     }
 }
