@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ExpensesCtrl">
     <children>
-        <Button layoutX="419.0" layoutY="300.0" mnemonicParsing="false" onAction="#add" text="Add" />
+        <Button layoutX="419.0" layoutY="300.0" mnemonicParsing="false" onAction="#modify" text="Add" />
         <Button layoutX="350.0" layoutY="300.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
         <TextField fx:id="username" layoutX="109.0" layoutY="24.0"  />
         <TextField fx:id="description" layoutX="109.0" layoutY="61.0" />

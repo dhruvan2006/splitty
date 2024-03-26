@@ -139,10 +139,10 @@ public class ServerUtils {
 
 	public void deleteExpense(long id) {
 		ClientBuilder.newClient(new ClientConfig())//
-				.target(SERVER).path("api/expense?id="+id)//
+				.target(SERVER).path("api/expense/2")//
 				.request(APPLICATION_JSON)//
 				.accept(APPLICATION_JSON)//
-				.delete();
+				.delete(Expense.class);
 	}
 	public Expense putExpense(long id, Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())//

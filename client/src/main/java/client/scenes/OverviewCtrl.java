@@ -183,14 +183,15 @@ public class OverviewCtrl {
     }
 
     private void editExpense(Expense expense) {
+        expensesCtrl.setExpense(expense);
         expensesCtrl.initializeWithExpense(expense);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
 
     private void deleteExpense(Expense expense) {
         event.getExpenses().remove(expense);
-        updateExpenseList();
         server.deleteExpense(expense.getId());
+        updateExpenseList();
     }
 
     @FXML

@@ -55,11 +55,16 @@ public class ExpensesCtrl {
         amount.clear();
     }
     public void modify() {
-
-    }
-    public void add(){
-        Expense added = server.addExpense(getExpenses());
-        event.addExpense(added);
+        Expense modify = getExpenses();
+        if(expense == null){
+            Expense added = server.addExpense(modify);
+            event.addExpense(added);
+        }
+        else {
+            event.getExpenses().remove(expense);
+            Expense updated = server.putExpense(expense.getId(), modify);
+            event.addExpense(updated);
+        }
         mainCtrl.showOverviewWithEvent(event);
     }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later

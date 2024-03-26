@@ -68,8 +68,8 @@ public class ExpenseController {
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping({"", "/"})
-    public ResponseEntity<Expense> deleteIt(@RequestParam("id") Long id) {
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<Expense> deleteIt(@PathVariable Long id) {
         if (id < 0 || !repo.existsById(id))
             return ResponseEntity.badRequest().build();
 
