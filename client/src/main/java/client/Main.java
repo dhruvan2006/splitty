@@ -31,8 +31,17 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
+    private static boolean showAdminPage = false;
+
     public static void main(String[] args) throws URISyntaxException, IOException {
-        launch();
+        for (String arg : args) {
+            if ("--admin".equals(arg)) {
+                showAdminPage = true;
+                break;
+            }
+        }
+
+        launch(args);
     }
 
 
@@ -45,6 +54,10 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         overview.getKey().initialize(expense);
         mainCtrl.initialize(primaryStage, start, cParticipant, overview, admin);
+
+        if (showAdminPage) {
+            mainCtrl.showAdminScreen();
+        }
     }
 
 
