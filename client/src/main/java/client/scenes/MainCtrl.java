@@ -16,9 +16,13 @@
 package client.scenes;
 
 import commons.Event;
+import javafx.animation.PauseTransition;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 public class MainCtrl {
@@ -51,7 +55,7 @@ public class MainCtrl {
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
         showStartScreen();
-//        showAdminScreen();
+        showAdminScreen();
         primaryStage.show();
     }
 
@@ -111,5 +115,22 @@ public class MainCtrl {
 
     public OverviewCtrl getOverviewCtrl() {
         return overviewCtrl;
+    }
+
+    public void showNotification(String message, String color) {
+        Popup popup = new Popup();
+        Label label = new Label(message);
+        label.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-padding: 10;");
+        popup.getContent().add(label);
+        // position top-right
+        popup.setOnShown(event -> {
+            popup.setX(primaryStage.getX() + primaryStage.getWidth() - popup.getWidth() - 20);
+            popup.setY(primaryStage.getY() + 40);
+        });
+        popup.show(primaryStage);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(e -> popup.hide());
+        delay.play();
     }
 }
