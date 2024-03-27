@@ -20,8 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-
 public class OverviewCtrl {
 
     private final ServerUtils server;
