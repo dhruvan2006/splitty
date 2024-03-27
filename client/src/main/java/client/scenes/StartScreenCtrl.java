@@ -111,8 +111,8 @@ public class StartScreenCtrl {
     private void clearFields() {
         createEventTextField.clear();
         joinEventTextField.clear();
-        createEventTextField.setStyle("-fx-border-color: grey");
-        joinEventTextField.setStyle("-fx-border-color: grey");
+        createEventTextField.setStyle(borderColor);
+        joinEventTextField.setStyle(borderColor);
     }
 
     public boolean validateCreate(){
@@ -120,7 +120,7 @@ public class StartScreenCtrl {
         if(createEventTextField.getText().isEmpty()){
             valid = false;
             createEventTextField.setStyle("-fx-border-color: #E80C0C");
-            joinEventTextField.setStyle("-fx-border-color: grey");
+            joinEventTextField.setStyle(borderColor);
         }
         return valid;
     }
@@ -131,7 +131,7 @@ public class StartScreenCtrl {
         if(joinEventTextField.getText().isEmpty()){
             valid = false;
             joinEventTextField.setStyle("-fx-border-color: #E80C0C");
-            createEventTextField.setStyle("-fx-border-color: grey");
+            createEventTextField.setStyle(borderColor);
         }
         return valid;
     }
