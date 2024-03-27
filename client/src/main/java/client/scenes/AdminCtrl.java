@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import commons.Event;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,8 +13,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.util.Callback;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -56,14 +61,7 @@ public class AdminCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         titleColumn.setCellValueFactory(event -> new SimpleStringProperty(event.getValue().getTitle()));
 
-        deleteColumn.setCellFactory(createDeleteButtonCell());
-        jsonColumn.setCellFactory(createJsonButtonCell());
-
-        refresh();
-    }
-
-    private Callback<TableColumn<Event, String>, TableCell<Event, String>> createDeleteButtonCell() {
-        return param -> new TableCell<>() {
+        deleteColumn.setCellFactory(column -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
 
             @Override
@@ -75,16 +73,14 @@ public class AdminCtrl implements Initializable {
                     setGraphic(deleteButton);
                     deleteButton.setOnAction(event -> {
                         Event eventToDelete = getTableView().getItems().get(getIndex());
-                        // Implement deletion logic here, e.g., server.deleteEvent(eventToDelete.getId());
-                        refresh(); // Refresh the table view
+                        server.deleteEventById(eventToDelete.getId());
+                        refresh();
                     });
                 }
             }
-        };
-    }
+        });
 
-    private Callback<TableColumn<Event, String>, TableCell<Event, String>> createJsonButtonCell() {
-        return param -> new TableCell<>() {
+        jsonColumn.setCellFactory(column -> new TableCell<>() {
             private final Button jsonButton = new Button("JSON");
 
             @Override
@@ -96,15 +92,41 @@ public class AdminCtrl implements Initializable {
                     setGraphic(jsonButton);
                     jsonButton.setOnAction(event -> {
                         Event eventData = getTableView().getItems().get(getIndex());
-                        // Implement logic to show JSON, e.g., showDialogWithJson(eventData);
+                        try {
+                            // I am using jackson to generate JSON dump of an event
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            String json = objectMapper.writeValueAsString(eventData);
+                            saveJsonToFile(json, eventData.getTitle());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     });
                 }
             }
-        };
+        });
+
+        refresh();
+    }
+
+    private void saveJsonToFile(String json, String eventTitle) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save JSON");
+        // replace illegal characters
+        String sanitizedEventName = eventTitle.replaceAll("[^a-zA-Z0-9.-]", "_");
+        fileChooser.setInitialFileName(sanitizedEventName + ".json");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File file = fileChooser.showSaveDialog(new Stage());
+        if (file != null) {
+            try (FileWriter fileWriter = new FileWriter(file)) {
+                fileWriter.write(json);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void handleImportEvent() {
-        return;
+        // TODO: Add the ability to import a JSON file
     }
 
     public void refresh() {

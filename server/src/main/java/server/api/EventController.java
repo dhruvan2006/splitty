@@ -62,13 +62,13 @@ public class EventController {
     }
 
     @DeleteMapping({"", "/"})
-    public ResponseEntity<Event> deleteEvent(@RequestParam("id") Long id) {
+    public ResponseEntity<Void> deleteEvent(@RequestParam("id") Long id) {
         if (id < 0 || !repo.existsById(id))
             return ResponseEntity.badRequest().build();
 
         repo.deleteById(id);
-        List<Event> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/title")

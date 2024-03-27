@@ -26,6 +26,7 @@ import java.util.List;
 
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -93,6 +94,16 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
+	}
+
+	public boolean deleteEventById(long eventId) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/event") //
+				.queryParam("id", eventId)
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.delete()
+				.getStatus() == Response.Status.NO_CONTENT.getStatusCode();
 	}
 
 	public Event updateEventTitle(long id, String newTitle) {

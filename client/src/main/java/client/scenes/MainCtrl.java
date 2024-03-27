@@ -50,9 +50,8 @@ public class MainCtrl {
         this.configParticipant = new Scene(cParticipant.getValue());
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
-//        TODO: change this back
-//        showStartScreen();
-        showAdminScreen();
+        showStartScreen();
+//        showAdminScreen();
         primaryStage.show();
     }
 
