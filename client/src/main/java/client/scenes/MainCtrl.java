@@ -32,13 +32,15 @@ public class MainCtrl {
     private Scene add;
 
     private ParticipantCtrl participantCtrl;
-
     private Scene configParticipant;
+
     private StartScreenCtrl startScreenCtrl;
     private Scene start;
 
-    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview) {
-//            Pair<AddQuoteCtrl, Parent> add) {
+    private AdminCtrl adminCtrl;
+    private Scene admin;
+
+    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview, Pair<AdminCtrl, Parent> admin) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -46,7 +48,11 @@ public class MainCtrl {
         this.start = new Scene(start.getValue());
         this.participantCtrl = cParticipant.getKey();
         this.configParticipant = new Scene(cParticipant.getValue());
-        showStartScreen();
+        this.adminCtrl = admin.getKey();
+        this.admin = new Scene(admin.getValue());
+//        TODO: change this back
+//        showStartScreen();
+        showAdminScreen();
         primaryStage.show();
     }
 
@@ -66,6 +72,13 @@ public class MainCtrl {
         primaryStage.setTitle("StartScreen");
         startScreenCtrl.updateRecentEvents();
         primaryStage.setScene(start);
+    }
+
+
+    public void showAdminScreen() {
+        primaryStage.setTitle("Admin");
+        primaryStage.setScene(admin);
+
     }
 
 
