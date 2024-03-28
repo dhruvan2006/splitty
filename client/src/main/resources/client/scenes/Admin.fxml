@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminCtrl">
+   <children>
+      <Label layoutX="253.0" text="Admin">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+      </Label>
+      <TableView fx:id="table" layoutX="14.0" layoutY="54.0" prefHeight="289.0" prefWidth="570.0">
+        <columns>
+          <TableColumn fx:id="titleColumn" prefWidth="220.0" text="Title" />
+          <TableColumn fx:id="creationDateColumn" prefWidth="100.0" text="Creation Date" />
+            <TableColumn fx:id="lastActivityColumn" minWidth="0.0" prefWidth="100.0" text="Last Activity" />
+            <TableColumn fx:id="deleteColumn" prefWidth="65.0" text="Delete" />
+            <TableColumn fx:id="jsonColumn" prefWidth="65.0" text="JSON" />
+        </columns>
+      </TableView>
+      <Button fx:id="importEventButton" layoutX="490.0" layoutY="356.0" mnemonicParsing="false" onAction="#handleImportEvent" prefHeight="29.0" prefWidth="94.0" text="Import Event" />
+      <Button layoutX="14.0" layoutY="358.0" mnemonicParsing="false" onAction="#refresh" text="temp: Refresh" />
+   </children>
+</AnchorPane>
