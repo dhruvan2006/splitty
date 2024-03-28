@@ -87,5 +87,10 @@ public class Expense {
                 " - " + title +
                 ", created by " + creator.toString() + "\n";
     }
+
+    public int getSharePerPerson(List<Participant> participants){
+        int participantsSize = participants.size()-1;
+        return getTotalExpense()/participantsSize;
+    }
 }
 
