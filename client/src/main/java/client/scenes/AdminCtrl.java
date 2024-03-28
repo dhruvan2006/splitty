@@ -76,7 +76,7 @@ public class AdminCtrl implements Initializable {
                         confirmDialog.setHeaderText("Confirm Deletion");
                         Optional<ButtonType> result = confirmDialog.showAndWait();
                         if (result.isPresent() && result.get() == ButtonType.YES) {
-                            // server.deleteEventById(eventToDelete.getId()); TO DO deleteEventById
+                            server.deleteEventById(eventToDelete.getId());
                             refresh();
                             // success
                             mainCtrl.showNotification("Event deleted successfully", "#4CAF50");

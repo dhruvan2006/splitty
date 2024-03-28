@@ -76,7 +76,7 @@ public class StartScreenCtrl {
         Event event;
         String inviteCode = joinEventTextField.getText().trim();
         try{
-            // List<Event> eventFromServer = server.getEventByInviteCode(inviteCode); TO DO getEventByInviteCode
+            List<Event> eventFromServer = server.getEventByInviteCode(inviteCode);
             if(eventFromServer.size() > 1){
                 System.out.println("There is a problem on inviteCode");
                 return;
