@@ -101,4 +101,44 @@ class ExpenseTest {
         assertTrue(e.toString().contains("- Brunch in Delft, created by "));
     }
 
+    @Test
+    void testGetParticipants() {
+
+        Event event = new Event("X");
+        Participant p = new Participant("Mara", "Tacenco", "MT");
+        Participant h = new Participant("Hugh", "Jones", "HJ");
+        List<Participant> list = new ArrayList<>();
+        list.add(p);
+        list.add(h);
+
+        Expense e = new Expense("Brunch in Delft", 1200, p ,event,list);
+
+        assertEquals(list,e.getParticipants());
+    }
+
+    @Test
+    void testSetParticipants() {
+
+        Event event = new Event("X");
+        Participant p = new Participant("Mara", "Tacenco", "MT");
+        Participant h = new Participant("Hugh", "Jones", "HJ");
+
+        List<Participant> list = new ArrayList<>();
+        list.add(p);
+        list.add(h);
+
+        Expense e = new Expense("Brunch in Delft", 1200, p ,event,list);
+
+        List<Participant> list2 = new ArrayList<>();
+        list2.add(h);
+
+        e.setParticipants(list2);
+
+        assertEquals(list2,e.getParticipants());
+    }
+
+
+
+
+
 }

@@ -156,7 +156,7 @@ public class Event {
         }
 
         for (Expense expense : expenses) {
-            int sharePerParticipant = expense.getSharePerPerson(participants);
+            int sharePerParticipant = expense.getSharePerPerson();
 
             for (Participant participant : participants) {
                 if (participant.equals(expense.getCreator())) continue;
@@ -207,7 +207,7 @@ public class Event {
         }
 
         for (Expense expense : expenses) {
-            int sharePerParticipant = expense.getSharePerPerson(participants);
+            int sharePerParticipant = expense.getSharePerPerson();
 
             for (Participant other : participants) {
                 if (other.equals(expense.getCreator())) continue; 
@@ -220,5 +220,6 @@ public class Event {
 
         return ownedMap;
     }
+
 
 }

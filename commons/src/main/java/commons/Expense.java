@@ -15,6 +15,9 @@ public class Expense {
     @ManyToOne()
     Event event; // the event this expense belongs to
 
+    @ManyToOne
+    List<Participant> participants;
+
     public Expense() {
     }
 
@@ -33,11 +36,12 @@ public class Expense {
         this.creator = creator;
     }
 
-    public Expense(String title, int totalExpense, Participant creator, Event event){
+    public Expense(String title, int totalExpense, Participant creator, Event event, List<Participant> participants){
         this.title = title;
         this.totalExpense = totalExpense;
         this.creator = creator;
         this.event = event;
+        this.participants = participants;
     }
 
     public Event getEvent() {
@@ -64,8 +68,16 @@ public class Expense {
         return creator;
     }
 
+    public List<Participant> getParticipants(){
+        return participants;
+    }
+
     public void setCreator(Participant creator) {
         this.creator = creator;
+    }
+
+    public void setParticipants(List<Participants> participants){
+        this.participants = participants;
     }
 
 
@@ -88,8 +100,8 @@ public class Expense {
                 ", created by " + creator.toString() + "\n";
     }
 
-    public int getSharePerPerson(List<Participant> participants){
-        int participantsSize = participants.size()-1;
+    public int getSharePerPerson(){
+        int participantsSize = this.participants.size()-1;
         return getTotalExpense()/participantsSize;
     }
 }
