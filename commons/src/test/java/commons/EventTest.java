@@ -119,6 +119,12 @@ class EventTest {
     }
 
     @Test
+    void toStringTest(){
+        Event e = new Event("x");
+        assertTrue(e.toString().contains("x (code: "));
+    }
+
+    @Test
     void totalDebtTest()
     {
         Event event = new Event("z");
