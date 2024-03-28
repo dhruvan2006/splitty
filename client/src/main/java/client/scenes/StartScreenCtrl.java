@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class StartScreenCtrl {
     private TextField joinEventTextField;
     @FXML
     private ListView<Event> recentlyViewedEvents;
+    ObservableList<Event> observableEvents;
+
+    private final String borderColor = "-fx-border-color: rgb(182,180,180)";
 
 
     @Inject
@@ -35,13 +39,28 @@ public class StartScreenCtrl {
         this.server = server;
     }
 
+    @FXML
+    public void initialize(){
+        List<Event> events = List.of();
+        observableEvents = FXCollections.observableArrayList(events);
+        if (recentlyViewedEvents == null){
+            recentlyViewedEvents = new ListView<>();
+        }
+        recentlyViewedEvents.setItems(observableEvents);
+        createEventTextField.setStyle(borderColor);
+        joinEventTextField.setStyle(borderColor);
+    }
+
 
     public void create(){
-        //Will code after API is created
+        if(!validateCreate()) return;
         String createEventText = createEventTextField.getText().trim();
         Event newEvent = new Event(createEventText);
         try {
-            server.addEvent(newEvent);
+            newEvent = server.addEvent(newEvent);
+            clearFields();
+            mainCtrl.showOverviewWithEvent(newEvent);
+            observableEvents.addFirst(newEvent);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -50,32 +69,93 @@ public class StartScreenCtrl {
             alert.showAndWait();
             return;
         }
-
-        clearFields();
-        mainCtrl.showStartScreen();
     }
 
     public void join(){
-        //Will code after API is created
-    }
-    private Event createEvent(){
-        var eventTitle = createEventTextField.getText();
-        Event x = new Event(eventTitle);
-        return x;
+        if (!validateJoin()) return;
+        Event event;
+        String inviteCode = joinEventTextField.getText().trim();
+        try{
+            List<Event> eventFromServer = server.getEventByInviteCode(inviteCode);
+            if(eventFromServer.size() > 1){
+                System.out.println("There is a problem on inviteCode");
+                return;
+            }
+            if(eventFromServer.isEmpty()){
+                joinEventTextField.setStyle("-fx-border-color: #E80C0C");
+                System.out.println("Event does not exists");
+                createEventTextField.setStyle(borderColor);
+                return;
+            }
+            event = eventFromServer.get(0);
+        }
+        catch (WebApplicationException e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            joinEventTextField.setStyle("-fx-border-color: #E80C0C");
+            System.out.println("Event does not exists");
+            createEventTextField.setStyle(borderColor);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Event does not exists \n " +
+                            "Please enter a valid invite code");
+            alert.showAndWait();
+            return;
+        }
+
+        clearFields();
+        observableEvents.remove(event);
+        observableEvents.addFirst(event);
+        mainCtrl.showOverviewWithEvent(event);
+
     }
 
     private void clearFields() {
         createEventTextField.clear();
         joinEventTextField.clear();
+        createEventTextField.setStyle(borderColor);
+        joinEventTextField.setStyle(borderColor);
+    }
+
+    public boolean validateCreate(){
+        boolean valid = true;
+        if(createEventTextField.getText().isEmpty()){
+            valid = false;
+            createEventTextField.setStyle("-fx-border-color: #E80C0C");
+            joinEventTextField.setStyle(borderColor);
+        }
+        return valid;
     }
 
 
-    public void updateEventsList() {
-        List<Event> events = List.of(new Event("New Year"), new Event("X")); // Hardcoded when API is formed it will be fetched from there
-        ObservableList<Event> observableEvents = FXCollections.observableArrayList(events);
-        if(recentlyViewedEvents == null){
-            recentlyViewedEvents = new ListView<>();
+    public boolean validateJoin(){
+        boolean valid = true;
+        if(joinEventTextField.getText().isEmpty()){
+            valid = false;
+            joinEventTextField.setStyle("-fx-border-color: #E80C0C");
+            createEventTextField.setStyle(borderColor);
         }
-        recentlyViewedEvents.setItems(observableEvents);
+        return valid;
+    }
+
+    public void updateRecentEvents() {
+        OverviewCtrl overviewCtrl = mainCtrl.getOverviewCtrl();
+        Event currentEvent = overviewCtrl.getEvent();
+        if (currentEvent == null) return;
+        for (Event event: observableEvents){
+            if (event.getId() == currentEvent.getId()){
+                int index = observableEvents.indexOf(event);
+                observableEvents.remove(event);
+                observableEvents.add(index, currentEvent);
+            }
+            break;
+        }
+    }
+
+    @FXML
+    public void handleRecentEventClick(MouseEvent arg0) {
+        Event event = recentlyViewedEvents.getSelectionModel().getSelectedItem();
+        if (event == null) return;
+        observableEvents.remove(event);
+        observableEvents.addFirst(event);
+        mainCtrl.showOverviewWithEvent(event);
     }
 }

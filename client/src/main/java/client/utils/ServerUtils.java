@@ -64,12 +64,28 @@ public class ServerUtils {
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
 	}
 
-	public Participant addParticipant(Participant participant) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/participant")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
+	public Event addParticipantToEvent(long eventId, Participant participant) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/event/" + eventId + "/participants") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.post(Entity.entity(participant, APPLICATION_JSON), Event.class);
+	}
+
+	public Event removeParticipantFromEvent(long eventId, long participantId) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/event/" + eventId + "/participants/" + participantId) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.delete(Event.class); //
+	}
+
+	public List<Event> getEvents() {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("/api/event") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>() {});
 	}
 
 	public Event addEvent(Event event) {

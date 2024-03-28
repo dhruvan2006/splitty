@@ -4,52 +4,53 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
-   <HBox prefHeight="41.0" prefWidth="600.0">
-      <Label prefHeight="17.0" prefWidth="299.0" text="New Year Party">
+   <Button text="back" style="-fx-end-margin: 30" onMouseClicked="#back"/>
+   <HBox fx:id="titleHBox" prefHeight="41.0" prefWidth="600.0">
+      <Label fx:id="titleLabel" alignment="TOP_RIGHT" prefHeight="36.0">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
-         <HBox.margin>
-            <Insets />
-         </HBox.margin>
       </Label>
-      <Button alignment="TOP_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Send Invites" />
+      <Button fx:id="titleButton" mnemonicParsing="false" onAction="#handleTitleButton" text="Change Title" />
       <HBox prefHeight="41.0" prefWidth="217.0">
-         <children>
-            <Label alignment="TOP_RIGHT" prefHeight="27.0" prefWidth="141.0" text="Invite Code:" textAlignment="RIGHT">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="inviteCodeLabel" alignment="TOP_LEFT" contentDisplay="RIGHT" prefHeight="36.0" prefWidth="101.0" text="QWERTY" textAlignment="RIGHT">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
+         <Label alignment="TOP_RIGHT" prefHeight="27.0" prefWidth="141.0" text="Invite Code: " textAlignment="RIGHT">
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Label>
+         <Label fx:id="inviteCodeLabel" alignment="TOP_LEFT" contentDisplay="RIGHT" prefHeight="36.0" prefWidth="101.0"
+                text="QWERTY" textAlignment="RIGHT">
+            <font>
+               <Font name="System Bold" size="18.0"/>
+            </font>
+         </Label>
       </HBox>
    </HBox>
    <HBox prefHeight="33.0" prefWidth="589.0">
-      <Label text="Participants">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <Button mnemonicParsing="false" onAction="#handleAddParticipantButton" text="+" />
-      <TextField fx:id="participantFirstNameField" prefHeight="25.0" prefWidth="89.0" promptText="First name..." />
-      <TextField fx:id="participantLastNameField" prefHeight="25.0" prefWidth="89.0" promptText="Last name..." />
-      <TextField fx:id="participantEmailField" prefHeight="25.0" prefWidth="86.0" promptText="Email..." />
-      <TextField fx:id="participantIBANField" prefHeight="25.0" prefWidth="87.0" promptText="IBAN" />
-      <TextField fx:id="participantUsernameField" prefHeight="25.0" prefWidth="87.0" promptText="Username..." />
+      <VBox prefHeight="33.0" prefWidth="191.0">
+         <HBox prefHeight="100.0" prefWidth="200.0">
+            <Label text="Participants">
+               <font>
+                  <Font name="System Bold" size="18.0"/>
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#handleAddParticipantButton" text="+"/>
+         </HBox>
+         <VBox fx:id="participantsVBox" prefHeight="200.0" prefWidth="100.0">
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <Label text="Participant1"/>
+               <Button mnemonicParsing="false" text="Edit"/>
+               <Button mnemonicParsing="false" text="Remove"/>
+            </HBox>
+         </VBox>
+      </VBox>
    </HBox>
    <Text fx:id="participantsText" strokeType="OUTSIDE" strokeWidth="0.0" />
    <Label text="Expenses">
@@ -59,15 +60,12 @@
    </Label>
    <HBox prefHeight="35.0" prefWidth="589.0">
       <ComboBox fx:id="participantsComboBox" prefWidth="150.0" promptText="Participants..." />
-      <Button mnemonicParsing="false" text="Add Expense" onAction="#addExpense"/>
+      <Button mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
    </HBox>
    <VBox prefHeight="200.0" prefWidth="100.0">
-      <HBox prefHeight="100.0" prefWidth="200.0">
-         <ToggleButton mnemonicParsing="false" text="All" />
-         <ToggleButton mnemonicParsing="false" text="From John" />
-         <ToggleButton mnemonicParsing="false" text="Including John" />
-      </HBox>
-      <TextArea fx:id="expensesTextArea" prefHeight="200.0" prefWidth="200.0" />
+      <ScrollPane>
+         <VBox fx:id="expenseListVBox" />
+      </ScrollPane>
    </VBox>
    <Button fx:id="settleDebtsButton" mnemonicParsing="false" onAction="#handleSettleDebtsButton" text="Settle Debts" />
 </VBox>

@@ -20,12 +20,9 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.ExpensesCtrl;
-import client.scenes.OverviewCtrl;
-import client.scenes.StartScreenCtrl;
+import client.scenes.*;
 import com.google.inject.Injector;
 
-import client.scenes.MainCtrl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -34,8 +31,17 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
+    private static boolean showAdminPage = false;
+
     public static void main(String[] args) throws URISyntaxException, IOException {
-        launch();
+        for (String arg : args) {
+            if ("--admin".equals(arg)) {
+                showAdminPage = true;
+                break;
+            }
+        }
+
+        launch(args);
     }
 
 
@@ -43,9 +49,15 @@ public class Main extends Application {
         var expense = FXML.load(ExpensesCtrl.class, "client", "scenes", "Expenses.fxml");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
+        var cParticipant = FXML.load(ParticipantCtrl.class, "client", "scenes", "Participant.fxml");
+        var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         overview.getKey().initialize(expense);
-        mainCtrl.initialize(primaryStage, start, overview);
+        mainCtrl.initialize(primaryStage, start, cParticipant, overview, admin);
+
+        if (showAdminPage) {
+            mainCtrl.showAdminScreen();
+        }
     }
 
 
