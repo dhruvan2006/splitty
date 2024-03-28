@@ -239,7 +239,6 @@ public class OverviewCtrl {
 
    @FXML
     public void showDebtsButton() {
-
     Map<Participant, Map<Participant, Integer>> debts = event.calculateIndividualDebt();
 
     participantsComboBox.setPromptText("Select a participant to view debts");
@@ -248,42 +247,48 @@ public class OverviewCtrl {
 
     Label selectedOption = new Label();
 
-    participantsComboBox.setCellFactory(param -> new ListCell<Participant>() {
+    participantsComboBox.setCellFactory(param -> new ListCell<>() {
         @Override
-        protected void updateItem(Participant participant, boolean empty) {
-            super.updateItem(participant, empty);
+        protected void updateItem(String participantName, boolean empty) {
+            super.updateItem(participantName, empty);
 
-            if (empty || participant == null) {
+            if (empty || participantName == null) {
                 setText(null);
             } else {
+                Participant participant = event.getParticipants().stream()
+                        .filter(p -> p.getUserName().equals(participantName))
+                        .findFirst()
+                        .orElse(null);
 
-                String result = participant.getUserName() + "\n";
-                Map<Participant, Integer> participantDebts = debts.get(participant);
+                if (participant != null) {
+                    Map<Participant, Integer> participantDebts = debts.get(participant);
 
-                if (participantDebts.size()>0) {
-                for (Map.Entry<Participant, Integer> entry : participantDebts.entrySet()) 
-                    result+= "owes " + entry.getValue() + " to " + entry.getKey().getUserName() + ".\n";
-                
-                } else {
-                   result = "No debts found for " + participant.getUserName();
+                    if (participantDebts.size() > 0) {
+                        StringBuilder result = new StringBuilder(participant.getUserName() + "\n");
+                        for (Map.Entry<Participant, Integer> entry : participantDebts.entrySet())
+                            result.append("owes ").append(entry.getValue()).append(" to ").append(entry.getKey().getUserName()).append(".\n");
+                        setText(result.toString());
+
+                    } else {
+                        setText("No debts found for " + participant.getUserName());
+                    }
                 }
-                setText(result);
-                
             }
         }
     });
 
     participantsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue != null) {
-            selectedOption.setText("Debts for " + newValue.getUserName());
+            selectedOption.setText("Debts for " + newValue);
         }
     });
 
-        VBox root = new VBox(10, titleLabel, participantsComboBox, selectedOption);
-        root.setPrefWidth(200);
+    VBox root = new VBox(10, titleLabel, participantsComboBox, selectedOption);
+    root.setPrefWidth(200);
 
-        // To do: adding to a scene | for now: printing
-        System.out.println(root);
+    // To do: adding to a scene | for now: printing
+    System.out.println(root);
     }
+
 
 }
