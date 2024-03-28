@@ -76,7 +76,7 @@ public class Expense {
         this.creator = creator;
     }
 
-    public void setParticipants(List<Participants> participants){
+    public void setParticipants(List<Participant> participants){
         this.participants = participants;
     }
 
