@@ -15,6 +15,6 @@
       <Label fx:id="JoinEventLabel" layoutX="107.0" layoutY="124.0" text="Join Event" />
       <Button fx:id="joinButton" layoutX="427.0" layoutY="157.0" mnemonicParsing="false" onAction="#join" text="Join" />
       <Label fx:id="recentlyViewedEventsLabel" layoutX="107.0" layoutY="208.0" text="Recently Viewed Events:" />
-      <ListView fx:id="recentlyViewedEvents" layoutX="107.0" layoutY="230.0" prefHeight="150.0" prefWidth="320.0" onMouseClicked="#handleRecentEventClick"/>
+      <ListView fx:id="recentlyViewedEvents" layoutX="107.0" layoutY="230.0" prefHeight="150.0" prefWidth="320.0" />
    </children>
 </AnchorPane>

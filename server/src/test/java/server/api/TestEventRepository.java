@@ -176,5 +176,4 @@ public class TestEventRepository implements EventRepository {
     public Page<Event> findAll(Pageable pageable) {
         return null;
     }
-
 }

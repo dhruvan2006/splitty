@@ -15,14 +15,26 @@ public class Participant{
 
     public String userName;
 
+    private boolean init;
+
+    @ManyToOne
+    public Event event;
+
+
+    public Participant(String email, String IBAN, String userName, Event event) {
+        this.email = email;
+        this.IBAN = IBAN;
+        this.userName = userName;
+        this.event = event;
+    }
+
+    public Participant() {
+    }
 
     public Participant(String email, String IBAN, String userName) {
         this.email = email;
         this.IBAN = IBAN;
         this.userName = userName;
-    }
-
-    public Participant() {
     }
 
     public long getId() {
@@ -41,6 +53,10 @@ public class Participant{
         return userName;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -57,6 +73,10 @@ public class Participant{
         this.userName = userName;
     }
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     public boolean notNull(){
         return getUserName() != null;
     }
@@ -66,12 +86,12 @@ public class Participant{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Participant that)) return false;
-        return getId() == that.getId() && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getIBAN(), that.getIBAN()) && Objects.equals(getUserName(), that.getUserName());
+        return getId() == that.getId() && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getIBAN(), that.getIBAN()) && Objects.equals(getUserName(), that.getUserName()) && Objects.equals(getEvent(), that.getEvent());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getIBAN(), getUserName());
+        return Objects.hash(getId(), getEmail(), getIBAN(), getUserName(), getEvent());
     }
 
 
@@ -82,6 +102,7 @@ public class Participant{
                 ", email='" + email +
                 ", IBAN='" + IBAN +
                 ", userName='" + userName +
+                ", event=" + event +
                 '}';
     }
 }

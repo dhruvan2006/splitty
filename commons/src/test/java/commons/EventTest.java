@@ -60,6 +60,14 @@ class EventTest {
     }
 
     @Test
+    void testEqualsFalse() {
+        Event e = new Event("");
+        Event e1 = new Event("f");
+        assertNotEquals(e, e1);
+        assertNotEquals(e1, e);
+    }
+
+    @Test
     void testHashCode() {
         Event e = new Event("");
         Event e1 = new Event("f");

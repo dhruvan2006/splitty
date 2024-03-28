@@ -46,15 +46,13 @@ public class ParticipantController {
         List<Participant> resp = repo.findAll().stream().filter(x -> x.getId() == lid).toList();
         return ResponseEntity.ok(resp);
     }
-
     @PostMapping({"", "/"})
-    public ResponseEntity<Participant> createParticipant(@RequestBody Participant p) {
+    public ResponseEntity<Participant> postParticipant(@RequestBody Participant p) {
         if (p == null || !p.notNull())
             return ResponseEntity.badRequest().build();
         Participant saved = repo.save(p);
         return ResponseEntity.ok(saved);
     }
-
     @DeleteMapping({"", "/"})
     public ResponseEntity<Participant> deleteIt(@RequestParam("id") Long id) {
         if (id < 0 || !repo.existsById(id))

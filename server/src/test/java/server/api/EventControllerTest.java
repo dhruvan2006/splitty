@@ -36,7 +36,7 @@ public class EventControllerTest {
         events.add(event);
         TestEventRepository repo = new TestEventRepository(events);
         EventController sut = new EventController(repo);
-        var actual = sut.createEvent(null);
+        var actual = sut.postEvent(null);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     @Test
@@ -47,7 +47,7 @@ public class EventControllerTest {
         events.add(event);
         TestEventRepository repo = new TestEventRepository(events);
         EventController sut = new EventController(repo);
-        var actual = sut.createEvent(event1);
+        var actual = sut.postEvent(event1);
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
     @Test
@@ -58,7 +58,7 @@ public class EventControllerTest {
         events.add(event);
         TestEventRepository repo = new TestEventRepository(events);
         EventController sut = new EventController(repo);
-        var actual = sut.createEvent(event1);
+        var actual = sut.postEvent(event1);
         assertEquals(OK, actual.getStatusCode());
     }
     @Test
@@ -69,7 +69,7 @@ public class EventControllerTest {
         events.add(event);
         TestEventRepository repo = new TestEventRepository(events);
         EventController sut = new EventController(repo);
-        var actual = sut.createEvent(event1);
+        var actual = sut.postEvent(event1);
         assertEquals(event1, actual.getBody());
     }
 
@@ -93,7 +93,7 @@ public class EventControllerTest {
         events.add(event);
         TestEventRepository repo = new TestEventRepository(events);
         EventController sut = new EventController(repo);
-        var actual = sut.createEvent(event1);
+        var actual = sut.postEvent(event1);
         assertEquals(OK, actual.getStatusCode());
         assertEquals(OK, actual.getStatusCode());
     }

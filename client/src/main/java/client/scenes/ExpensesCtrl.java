@@ -70,10 +70,4 @@ public class ExpensesCtrl {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    public void initializeWithExpense(Expense expense) {
-        username.setText(expense.getCreator().getUserName());
-        description.setText(expense.getTitle());
-        amount.setText(Integer.toString(expense.getTotalExpense()));
-    }
 }
