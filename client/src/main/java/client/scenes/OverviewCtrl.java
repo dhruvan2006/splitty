@@ -124,7 +124,7 @@ public class OverviewCtrl {
     }
 
     public void updateParticipant(Participant updatedParticipant) {
-        this.event = server.updateParticipantInEvent(event.getId(), updatedParticipant);
+        this.event = server.updateParticipantToEvent(event.getId(), updatedParticipant);
         updateParticipantsList();
         updateParticipantsComboBox();
     }
@@ -217,7 +217,7 @@ public class OverviewCtrl {
             titleButton.setText("Apply Changes");
         } else {
             System.out.println(event.getId());
-            this.event = server.updateEventTitle(event.getId(), titleTextField.getText());
+            // this.event = server.updateEventTitle(event.getId(), titleTextField.getText()); TO DO updateEventTitle
             titleLabel.setText(event.getTitle());
             titleHBox.getChildren().remove(titleTextField);
             titleHBox.getChildren().addFirst(titleLabel);
