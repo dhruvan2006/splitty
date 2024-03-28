@@ -69,3 +69,4 @@
    </VBox>
    <Button fx:id="settleDebtsButton" mnemonicParsing="false" onAction="#handleSettleDebtsButton" text="Settle Debts" />
 </VBox>
+<Button fx:id="showDebtsButton" text="Show Debts" style="-fx-end-margin: 30" onAction="#showDebtsButton"/>

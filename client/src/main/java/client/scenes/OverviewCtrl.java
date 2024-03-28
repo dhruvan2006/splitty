@@ -20,7 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class OverviewCtrl {
 
@@ -36,7 +36,7 @@ public class OverviewCtrl {
     public HBox titleHBox;
 
     @FXML
-    private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
+    private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton, showDebtsButton;
 
     @FXML
     private ComboBox<String> participantsComboBox;
@@ -236,4 +236,54 @@ public class OverviewCtrl {
     public void back(MouseEvent mouseEvent) {
         mainCtrl.showStartScreen();
     }
+
+   @FXML
+    public void showDebtsButton() {
+
+    Map<Participant, Map<Participant, Integer>> debts = event.calculateIndividualDebt();
+
+    participantsComboBox.setPromptText("Select a participant to view debts");
+    Label titleLabel = new Label("Open debts");
+    titleLabel.setStyle("-fx-font-weight: bold");
+
+    Label selectedOption = new Label();
+
+    participantsComboBox.setCellFactory(param -> new ListCell<Participant>() {
+        @Override
+        protected void updateItem(Participant participant, boolean empty) {
+            super.updateItem(participant, empty);
+
+            if (empty || participant == null) {
+                setText(null);
+            } else {
+
+                String result = participant.getUserName() + "\n";
+                Map<Participant, Integer> participantDebts = debts.get(participant);
+
+                if (participantDebts.size()>0) {
+                for (Map.Entry<Participant, Integer> entry : participantDebts.entrySet()) 
+                    result+= "owes " + entry.getValue() + " to " + entry.getKey().getUserName() + ".\n";
+                
+                } else {
+                   result = "No debts found for " + participant.getUserName();
+                }
+                setText(result);
+                
+            }
+        }
+    });
+
+    participantsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue != null) {
+            selectedOption.setText("Debts for " + newValue.getUserName());
+        }
+    });
+
+        VBox root = new VBox(10, titleLabel, participantsComboBox, selectedOption);
+        root.setPrefWidth(200);
+
+        // To do: adding to a scene | for now: printing
+        System.out.println(root);
+    }
+
 }
