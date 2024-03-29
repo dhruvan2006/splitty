@@ -128,9 +128,10 @@ public class Event {
      */
     public Map<Participant,Integer> calculateTotalDebt() {
         Map<Participant,Integer> map = new HashMap<>();
+        var indDebts = calculateIndividualDebt();
 
         for (Participant participant : participants) {
-            Map<Participant, Integer> debts = calculateIndividualDebt().get(participant);
+            Map<Participant, Integer> debts = indDebts.get(participant);
             int totalSum = 0;
             for (Participant other : participants) {
 
@@ -156,7 +157,7 @@ public class Event {
         }
 
         for (Expense expense : expenses) {
-            int sharePerParticipant = expense.getSharePerPerson();
+            int sharePerParticipant = expense.getSharePerPerson(participants.size());
 
             for (Participant participant : participants) {
                 if (participant.equals(expense.getCreator())) continue;
@@ -178,9 +179,10 @@ public class Event {
      */
     public Map<Participant,Integer> calculateTotalOwned() {
         Map<Participant,Integer> map = new HashMap<>();
+        var indOwned = calculateIndividualDebt();
 
         for (Participant participant : participants) {
-            Map<Participant, Integer> owned = calculateIndividualOwned().get(participant);
+            Map<Participant, Integer> owned = indOwned.get(participant);
             int totalOwned = 0;
             for (Participant other : participants) {
 
@@ -207,7 +209,7 @@ public class Event {
         }
 
         for (Expense expense : expenses) {
-            int sharePerParticipant = expense.getSharePerPerson();
+            int sharePerParticipant = expense.getSharePerPerson(participants.size());
 
             for (Participant other : participants) {
                 if (other.equals(expense.getCreator())) continue; 

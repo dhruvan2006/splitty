@@ -113,9 +113,7 @@ class ExpenseTest {
         list.add(p);
         list.add(h);
 
-        Expense e = new Expense("Brunch in Delft", 1200, p ,event,list);
-
-        assertEquals(list,e.getParticipants());
+        Expense e = new Expense("Brunch in Delft", 1200, p ,event);
     }
 
     @Test
@@ -129,14 +127,10 @@ class ExpenseTest {
         list.add(p);
         list.add(h);
 
-        Expense e = new Expense("Brunch in Delft", 1200, p ,event,list);
+        Expense e = new Expense("Brunch in Delft", 1200, p ,event);
 
         List<Participant> list2 = new ArrayList<>();
         list2.add(h);
-
-        e.setParticipants(list2);
-
-        assertEquals(list2,e.getParticipants());
     }
 
 

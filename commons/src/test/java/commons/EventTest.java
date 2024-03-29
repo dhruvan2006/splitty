@@ -138,8 +138,8 @@ class EventTest {
         event.addParticipant(c);
         event.addParticipant(d);
         event.addParticipant(e);
-        Expense expense = new Expense("TEST",20,e,event,Arrays.asList(a,b,c,d,e));
-        Expense expense2 = new Expense("TEST",16,a,event,Arrays.asList(a,b,c,d,e));
+        Expense expense = new Expense("TEST",20,e,event);
+        Expense expense2 = new Expense("TEST",16,a,event);
         event.addExpense(expense);
         event.addExpense(expense2);
 
@@ -165,8 +165,8 @@ class EventTest {
         event.addParticipant(c);
         event.addParticipant(d);
         event.addParticipant(e);
-        Expense expense = new Expense("TEST",20,e,event,Arrays.asList(a,b,c,d,e));
-        Expense expense2 = new Expense("TEST",16,a,event,Arrays.asList(a,b,c,d,e));
+        Expense expense = new Expense("TEST",20,e,event);
+        Expense expense2 = new Expense("TEST",16,a,event);
         event.addExpense(expense);
         event.addExpense(expense2);
 
@@ -194,8 +194,8 @@ class EventTest {
         event.addParticipant(c);
         event.addParticipant(d);
         event.addParticipant(e);
-        Expense expense = new Expense("TEST",20,e,event,Arrays.asList(a,b,c,d,e));
-        Expense expense2 = new Expense("TEST",16,a,event,Arrays.asList(a,b,c,d,e));
+        Expense expense = new Expense("TEST",20,e,event);
+        Expense expense2 = new Expense("TEST",16,a,event);
         event.addExpense(expense);
         event.addExpense(expense2);
 
@@ -222,8 +222,8 @@ class EventTest {
         event.addParticipant(c);
         event.addParticipant(d);
         event.addParticipant(e);
-        Expense expense = new Expense("TEST",20,e,event,Arrays.asList(a,b,c,d,e));
-        Expense expense2 = new Expense("TEST",16,a,event,Arrays.asList(a,b,c,d,e));
+        Expense expense = new Expense("TEST",20,e,event);
+        Expense expense2 = new Expense("TEST",16,a,event);
         event.addExpense(expense);
         event.addExpense(expense2);
 
