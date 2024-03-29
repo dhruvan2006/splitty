@@ -158,4 +158,18 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)//
 				.get(new GenericType<List<Participant>>(){});
 	}
+	public Event putEvent(Event event) {
+		return ClientBuilder.newClient(new ClientConfig())//
+				.target(SERVER).path("api/event/"+event.getId())//
+				.request(APPLICATION_JSON)//
+				.accept(APPLICATION_JSON)//
+				.put(Entity.entity(event,APPLICATION_JSON), Event.class);
+	}
+	public Event postExpenseInEvent(Event event, Expense expense) {
+		return ClientBuilder.newClient(new ClientConfig())//
+				.target(SERVER).path("api/event/"+event.getId()+"/expense")//
+				.request(APPLICATION_JSON)//
+				.accept(APPLICATION_JSON)//
+				.post(Entity.entity(expense,APPLICATION_JSON), Event.class);
+	}
 }

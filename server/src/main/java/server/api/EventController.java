@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/api/event")
 public class EventController {
     private final EventRepository repo;
 
-    @Autowired
     EventController(EventRepository repo){
         this.repo = repo;
     }
@@ -131,5 +132,22 @@ public class EventController {
 
         var participants = event.get().getParticipants();
         return ResponseEntity.ok(participants);
+    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Event> updateEvent(@PathVariable("id") Long id, @RequestBody Event event) {
+//        var OldEvent = repo.findById(id);
+//        if(OldEvent.isEmpty())
+//            return ResponseEntity.badRequest().build();
+//
+//        repo.save(event);
+//        return ResponseEntity.ok(event);
+//    }
+    @PostMapping("/{eventId}/expense")
+    public ResponseEntity<Event> addExpenseToEvent(@PathVariable("eventId") Long eventId, @RequestBody Expense expense) {
+        return repo.findById(eventId).map(event -> {
+            event.addExpense(expense);
+            Event updateEvent = repo.save(event);
+            return ResponseEntity.ok(updateEvent);
+        }).orElse(ResponseEntity.notFound().build());
     }
 }
