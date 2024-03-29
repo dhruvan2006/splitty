@@ -179,7 +179,7 @@ public class Event {
      */
     public Map<Participant,Integer> calculateTotalOwned() {
         Map<Participant,Integer> map = new HashMap<>();
-        var indOwned = calculateIndividualDebt();
+        var indOwned = calculateIndividualOwned();
 
         for (Participant participant : participants) {
             Map<Participant, Integer> owned = indOwned.get(participant);
