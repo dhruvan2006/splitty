@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,7 +12,6 @@ import java.util.Objects;
 
 public class ParticipantCtrl {
 
-    //TODO add event attribute and construct participant with event
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -27,6 +27,12 @@ public class ParticipantCtrl {
     @FXML
     private TextField nameField;
     private ArrayList<TextField> fields;
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    private Event event;
 
     private Participant editingParticipant;
 
@@ -107,6 +113,4 @@ public class ParticipantCtrl {
         }
         mainCtrl.showOverview();
     }
-
-
 }

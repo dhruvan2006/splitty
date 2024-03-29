@@ -46,7 +46,7 @@ public class ExpensesCtrl {
     }
     public void cancel() {
         clearFields();
-        mainCtrl.showOverviewWithEvent(event);
+        mainCtrl.showOverview();
     }
 
     private void clearFields() {
@@ -69,7 +69,7 @@ public class ExpensesCtrl {
     }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
-        var participants = server.getParticipants();
+        var participants = server.getParticipantsInEvent(event.getId());
         var filtered = participants.stream().filter(x -> Objects.equals(username.getText(), x.getUserName()));
         var any = filtered.findAny();
         if(any.isEmpty()) {

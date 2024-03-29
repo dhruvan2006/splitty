@@ -154,7 +154,7 @@ public class OverviewCtrl {
             Text payer = new Text(expense.getCreator().getUserName());
             payer.setStyle("-fx-font-weight: bold");
             Text textPaid = new Text(" paid ");
-            Text amount = new Text("\u20ac" + expense.getTotalExpense());
+            Text amount = new Text("\u20ac" + expense.getTotalExpense()*1.0/100);
             amount.setStyle("-fx-font-weight: bold");
             Text textFor = new Text(" for ");
             Text title = new Text(expense.getTitle());
@@ -200,6 +200,7 @@ public class OverviewCtrl {
 
     @FXML
     public void handleAddParticipantButton() {
+        mainCtrl.getParticipantCtrl().setEvent(event);
         mainCtrl.getParticipantCtrl().initialize();
         mainCtrl.showConfigParticipant(this);
     }

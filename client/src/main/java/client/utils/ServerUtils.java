@@ -151,4 +151,11 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)//
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
+	public List<Participant> getParticipantsInEvent(long id) {
+		return ClientBuilder.newClient(new ClientConfig())//
+				.target(SERVER).path("api/event/"+id+"/participant")//
+				.request(APPLICATION_JSON)//
+				.accept(APPLICATION_JSON)//
+				.get(new GenericType<List<Participant>>(){});
+	}
 }

@@ -123,4 +123,13 @@ public class EventController {
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/{id}/participant")
+    public ResponseEntity<List<Participant>> getParticipants(@PathVariable("id") Long id){
+        var event = repo.findById(id);
+        if(event.isEmpty())
+            return ResponseEntity.badRequest().build();
+
+        var participants = event.get().getParticipants();
+        return ResponseEntity.ok(participants);
+    }
 }
