@@ -1,15 +1,9 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.PasswordGenerator;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
-
 import javax.inject.Inject;
-import java.util.List;
 
 public class JoinAdminCtrl {
 
@@ -19,7 +13,7 @@ public class JoinAdminCtrl {
     @FXML
     private TextField password;
 
-    private int saltHash;
+    private String adminPassword;
 
     @Inject
     public JoinAdminCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -28,8 +22,8 @@ public class JoinAdminCtrl {
     }
 
     public void join(){
-        String x = password.getText() + "55005";
-        if(x.hashCode() == saltHash){
+        String x = password.getText();
+        if(x.equals(adminPassword)){
             password.clear();
             mainCtrl.showAdminScreen();
         }
@@ -39,11 +33,11 @@ public class JoinAdminCtrl {
         }
     }
 
-    public void setSaltHash() {
-
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
     }
 
-    public int getSaltHash() {
-        return saltHash;
+    public String getAdminPassword() {
+        return adminPassword; //For testing
     }
 }

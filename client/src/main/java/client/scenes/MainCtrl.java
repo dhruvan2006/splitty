@@ -33,6 +33,10 @@ public class MainCtrl {
 
     private String adminPassword;
 
+    private JoinAdminCtrl joinAdminCtrl;
+
+    private Scene joinAdmin;
+
     private Stage primaryStage;
 
     private OverviewCtrl overviewCtrl;
@@ -50,7 +54,7 @@ public class MainCtrl {
     private AdminCtrl adminCtrl;
     private Scene admin;
 
-    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview, Pair<AdminCtrl, Parent> admin) {
+    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview, Pair<AdminCtrl, Parent> admin, Pair<JoinAdminCtrl, Parent> joinAdmin) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -60,6 +64,8 @@ public class MainCtrl {
         this.configParticipant = new Scene(cParticipant.getValue());
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
+        this.joinAdminCtrl = joinAdmin.getKey();
+        this.joinAdmin = new Scene(joinAdmin.getValue());
         setAdminPassword();
         showStartScreen();
         primaryStage.show();
@@ -89,6 +95,13 @@ public class MainCtrl {
         primaryStage.setScene(admin);
 
     }
+
+    public void showJoinAdmin(){
+        joinAdminCtrl.setAdminPassword(adminPassword);
+        primaryStage.setTitle("Join Admin");
+        primaryStage.setScene(joinAdmin);
+    }
+
 
 
     public void showConfigParticipant(OverviewCtrl overviewCtrl) {
