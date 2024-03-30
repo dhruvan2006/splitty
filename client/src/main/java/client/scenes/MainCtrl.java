@@ -25,7 +25,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class MainCtrl {
+
+    private String adminPassword;
 
     private Stage primaryStage;
 
@@ -54,6 +60,7 @@ public class MainCtrl {
         this.configParticipant = new Scene(cParticipant.getValue());
         this.adminCtrl = admin.getKey();
         this.admin = new Scene(admin.getValue());
+        setAdminPassword();
         showStartScreen();
         primaryStage.show();
     }
@@ -131,5 +138,21 @@ public class MainCtrl {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(e -> popup.hide());
         delay.play();
+    }
+
+    private void setAdminPassword() {
+        adminPassword = "";
+        try {
+            File test = new File("build.gradle");
+            File file = new File("server/src/adminPass.txt");
+            if (test.getAbsolutePath().contains("client")) {
+                file = new File("../server/src/adminPass.txt");
+            }
+            Scanner scanner = new Scanner(file);
+            adminPassword = scanner.nextLine().trim();
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
