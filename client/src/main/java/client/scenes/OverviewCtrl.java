@@ -237,7 +237,7 @@ public class OverviewCtrl {
         mainCtrl.showStartScreen();
     }
 
-   @FXML
+    @FXML
     public void showDebtsButton() {
     Map<Participant, Map<Participant, Integer>> debts = event.calculateIndividualDebt();
 
@@ -286,8 +286,7 @@ public class OverviewCtrl {
     VBox root = new VBox(10, titleLabel, participantsComboBox, selectedOption);
     root.setPrefWidth(200);
 
-    // To do: adding to a scene | for now: printing
-    System.out.println(root);
+    expenseScene.setRoot(root);
     }
 
 

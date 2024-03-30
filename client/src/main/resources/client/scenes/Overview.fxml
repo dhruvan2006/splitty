@@ -68,5 +68,5 @@
       </ScrollPane>
    </VBox>
    <Button fx:id="settleDebtsButton" mnemonicParsing="false" onAction="#handleSettleDebtsButton" text="Settle Debts" />
-   <Button fx:id="showDebtsButton" text="Show Debts" style="-fx-end-margin: 30" onAction="#showDebtsButton"/>
+   <Button fx:id="showDebtsButton" text="Show Debts" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-border-radius: 5px;" onAction="#showDebtsButton"/>
 </VBox>
