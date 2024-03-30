@@ -26,7 +26,6 @@ public class JoinAdminCtrl {
         this.server = server;
         this.mainCtrl = mainCtrl;
         setSaltHash();
-        System.out.println(saltHash);
     }
 
     public void join(){
@@ -34,6 +33,10 @@ public class JoinAdminCtrl {
         if(x.hashCode() == saltHash){
             password.clear();
             mainCtrl.showAdminScreen();
+        }
+        else{
+            mainCtrl.showNotification("Wrong Password", "#FF6666");
+            password.setStyle("-fx-border-color: #FF6666");
         }
     }
 
