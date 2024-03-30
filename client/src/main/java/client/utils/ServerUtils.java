@@ -26,6 +26,7 @@ import java.util.List;
 
 import commons.Event;
 import commons.Participant;
+import commons.PasswordGenerator;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -47,7 +48,6 @@ public class ServerUtils {
 			System.out.println(line);
 		}
 	}
-
 	public List<Quote> getQuotes() {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/quotes") //
@@ -129,4 +129,21 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<List<Event>>() {});
 	}
+
+	public List<PasswordGenerator> getPassword(){
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/password") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<PasswordGenerator>>() {});
+	}
+
+	public PasswordGenerator postPassword(PasswordGenerator passwordGenerator){
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/password") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.post(Entity.entity(passwordGenerator, APPLICATION_JSON), PasswordGenerator.class);
+	}
+
 }
