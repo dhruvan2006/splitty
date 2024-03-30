@@ -40,6 +40,19 @@ public class JoinAdminCtrl {
     public void setSaltHash() {
         try {
             List<PasswordGenerator> temp = server.getPassword();
+            if(temp == null || temp.isEmpty()){
+                try {
+                    server.postPassword(new PasswordGenerator());
+                    temp = server.getPassword();
+                }
+                catch (WebApplicationException e){
+                    var alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                    return;
+                }
+            }
             System.out.println(temp.get(0).getPassword());
             this.saltHash = temp.get(0).getSaltHash();
         } catch (WebApplicationException e) {
