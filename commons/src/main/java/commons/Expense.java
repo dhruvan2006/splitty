@@ -1,9 +1,12 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,14 +15,19 @@ public class Expense {
     @ManyToOne()
     Participant creator;
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     @ManyToOne()
+    @JsonBackReference
     Event event; // the event this expense belongs to
 
     public Expense() {
     }
 
     //to indicate if object ready to be added to database
-    public boolean isInit(){
+    public boolean checkNull(){
         return true;
     }
 
@@ -73,6 +81,10 @@ public class Expense {
         return totalExpense;
     }
 
+    public String getTotalExpenseString(){
+        return String.format(java.util.Locale.US,"%.2f", totalExpense / 100f);
+    }
+
     public void setTotalExpense(int totalExpense) {
         this.totalExpense = totalExpense;
     }
@@ -88,4 +100,3 @@ public class Expense {
                 ", created by " + creator.toString() + "\n";
     }
 }
-

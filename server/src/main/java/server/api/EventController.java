@@ -2,21 +2,22 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
 @RequestMapping("/api/event")
 public class EventController {
+
     private final EventRepository repo;
 
-    @Autowired
     EventController(EventRepository repo){
         this.repo = repo;
     }
@@ -112,6 +113,24 @@ public class EventController {
             if (!updated) {
                 return new ResponseEntity<Event>(HttpStatus.NOT_FOUND); // had problems with type casting
             }
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/{id}/participant")
+    public ResponseEntity<List<Participant>> getParticipants(@PathVariable("id") Long id){
+        var event = repo.findById(id);
+        if(event.isEmpty())
+            return ResponseEntity.badRequest().build();
+
+        var participants = event.get().getParticipants();
+        return ResponseEntity.ok(participants);
+    }
+
+    @PutMapping("/{eventId}/date")
+    public ResponseEntity<Event> updateEventLastAccess(@PathVariable("eventId") Long id){
+        return repo.findById(id).map(event -> {
+            event.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
