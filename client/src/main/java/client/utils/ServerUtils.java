@@ -15,8 +15,6 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,6 +32,8 @@ import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+
+import static jakarta.ws.rs.core.MediaType.*;
 
 public class ServerUtils {
 
@@ -85,7 +85,7 @@ public class ServerUtils {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("/api/event") //
 				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Event>>() {});
 	}
 
@@ -140,7 +140,7 @@ public class ServerUtils {
 	}
 	public Expense addExpense(Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())//
-				.target(SERVER).path("api/expense")//
+				.target(SERVER).path("api/expense/addToEvent/" + expense.getEvent().getId())//
 				.request(APPLICATION_JSON)//
 				.accept(APPLICATION_JSON)//
 				.post(Entity.entity(expense, APPLICATION_JSON), Expense.class);

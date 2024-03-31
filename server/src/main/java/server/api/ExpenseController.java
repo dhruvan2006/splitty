@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.Expense;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,8 +63,10 @@ public class ExpenseController {
 
     }
 
-    @PostMapping(path = {"add", "/", ""})
-    public ResponseEntity<Expense> add(@RequestBody Expense expense) {
+    @PostMapping(path = {"/addToEvent/{event_id}"})
+    public ResponseEntity<Expense> add(@RequestBody Expense expense, @PathVariable("event_id") long event_id) {
+        Event e = new Event(); e.setId(event_id);
+        expense.setEvent(e); // I know this is cursed but truly this is the only option there is.
         Expense saved = repo.save(expense);
         return ResponseEntity.ok(saved);
     }

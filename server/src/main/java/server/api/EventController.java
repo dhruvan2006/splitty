@@ -2,7 +2,6 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,10 +13,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/event")
 public class EventController {
-    @Autowired
+
     private final EventRepository repo;
 
-    @Autowired
     EventController(EventRepository repo){
         this.repo = repo;
     }
@@ -50,7 +48,6 @@ public class EventController {
         }
 
         List<Event> resp = repo.findAll().stream().filter(x -> x.getInviteCode().equals(inviteCode)).toList();
-        //System.out.println(resp.getFirst().getExpenses());
         return ResponseEntity.ok(resp);
     }
 

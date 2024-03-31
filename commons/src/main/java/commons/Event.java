@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -19,7 +20,8 @@ public class Event {
     @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
     private List<Participant> participants;
 
-    @OneToMany(targetEntity = Expense.class, mappedBy = "event")
+    @OneToMany(targetEntity = Expense.class, cascade = CascadeType.ALL, mappedBy = "event")
+    @JsonManagedReference
     private List<Expense> expenses;
 
     public Event() {
@@ -29,7 +31,7 @@ public class Event {
     public Event(String title, boolean ...useMockData) {
         this.title = title;
         this.participants = new ArrayList<>();
-//        this.expenses = new ArrayList<>();
+        this.expenses = new ArrayList<>();
         this.inviteCode = generateInviteCode();
     }
 

@@ -105,7 +105,6 @@ public class StartScreenCtrl {
         clearFields();
         observableEvents.remove(event);
         observableEvents.addFirst(event);
-//        System.out.println(event.getExpenses());
         mainCtrl.showOverviewWithEvent(event);
 
     }

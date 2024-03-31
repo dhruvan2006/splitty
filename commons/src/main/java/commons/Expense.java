@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.Objects;
 
@@ -12,7 +13,12 @@ public class Expense {
     @ManyToOne()
     Participant creator;
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     @ManyToOne()
+    @JsonBackReference
     Event event; // the event this expense belongs to
 
     public Expense() {
