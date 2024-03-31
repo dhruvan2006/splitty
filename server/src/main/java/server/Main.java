@@ -18,10 +18,6 @@ package server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Random;
 
 @SpringBootApplication
