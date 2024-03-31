@@ -18,12 +18,34 @@ package server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import java.util.Random;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "commons", "server" })
 public class Main {
 
+    private static String password;
+
     public static void main(String[] args) {
+        password = passwordGenerator();
+        System.out.println(password);
         SpringApplication.run(Main.class, args);
+    }
+
+    private static String passwordGenerator(){
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+        Random random = new Random();
+
+        StringBuilder sb = new StringBuilder(15);
+        for (int i = 0; i < 15; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            sb.append(characters.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
+
+    public static String getPassword() {
+        return password;
     }
 }

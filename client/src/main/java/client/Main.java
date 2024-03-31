@@ -53,12 +53,13 @@ public class Main extends Application {
         var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
         var cParticipant = FXML.load(ParticipantCtrl.class, "client", "scenes", "Participant.fxml");
         var admin = FXML.load(AdminCtrl.class, "client", "scenes", "Admin.fxml");
+        var joinAdmin = FXML.load(JoinAdminCtrl.class, "client", "scenes", "JoinAdmin.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         overview.getKey().initialize(expense);
-        mainCtrl.initialize(primaryStage, start, cParticipant, overview, admin);
+        mainCtrl.initialize(primaryStage, start, cParticipant, overview, admin, joinAdmin);
 
         if (showAdminPage) {
-            mainCtrl.showAdminScreen();
+            mainCtrl.showJoinAdmin();
         }
     }
 
