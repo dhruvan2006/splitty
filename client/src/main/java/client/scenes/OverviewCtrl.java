@@ -24,7 +24,6 @@ import javafx.stage.Modality;
 import javafx.util.Pair;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {

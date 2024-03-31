@@ -19,8 +19,6 @@ import static com.google.inject.Guice.createInjector;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import client.scenes.*;
 import com.google.inject.Injector;
