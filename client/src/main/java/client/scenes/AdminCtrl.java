@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,6 +60,9 @@ public class AdminCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         titleColumn.setCellValueFactory(event -> new SimpleStringProperty(event.getValue().getTitle()));
+        creationDateColumn.setCellValueFactory(event -> new SimpleStringProperty(formatDate(event.getValue().getOpenDate())));
+        lastActivityColumn.setCellValueFactory(event -> new SimpleStringProperty(formatDate(event.getValue().getLastUsed())));
+
 
         deleteColumn.setCellFactory(column -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
@@ -148,4 +153,13 @@ public class AdminCtrl implements Initializable {
         data = FXCollections.observableList(events);
         table.setItems(data);
     }
+
+    private String formatDate(Date date) {
+        if (date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.format(date);
+        }
+        return null;
+    }
+
 }

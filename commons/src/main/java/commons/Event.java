@@ -3,6 +3,8 @@ package commons;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +17,10 @@ public class Event {
     private long id;
     private String inviteCode;
     private String title;
+
+    private Date openDate;
+    private Date lastUsed;
+
 
     @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
     private List<Participant> participants;
@@ -31,6 +37,8 @@ public class Event {
         this.participants = new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.inviteCode = generateInviteCode();
+        this.openDate = Date.valueOf(LocalDate.now());
+        this.lastUsed = Date.valueOf(LocalDate.now());
     }
 
     private String generateInviteCode() {
@@ -99,6 +107,18 @@ public class Event {
 
     public void addExpense(Expense expense) {
         expenses.add(expense);
+    }
+
+    public Date getOpenDate() {
+        return openDate;
+    }
+
+    public Date getLastUsed() {
+        return lastUsed;
+    }
+
+    public void setLastUsed(Date lastUsed) {
+        this.lastUsed = lastUsed;
     }
 
     @Override
