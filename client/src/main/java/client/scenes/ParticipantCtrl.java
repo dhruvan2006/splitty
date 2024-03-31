@@ -41,7 +41,8 @@ public class ParticipantCtrl implements Initializable {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle resources) {
+        this.bundle = resources;
         if (fields == null)
             fields = new ArrayList<>() {
             {
@@ -50,18 +51,20 @@ public class ParticipantCtrl implements Initializable {
                 add(nameField);
             }
         };
-        clearFields();
-        editingParticipant = null;
-        finishButton.setText(bundle.getString("globals.add"));
     }
 
     public void initializeWithParticipant(Participant participant) {
         this.editingParticipant = participant;
-        finishButton.setText(bundle.getString("globals.edit"));
         if (participant != null) {
+            finishButton.setText(bundle.getString("globals.edit"));
             bnrField.setText(participant.getIBAN());
             emailField.setText(participant.getEmail());
             nameField.setText(participant.getUserName());
+        }
+        else {
+            finishButton.setText(bundle.getString("globals.add"));
+            clearFields();
+            editingParticipant = null;
         }
     }
 
@@ -111,10 +114,5 @@ public class ParticipantCtrl implements Initializable {
             overviewCtrl.addParticipant(participant);
         }
         mainCtrl.showOverview();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resources) {
-        this.bundle = resources;
     }
 }

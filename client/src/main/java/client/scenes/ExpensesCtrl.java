@@ -6,15 +6,18 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class ExpensesCtrl {
+public class ExpensesCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     @FXML
@@ -29,6 +32,8 @@ public class ExpensesCtrl {
     private Event event;
     private boolean editMode;
     private Expense expense;
+    private ResourceBundle bundle;
+
 
     public void setExpense(Expense expense) {
         this.expense = expense;
@@ -44,10 +49,10 @@ public class ExpensesCtrl {
             assert expense != null;
             setExpense(expense);
             initializeWithExpense(expense);
-            finishButton.setText("edit");
+            finishButton.setText(bundle.getString("globals.edit"));
         }
         else {
-            finishButton.setText("add");
+            finishButton.setText(bundle.getString("globals.add"));
         }
     }
 
@@ -68,7 +73,6 @@ public class ExpensesCtrl {
     }
 
     private void clearFields() {
-        //username.clear();
         description.clear();
         amount.clear();
     }
@@ -98,7 +102,7 @@ public class ExpensesCtrl {
         if(any.isEmpty()) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Participant does not exists in this event");
+            alert.setContentText(bundle.getString("expense.participant_not_found"));
             alert.showAndWait();
             return null;
         }
@@ -119,7 +123,7 @@ public class ExpensesCtrl {
         catch (Exception e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Have to be Integer");
+            alert.setContentText(bundle.getString("expense.error_amount"));
             alert.showAndWait();
             return null;
         }
@@ -132,14 +136,14 @@ public class ExpensesCtrl {
             catch (Exception e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText("Have to be Integer");
+                alert.setContentText(bundle.getString("expense.error_amount"));
                 alert.showAndWait();
                 return null;
             }
             if(unit > 100) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText("Have to at most two digits after \".\"");
+                alert.setContentText(bundle.getString("expense.too_much_decimals"));
                 alert.showAndWait();
                 return null;
             }
@@ -154,5 +158,10 @@ public class ExpensesCtrl {
         username.getSelectionModel().select(expense.getCreator().getUserName());
         description.setText(expense.getTitle());
         amount.setText(expense.getTotalExpenseString());
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.bundle = resourceBundle;
     }
 }

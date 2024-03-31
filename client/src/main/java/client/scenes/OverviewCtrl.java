@@ -124,6 +124,7 @@ public class OverviewCtrl implements Initializable {
         this.event = server.updateParticipantInEvent(event.getId(), updatedParticipant);
         updateParticipantsList();
         updateParticipantsComboBox();
+        updateExpenseList();
     }
 
     private void editParticipant(Participant participant) {
@@ -142,7 +143,7 @@ public class OverviewCtrl implements Initializable {
         expenseListVBox.getChildren().clear();
 
         if (event.getExpenses().isEmpty()) {
-            Label label = new Label("No expenses yet");
+            Label label = new Label(bundle.getString("overview.no_expenses"));
             label.setStyle("-fx-font-size: 20");
             expenseListVBox.getChildren().add(label);
         }
@@ -202,7 +203,7 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     public void handleAddParticipantButton() {
-        mainCtrl.getParticipantCtrl().initialize();
+        mainCtrl.getParticipantCtrl().initializeWithParticipant(null);
         mainCtrl.showConfigParticipant(this);
     }
 
