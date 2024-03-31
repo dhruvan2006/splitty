@@ -16,9 +16,13 @@
 package client.scenes;
 
 import commons.Event;
+import javafx.animation.PauseTransition;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 public class MainCtrl {
@@ -32,13 +36,15 @@ public class MainCtrl {
     private Scene add;
 
     private ParticipantCtrl participantCtrl;
-
     private Scene configParticipant;
+
     private StartScreenCtrl startScreenCtrl;
     private Scene start;
 
-    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview) {
-//            Pair<AddQuoteCtrl, Parent> add) {
+    private AdminCtrl adminCtrl;
+    private Scene admin;
+
+    public void initialize(Stage primaryStage, Pair<StartScreenCtrl, Parent> start, Pair<ParticipantCtrl, Parent> cParticipant, Pair<OverviewCtrl, Parent> overview, Pair<AdminCtrl, Parent> admin) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -46,6 +52,8 @@ public class MainCtrl {
         this.start = new Scene(start.getValue());
         this.participantCtrl = cParticipant.getKey();
         this.configParticipant = new Scene(cParticipant.getValue());
+        this.adminCtrl = admin.getKey();
+        this.admin = new Scene(admin.getValue());
         showStartScreen();
         primaryStage.show();
     }
@@ -66,6 +74,13 @@ public class MainCtrl {
         primaryStage.setTitle("StartScreen");
         startScreenCtrl.updateRecentEvents();
         primaryStage.setScene(start);
+    }
+
+
+    public void showAdminScreen() {
+        primaryStage.setTitle("Admin");
+        primaryStage.setScene(admin);
+
     }
 
 
@@ -99,5 +114,22 @@ public class MainCtrl {
 
     public OverviewCtrl getOverviewCtrl() {
         return overviewCtrl;
+    }
+
+    public void showNotification(String message, String color) {
+        Popup popup = new Popup();
+        Label label = new Label(message);
+        label.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-padding: 10;");
+        popup.getContent().add(label);
+        // position top-right
+        popup.setOnShown(event -> {
+            popup.setX(primaryStage.getX() + primaryStage.getWidth() - popup.getWidth() - 20);
+            popup.setY(primaryStage.getY() + 40);
+        });
+        popup.show(primaryStage);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(e -> popup.hide());
+        delay.play();
     }
 }
