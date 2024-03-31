@@ -15,7 +15,7 @@
  */
 package client.scenes;
 
-import client.utils.ServerUtils;
+
 import commons.Event;
 import javafx.animation.PauseTransition;
 import javafx.scene.Parent;
@@ -26,9 +26,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class MainCtrl {
 
