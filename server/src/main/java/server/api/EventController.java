@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/api/event")
 public class EventController {
+    @Autowired
     private final EventRepository repo;
 
     EventController(EventRepository repo){
