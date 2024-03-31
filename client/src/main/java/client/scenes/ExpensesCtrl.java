@@ -34,18 +34,21 @@ public class ExpensesCtrl {
         this.expense = expense;
     }
 
-    public void initialize(boolean editMode) {
+    public void initialize(Expense expense) {
+        this.editMode = expense != null;
         username.getItems().clear();
         username.getItems().addAll(
                 event.getParticipants().stream().map(Participant::getUserName).toList()
         );
         if (editMode){
+            assert expense != null;
+            setExpense(expense);
+            initializeWithExpense(expense);
             finishButton.setText("edit");
         }
         else {
             finishButton.setText("add");
         }
-        this.editMode = editMode;
     }
 
     public void setEvent(Event event) {
