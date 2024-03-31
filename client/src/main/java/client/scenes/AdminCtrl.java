@@ -12,11 +12,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,6 +61,9 @@ public class AdminCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         titleColumn.setCellValueFactory(event -> new SimpleStringProperty(event.getValue().getTitle()));
+        creationDateColumn.setCellValueFactory(event -> new SimpleStringProperty(formatDate(event.getValue().getOpenDate())));
+        lastActivityColumn.setCellValueFactory(event -> new SimpleStringProperty(formatDate(event.getValue().getLastUsed())));
+
 
         deleteColumn.setCellFactory(column -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
@@ -105,12 +111,12 @@ public class AdminCtrl implements Initializable {
                             boolean saved = saveJsonToFile(json, eventData.getTitle());
                             if (saved) {
                                 // success
-                                mainCtrl.showNotification("Event deleted successfully", "#4CAF50");
+                                mainCtrl.showNotification("Event exported successfully", "#4CAF50");
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                             // error
-                            mainCtrl.showNotification("Event deleted successfully", "#F44336");
+                            mainCtrl.showNotification("Event export failed", "#F44336");
                         }
                     });
                 }
@@ -140,7 +146,70 @@ public class AdminCtrl implements Initializable {
     }
 
     public void handleImportEvent() {
-        // TODO: Add the ability to import a JSON file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Event");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            try {
+                String jsonContent = new String(java.nio.file.Files.readAllBytes(file.toPath()));
+                importEventFromJSON(jsonContent);
+            } catch (IOException e) {
+                e.printStackTrace();
+                mainCtrl.showNotification("Error importing event", "#F44336");
+            }
+        }
+    }
+
+    private void importEventFromJSON(String jsonContent) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Event eventToImport = objectMapper.readValue(jsonContent, Event.class);
+
+            String inviteCode = eventToImport.getInviteCode();
+            List<Event> existingEvents = server.getEventByInviteCode(inviteCode);
+
+            if (existingEvents.isEmpty()) {
+                clearIds(eventToImport);
+                server.addEvent(eventToImport);
+                refresh();
+                mainCtrl.showNotification("Event imported successfully", "#4CAF50");
+            } else {
+                handleInviteCodeConflict(eventToImport, existingEvents);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            mainCtrl.showNotification("Error importing event", "#F44336");
+        }
+    }
+
+    private void handleInviteCodeConflict(Event eventToImport, List<Event> existingEvents) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Invite Code Conflict");
+        alert.setHeaderText("An event with the same invite code already exists.");
+        alert.setContentText("Do you want to generate a new invite code for this event?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            String newInviteCode = generateUniqueInviteCode();
+            eventToImport.setInviteCode(newInviteCode);
+            clearIds(eventToImport);
+            server.addEvent(eventToImport);
+            refresh();
+            mainCtrl.showNotification("Event imported successfully", "#4CAF50");
+        } else {
+            mainCtrl.showNotification("Event import canceled", "#F44336");
+        }
+    }
+
+    private void clearIds(Event event) {
+        event.setId(0);
+        event.getParticipants().forEach(participant -> participant.setId(0));
+        event.getExpenses().forEach(expense -> expense.setId(0));
+    }
+
+    private String generateUniqueInviteCode() {
+        return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
     }
 
     public void refresh() {
@@ -148,4 +217,13 @@ public class AdminCtrl implements Initializable {
         data = FXCollections.observableList(events);
         table.setItems(data);
     }
+
+    private String formatDate(Timestamp date) {
+        if (date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ; hh:mm");
+            return sdf.format(date);
+        }
+        return null;
+    }
+
 }

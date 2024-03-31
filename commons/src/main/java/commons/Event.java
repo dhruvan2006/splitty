@@ -1,8 +1,11 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -14,10 +17,15 @@ public class Event {
     private String inviteCode;
     private String title;
 
+    private Timestamp openDate;
+    private Timestamp lastUsed;
+
+
     @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
     private List<Participant> participants;
 
-    @OneToMany(targetEntity = Expense.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Expense.class, cascade = CascadeType.ALL, mappedBy = "event")
+    @JsonManagedReference
     private List<Expense> expenses;
 
     public Event() {
@@ -29,10 +37,12 @@ public class Event {
         this.participants = new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.inviteCode = generateInviteCode();
+        this.openDate = Timestamp.valueOf(LocalDateTime.now());
+        this.lastUsed = Timestamp.valueOf(LocalDateTime.now());
     }
 
     private String generateInviteCode() {
-        return this.id + RandomStringUtils.randomAlphanumeric(4).toUpperCase();
+        return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
     }
 
     public long getId() {
@@ -99,6 +109,18 @@ public class Event {
         expenses.add(expense);
     }
 
+    public Timestamp getOpenDate() {
+        return openDate;
+    }
+
+    public Timestamp getLastUsed() {
+        return lastUsed;
+    }
+
+    public void setLastUsed(Timestamp lastUsed) {
+        this.lastUsed = lastUsed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -143,7 +165,7 @@ public class Event {
         }
 
         return map;
-        
+
     }
 
     /**
@@ -194,7 +216,7 @@ public class Event {
         }
 
         return map;
-        
+
     }
 
 
@@ -212,7 +234,7 @@ public class Event {
             int sharePerParticipant = expense.getSharePerPerson(participants.size());
 
             for (Participant other : participants) {
-                if (other.equals(expense.getCreator())) continue; 
+                if (other.equals(expense.getCreator())) continue;
 
                 int currentOwned = ownedMap.get(expense.getCreator()).getOrDefault(other, 0);
                 currentOwned += sharePerParticipant;

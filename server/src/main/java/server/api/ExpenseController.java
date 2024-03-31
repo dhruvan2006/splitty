@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Event;
 import commons.Expense;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,14 +63,16 @@ public class ExpenseController {
 
     }
 
-    @PostMapping(path = {"add", "/"})
-    public ResponseEntity<Expense> add(@RequestBody Expense expense) {
+    @PostMapping(path = {"/addToEvent/{event_id}"})
+    public ResponseEntity<Expense> add(@RequestBody Expense expense, @PathVariable("event_id") long event_id) {
+        Event e = new Event(); e.setId(event_id);
+        expense.setEvent(e); // I know this is cursed but truly this is the only option there is.
         Expense saved = repo.save(expense);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping({"", "/"})
-    public ResponseEntity<Expense> deleteIt(@RequestParam("id") Long id) {
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<Expense> deleteIt(@PathVariable Long id) {
         if (id < 0 || !repo.existsById(id))
             return ResponseEntity.badRequest().build();
 
@@ -83,17 +86,17 @@ public class ExpenseController {
     */
     @PutMapping("/{id}")
     public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense updatedExpense) {
-    Optional<Expense> expenseOptional = repo.findById(id);
-    if (expenseOptional.isPresent()) {
-        Expense existingExpense = expenseOptional.get();
-        existingExpense.setTitle(updatedExpense.getTitle());
-        existingExpense.setTotalExpense(updatedExpense.getTotalExpense());
+        Optional<Expense> expenseOptional = repo.findById(id);
+        if (expenseOptional.isPresent()) {
+            Expense existingExpense = expenseOptional.get();
+            existingExpense.setTitle(updatedExpense.getTitle());
+            existingExpense.setTotalExpense(updatedExpense.getTotalExpense());
+            existingExpense.setCreator(updatedExpense.getCreator());
 
-        Expense savedExpense = repo.save(existingExpense);
-        return ResponseEntity.ok(savedExpense);
-    } else {
-        return ResponseEntity.notFound().build();
+            Expense savedExpense = repo.save(existingExpense);
+            return ResponseEntity.ok(savedExpense);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-    }
-
 }

@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,6 +19,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -73,14 +75,6 @@ public class OverviewCtrl {
         inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
         updateParticipantsList();
-        event.setExpenses(new ArrayList<>() {
-            {
-                for (int i = 0; i < 10; i ++) {
-                    add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
-                    add(new Expense("title2", 22, new Participant("hi2@hi2.com", "iban2", "klaasjanpiet")));
-                }
-            };
-        }); // TODO: Remove this mock data when you can add expenses via the expense scene
         updateExpenseList();
     }
 
@@ -141,7 +135,7 @@ public class OverviewCtrl {
         updateParticipantsComboBox();
     }
 
-    private void updateExpenseList() {
+    public void updateExpenseList() {
         expenseListVBox.getChildren().clear();
 
         if (event.getExpenses().isEmpty()) {
@@ -156,7 +150,7 @@ public class OverviewCtrl {
             Text payer = new Text(expense.getCreator().getUserName());
             payer.setStyle("-fx-font-weight: bold");
             Text textPaid = new Text(" paid ");
-            Text amount = new Text("\u20ac" + expense.getTotalExpense());
+            Text amount = new Text("\u20ac" + expense.getTotalExpenseString());
             amount.setStyle("-fx-font-weight: bold");
             Text textFor = new Text(" for ");
             Text title = new Text(expense.getTitle());
@@ -183,17 +177,23 @@ public class OverviewCtrl {
     }
 
     private void editExpense(Expense expense) {
-        expensesCtrl.initializeWithExpense(expense);
+        expensesCtrl.setEvent(event);
+        //expensesCtrl.setExpense(expense);
+        //expensesCtrl.initializeWithExpense(expense);
+        expensesCtrl.initialize(expense);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
 
     private void deleteExpense(Expense expense) {
         event.getExpenses().remove(expense);
+        server.deleteExpense(expense.getId());
         updateExpenseList();
     }
 
     @FXML
     private void addExpense() {
+        expensesCtrl.setEvent(event);
+        expensesCtrl.initialize(null);
         mainCtrl.showScene(expenseScene, "Expenses");
     }
 
@@ -222,6 +222,16 @@ public class OverviewCtrl {
             titleHBox.getChildren().remove(titleTextField);
             titleHBox.getChildren().addFirst(titleLabel);
             titleButton.setText("Change Title");
+        }
+        try{
+            server.updateLastUsedDate(event.getId());
+        }
+        catch (WebApplicationException e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Something went wrong");
+            alert.showAndWait();
+            return;
         }
     }
 

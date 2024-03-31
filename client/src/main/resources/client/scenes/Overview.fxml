@@ -43,8 +43,8 @@
             </Label>
             <Button mnemonicParsing="false" onAction="#handleAddParticipantButton" text="+"/>
          </HBox>
-         <VBox fx:id="participantsVBox" prefHeight="200.0" prefWidth="100.0">
-            <HBox prefHeight="100.0" prefWidth="200.0">
+         <VBox fx:id="participantsVBox" prefHeight="200.0" maxWidth="300.0">
+            <HBox prefHeight="100.0" prefWidth="300.0">
                <Label text="Participant1"/>
                <Button mnemonicParsing="false" text="Edit"/>
                <Button mnemonicParsing="false" text="Remove"/>
