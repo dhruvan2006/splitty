@@ -6,6 +6,7 @@
 
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ComboBox?>
 <GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="client.scenes.ExpensesCtrl" alignment="center" hgap="10" prefHeight="250" prefWidth="450" vgap="10">
     <Label style="-fx-padding: 0 0 10 5;" text="Configure Expense" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
@@ -17,10 +18,10 @@
     <Button fx:id="cancel" mnemonicParsing="false" onAction="#cancel" text="Cancel" GridPane.columnIndex="0" GridPane.rowIndex="4" />
     <Button fx:id="finishButton" mnemonicParsing="false" onAction="#modify" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-    <TextField fx:id="username" layoutX="109.0" layoutY="24.0"
+    <ComboBox fx:id="username" prefWidth="150.0" promptText="Participants..."
                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-    <TextField fx:id="description" layoutX="109.0" layoutY="61.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-    <TextField fx:id="amount" layoutX="109.0" layoutY="98.0" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <TextField fx:id="description" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <TextField fx:id="amount" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
     <Label text="Who paid" GridPane.columnIndex="0" GridPane.rowIndex="1">
         <font>

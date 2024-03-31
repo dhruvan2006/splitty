@@ -176,7 +176,7 @@ public class OverviewCtrl {
         expensesCtrl.setEvent(event);
         expensesCtrl.setExpense(expense);
         expensesCtrl.initializeWithExpense(expense);
-        expensesCtrl.setEditMode(true);
+        expensesCtrl.initialize(true);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
 
@@ -189,7 +189,7 @@ public class OverviewCtrl {
     @FXML
     private void addExpense() {
         expensesCtrl.setEvent(event);
-        expensesCtrl.setEditMode(false);
+        expensesCtrl.initialize(false);
         mainCtrl.showScene(expenseScene, "Expenses");
     }
 

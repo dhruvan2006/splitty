@@ -4,9 +4,11 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
@@ -19,7 +21,7 @@ public class ExpensesCtrl {
     public Button finishButton;
 
     @FXML
-    private TextField username;
+    private ComboBox username;
     @FXML
     private TextField description;
     @FXML
@@ -32,7 +34,11 @@ public class ExpensesCtrl {
         this.expense = expense;
     }
 
-    public void setEditMode(boolean editMode) {
+    public void initialize(boolean editMode) {
+        username.getItems().clear();
+        username.getItems().addAll(
+                event.getParticipants().stream().map(Participant::getUserName).toList()
+        );
         if (editMode){
             finishButton.setText("edit");
         }
@@ -59,7 +65,7 @@ public class ExpensesCtrl {
     }
 
     private void clearFields() {
-        username.clear();
+        //username.clear();
         description.clear();
         amount.clear();
     }
@@ -84,7 +90,7 @@ public class ExpensesCtrl {
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
         var participants = mainCtrl.getOverviewCtrl().getEvent().getParticipants();
-        var filtered = participants.stream().filter(x -> Objects.equals(username.getText(), x.getUserName()));
+        var filtered = participants.stream().filter(x -> Objects.equals(username.getSelectionModel().getSelectedItem(), x.getUserName()));
         var any = filtered.findAny();
         if(any.isEmpty()) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -142,7 +148,7 @@ public class ExpensesCtrl {
     }
 
     public void initializeWithExpense(Expense expense) {
-        username.setText(expense.getCreator().getUserName());
+        username.getSelectionModel().select(expense.getCreator().getUserName());
         description.setText(expense.getTitle());
         amount.setText(expense.getTotalExpenseString());
     }
