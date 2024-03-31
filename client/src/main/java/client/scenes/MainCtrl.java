@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Event;
 import javafx.animation.PauseTransition;
 import javafx.scene.Parent;
@@ -66,7 +67,6 @@ public class MainCtrl {
         this.admin = new Scene(admin.getValue());
         this.joinAdminCtrl = joinAdmin.getKey();
         this.joinAdmin = new Scene(joinAdmin.getValue());
-        setAdminPassword();
         showStartScreen();
         primaryStage.show();
     }
@@ -97,7 +97,6 @@ public class MainCtrl {
     }
 
     public void showJoinAdmin(){
-        joinAdminCtrl.setAdminPassword(adminPassword);
         primaryStage.setTitle("Join Admin");
         primaryStage.setScene(joinAdmin);
     }
@@ -153,19 +152,4 @@ public class MainCtrl {
         delay.play();
     }
 
-    private void setAdminPassword() {
-        adminPassword = "";
-        try {
-            File test = new File("build.gradle");
-            File file = new File("server/src/adminPass.txt");
-            if (test.getAbsolutePath().contains("client")) {
-                file = new File("../server/src/adminPass.txt");
-            }
-            Scanner scanner = new Scanner(file);
-            adminPassword = scanner.nextLine().trim();
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 }

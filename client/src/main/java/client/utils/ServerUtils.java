@@ -26,6 +26,7 @@ import java.util.List;
 
 import commons.Event;
 import commons.Participant;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -128,5 +129,13 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<List<Event>>() {});
+	}
+
+	public String getPassword(){
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("/password") //
+				.request(MediaType.TEXT_PLAIN) //
+				.accept(MediaType.TEXT_PLAIN) //
+				.get(String.class);
 	}
 }

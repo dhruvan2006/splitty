@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.*;
 import commons.Participant;
+import server.Main;
 
 @Controller
 @RequestMapping("/")
@@ -23,5 +24,11 @@ public class MainController {
     @PostMapping("/")
     public void receiveData(Participant participant) {
        System.out.println("Here is the user: " + participant.getUserName());
+    }
+
+    @GetMapping("/password")
+    @ResponseBody
+    public String getPassword(){
+        return Main.getPassword();
     }
 }

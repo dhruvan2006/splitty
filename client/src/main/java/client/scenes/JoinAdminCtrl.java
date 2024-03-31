@@ -1,8 +1,12 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+
 import javax.inject.Inject;
 
 public class JoinAdminCtrl {
@@ -19,6 +23,7 @@ public class JoinAdminCtrl {
     public JoinAdminCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        setAdminPassword();
     }
 
     public void join(){
@@ -33,8 +38,18 @@ public class JoinAdminCtrl {
         }
     }
 
-    public void setAdminPassword(String adminPassword) {
-        this.adminPassword = adminPassword;
+    public void setAdminPassword() {
+        try{
+            adminPassword = server.getPassword();
+        }
+        catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
     }
 
     public String getAdminPassword() {

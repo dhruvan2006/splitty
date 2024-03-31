@@ -28,8 +28,11 @@ import java.util.Random;
 @EntityScan(basePackages = { "commons", "server" })
 public class Main {
 
+    private static String password;
+
     public static void main(String[] args) {
-        System.out.println(passwordGenerator());
+        setPassword(passwordGenerator());
+        System.out.println(password);
         SpringApplication.run(Main.class, args);
     }
 
@@ -44,22 +47,14 @@ public class Main {
         }
 
         String result = sb.toString();
-        try {
-            FileWriter writer = new FileWriter("server/src/adminPass.txt");
-            writer.write(result);
-            writer.flush();
-            writer.close();
-            return result;
-        } catch (IOException e) {
-            File file = new File("server/src/adminPass.txt");
-            try {
-                file.delete();
-                file.createNewFile();
-
-            } catch (IOException ex) {
-                //Failed to create temp file.
-            }
-        }
         return result;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String password) {
+        Main.password = password;
     }
 }
