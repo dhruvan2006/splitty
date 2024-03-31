@@ -158,10 +158,10 @@ public class OverviewCtrl implements Initializable {
 
             Text payer = new Text(expense.getCreator().getUserName());
             payer.setStyle("-fx-font-weight: bold");
-            Text textPaid = new Text(" paid ");
+            Text textPaid = new Text(" " + bundle.getString("overview.paid") + " ");
             Text amount = new Text("\u20ac" + expense.getTotalExpense());
             amount.setStyle("-fx-font-weight: bold");
-            Text textFor = new Text(" for ");
+            Text textFor = new Text(" " + bundle.getString("overview.for") + " ");
             Text title = new Text(expense.getTitle());
             flow.setStyle("-fx-font-size: 20");
             flow.getChildren().addAll(payer, textPaid, amount, textFor, title);
