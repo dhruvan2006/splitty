@@ -56,17 +56,16 @@ public class ExpensesCtrl {
     }
     public void modify() {
         Expense modify = getExpenses();
-        Event added;
         if(expense == null){
-            added = server.postExpenseInEvent(event, modify);
+            Expense added = server.addExpense(modify);
+            event.addExpense(added);
         }
         else {
             event.getExpenses().remove(expense);
             Expense updated = server.putExpense(expense.getId(), modify);
             event.addExpense(updated);
-            added = event;
         }
-        mainCtrl.showOverviewWithEvent(added);
+        mainCtrl.showOverviewWithEvent(event);
     }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
@@ -125,7 +124,7 @@ public class ExpensesCtrl {
                 unit*=10;
         }
         totalExpense = centum*100+unit;
-        Expense expense = new Expense(description.getText(), totalExpense, any.get(), null);
+        Expense expense = new Expense(description.getText(), totalExpense, any.get(), event);
         clearFields();
         return expense;
     }
