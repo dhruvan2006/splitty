@@ -36,7 +36,7 @@ public class Event {
     }
 
     private String generateInviteCode() {
-        return this.id + RandomStringUtils.randomAlphanumeric(4).toUpperCase();
+        return RandomStringUtils.randomAlphanumeric(6).toUpperCase();
     }
 
     public long getId() {
