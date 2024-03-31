@@ -67,6 +67,7 @@ public class ExpensesCtrl {
     public void modify() {
         Expense modify = getExpenses();
         if (modify == null) return;
+        System.out.println(modify.getCreator());
         if (!editMode){
             Expense added = server.addExpense(modify);
             event.addExpense(added);

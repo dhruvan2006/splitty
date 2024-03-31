@@ -1,10 +1,12 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
