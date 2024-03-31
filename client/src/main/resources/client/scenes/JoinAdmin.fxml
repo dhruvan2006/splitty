@@ -13,7 +13,7 @@
                 <Font size="30.0" />
             </font>
         </Label>
-        <TextField fx:id="password" layoutX="225.0" layoutY="187.0" />
+        <TextField fx:id="password" layoutX="196.0" layoutY="187.0" prefHeight="26.0" prefWidth="200.0" promptText="Enter the Secret Password Here:" />
         <Button fx:id="enter" layoutX="274.0" layoutY="241.0" mnemonicParsing="false" onAction="#join" text="Enter" />
     </children>
 </AnchorPane>
