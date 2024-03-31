@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,8 +20,8 @@ public class Event {
     private String inviteCode;
     private String title;
 
-    private Date openDate;
-    private Date lastUsed;
+    private Timestamp openDate;
+    private Timestamp lastUsed;
 
 
     @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
@@ -37,8 +39,8 @@ public class Event {
         this.participants = new ArrayList<>();
         this.expenses = new ArrayList<>();
         this.inviteCode = generateInviteCode();
-        this.openDate = Date.valueOf(LocalDate.now());
-        this.lastUsed = Date.valueOf(LocalDate.now());
+        this.openDate = Timestamp.valueOf(LocalDateTime.now());
+        this.lastUsed = Timestamp.valueOf(LocalDateTime.now());
     }
 
     private String generateInviteCode() {
@@ -109,15 +111,15 @@ public class Event {
         expenses.add(expense);
     }
 
-    public Date getOpenDate() {
+    public Timestamp getOpenDate() {
         return openDate;
     }
 
-    public Date getLastUsed() {
+    public Timestamp getLastUsed() {
         return lastUsed;
     }
 
-    public void setLastUsed(Date lastUsed) {
+    public void setLastUsed(Timestamp lastUsed) {
         this.lastUsed = lastUsed;
     }
 

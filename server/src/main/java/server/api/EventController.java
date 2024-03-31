@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -122,7 +124,7 @@ public class EventController {
     @PutMapping("/{eventId}/date")
     public ResponseEntity<Event> updateEventLastAccess(@PathVariable("eventId") Long id){
         return repo.findById(id).map(event -> {
-            event.setLastUsed(Date.valueOf(LocalDate.now()));
+            event.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());

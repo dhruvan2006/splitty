@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
@@ -218,9 +219,9 @@ public class AdminCtrl implements Initializable {
         table.setItems(data);
     }
 
-    private String formatDate(Date date) {
+    private String formatDate(Timestamp date) {
         if (date != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ; hh:mm");
             return sdf.format(date);
         }
         return null;
