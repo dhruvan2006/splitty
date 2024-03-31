@@ -19,7 +19,7 @@ public class Event {
     @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
     private List<Participant> participants;
 
-    @OneToMany(targetEntity = Expense.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Expense.class, mappedBy = "event")
     private List<Expense> expenses;
 
     public Event() {
@@ -29,7 +29,7 @@ public class Event {
     public Event(String title, boolean ...useMockData) {
         this.title = title;
         this.participants = new ArrayList<>();
-        this.expenses = new ArrayList<>();
+//        this.expenses = new ArrayList<>();
         this.inviteCode = generateInviteCode();
     }
 

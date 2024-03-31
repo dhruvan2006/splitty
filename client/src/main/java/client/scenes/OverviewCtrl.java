@@ -71,14 +71,6 @@ public class OverviewCtrl {
         inviteCodeLabel.setText(event.getInviteCode());
         updateParticipantsComboBox();
         updateParticipantsList();
-//        event.setExpenses(new ArrayList<>() {
-//            {
-//                for (int i = 0; i < 10; i ++) {
-//                    add(new Expense("title", 11, new Participant("hi@hi.com", "iban", "janpietklaas")));
-//                    add(new Expense("title2", 22, new Participant("hi2@hi2.com", "iban2", "klaasjanpiet")));
-//                }
-//            };
-//        }); // TODO: Remove this mock data when you can add expenses via the expense scene
         updateExpenseList();
     }
 
@@ -139,7 +131,7 @@ public class OverviewCtrl {
         updateParticipantsComboBox();
     }
 
-    private void updateExpenseList() {
+    public void updateExpenseList() {
         expenseListVBox.getChildren().clear();
 
         if (event.getExpenses().isEmpty()) {
@@ -181,8 +173,10 @@ public class OverviewCtrl {
     }
 
     private void editExpense(Expense expense) {
+        expensesCtrl.setEvent(event);
         expensesCtrl.setExpense(expense);
         expensesCtrl.initializeWithExpense(expense);
+        expensesCtrl.setEditMode(true);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
 
@@ -195,12 +189,12 @@ public class OverviewCtrl {
     @FXML
     private void addExpense() {
         expensesCtrl.setEvent(event);
+        expensesCtrl.setEditMode(false);
         mainCtrl.showScene(expenseScene, "Expenses");
     }
 
     @FXML
     public void handleAddParticipantButton() {
-        mainCtrl.getParticipantCtrl().setEvent(event);
         mainCtrl.getParticipantCtrl().initialize();
         mainCtrl.showConfigParticipant(this);
     }

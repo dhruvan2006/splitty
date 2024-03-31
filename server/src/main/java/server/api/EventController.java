@@ -49,6 +49,7 @@ public class EventController {
         }
 
         List<Event> resp = repo.findAll().stream().filter(x -> x.getInviteCode().equals(inviteCode)).toList();
+        //System.out.println(resp.getFirst().getExpenses());
         return ResponseEntity.ok(resp);
     }
 

@@ -22,15 +22,15 @@ public class ExpensesCtrl {
     @FXML
     private TextField amount;
     private Event event;
-    private boolean edited;
+    private boolean editMode;
     private Expense expense;
 
     public void setExpense(Expense expense) {
         this.expense = expense;
     }
 
-    public void setEdited(boolean edited) {
-        this.edited = edited;
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
     }
 
     public void setEvent(Event event) {
@@ -41,7 +41,7 @@ public class ExpensesCtrl {
     public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        edited = false;
+        editMode = false;
         expense = null;
     }
     public void cancel() {
@@ -54,9 +54,11 @@ public class ExpensesCtrl {
         description.clear();
         amount.clear();
     }
+
     public void modify() {
         Expense modify = getExpenses();
-        if(expense == null){
+        if (modify == null) return;
+        if (!editMode){
             Expense added = server.addExpense(modify);
             event.addExpense(added);
         }
@@ -65,17 +67,19 @@ public class ExpensesCtrl {
             Expense updated = server.putExpense(expense.getId(), modify);
             event.addExpense(updated);
         }
-        mainCtrl.showOverviewWithEvent(event);
+        clearFields();
+        mainCtrl.getOverviewCtrl().updateExpenseList();
+        mainCtrl.showOverview();
     }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
-        var participants = server.getParticipantsInEvent(event.getId());
+        var participants = mainCtrl.getOverviewCtrl().getEvent().getParticipants();
         var filtered = participants.stream().filter(x -> Objects.equals(username.getText(), x.getUserName()));
         var any = filtered.findAny();
         if(any.isEmpty()) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Participant does not exists");
+            alert.setContentText("Participant does not exists in this event");
             alert.showAndWait();
             return null;
         }
@@ -124,9 +128,7 @@ public class ExpensesCtrl {
                 unit*=10;
         }
         totalExpense = centum*100+unit;
-        Expense expense = new Expense(description.getText(), totalExpense, any.get(), event);
-        clearFields();
-        return expense;
+        return new Expense(description.getText(), totalExpense, any.get(), event);
     }
 
     public void initializeWithExpense(Expense expense) {

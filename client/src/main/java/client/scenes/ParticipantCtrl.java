@@ -29,12 +29,6 @@ public class ParticipantCtrl {
     private final String borderColor = "-fx-border-color: rgb(182,180,180)";
     private ArrayList<TextField> fields;
 
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
-    private Event event;
-
     private Participant editingParticipant;
 
     @Inject
