@@ -26,6 +26,7 @@ public class ParticipantCtrl {
     private TextField emailField;
     @FXML
     private TextField nameField;
+    private final String borderColor = "-fx-border-color: rgb(182,180,180)";
     private ArrayList<TextField> fields;
 
     public void setEvent(Event event) {
@@ -44,16 +45,14 @@ public class ParticipantCtrl {
 
     @FXML
     public void initialize() {
-        fields = new ArrayList<>() {
+        if (fields == null)
+            fields = new ArrayList<>() {
             {
                 add(bnrField);
                 add(emailField);
                 add(nameField);
             }
         };
-        for (TextField field : fields) {
-            field.setStyle("-fx-border-color: grey");
-        }
         clearFields();
         editingParticipant = null;
         finishButton.setText("Add");
@@ -83,6 +82,9 @@ public class ParticipantCtrl {
         bnrField.clear();
         emailField.clear();
         nameField.clear();
+        for (TextField field : fields) {
+            field.setStyle(borderColor);
+        }
     }
     public boolean Validate() {
         boolean valid = true;
@@ -92,7 +94,7 @@ public class ParticipantCtrl {
                 field.setStyle("-fx-border-color: #E80C0C");
             }
             else {
-                field.setStyle("-fx-border-color: grey");
+                field.setStyle(borderColor);
             }
         }
         return valid;

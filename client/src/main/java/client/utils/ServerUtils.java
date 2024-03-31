@@ -27,6 +27,7 @@ import java.util.List;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -64,16 +65,6 @@ public class ServerUtils {
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
 	}
 
-//	According to definition a participant can exist only with an event
-//	Therefore, there is never a need to create a lone participant
-//	public Participant addParticipant(Participant participant) {
-//		return ClientBuilder.newClient(new ClientConfig())
-//				.target(SERVER).path("api/participant")
-//				.request(APPLICATION_JSON)
-//				.accept(APPLICATION_JSON)
-//				.post(Entity.entity(participant, APPLICATION_JSON), Participant.class);
-//	}
-
 	public Event addParticipantToEvent(long eventId, Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/event/" + eventId + "/participants") //
@@ -90,12 +81,30 @@ public class ServerUtils {
 				.delete(Event.class); //
 	}
 
+	public List<Event> getEvents() {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("/api/event") //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<List<Event>>() {});
+	}
+
 	public Event addEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/event") //
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
+	}
+
+	public boolean deleteEventById(long eventId) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(SERVER).path("api/event") //
+				.queryParam("id", eventId)
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.delete()
+				.getStatus() == Response.Status.NO_CONTENT.getStatusCode();
 	}
 
 	public Event updateEventTitle(long id, String newTitle) {

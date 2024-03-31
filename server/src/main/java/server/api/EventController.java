@@ -23,13 +23,6 @@ public class EventController {
 
     @GetMapping("")
     public ResponseEntity<List<Event>> getAllEvents() {
-//        @RequestParam(defaultValue = "0") int page,
-//        @RequestParam(defaultValue = "10") int size,
-//        @RequestParam(defaultValue = "id") String sortBy,
-//        @RequestParam(defaultValue = "asc") String sortOrder
-//        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-//        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-//        Page<Event> eventPage = repo.findAll(pageable);
         return ResponseEntity.ok(repo.findAll());
     }
     
@@ -69,13 +62,13 @@ public class EventController {
     }
 
     @DeleteMapping({"", "/"})
-    public ResponseEntity<Event> deleteEvent(@RequestParam("id") Long id) {
+    public ResponseEntity<Void> deleteEvent(@RequestParam("id") Long id) {
         if (id < 0 || !repo.existsById(id))
             return ResponseEntity.badRequest().build();
 
         repo.deleteById(id);
-        List<Event> resp = repo.findAll().stream().filter(x -> x.getId() == id).toList();
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/title")
