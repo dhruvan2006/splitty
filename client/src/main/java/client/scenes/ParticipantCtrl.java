@@ -3,13 +3,16 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javax.inject.Inject;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class ParticipantCtrl {
+public class ParticipantCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -28,6 +31,7 @@ public class ParticipantCtrl {
     private final String borderColor = "-fx-border-color: rgb(182,180,180)";
     private ArrayList<TextField> fields;
 
+    private ResourceBundle bundle;
     private Participant editingParticipant;
 
     @Inject
@@ -37,7 +41,8 @@ public class ParticipantCtrl {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle resources) {
+        this.bundle = resources;
         if (fields == null)
             fields = new ArrayList<>() {
             {
@@ -46,18 +51,20 @@ public class ParticipantCtrl {
                 add(nameField);
             }
         };
-        clearFields();
-        editingParticipant = null;
-        finishButton.setText("Add");
     }
 
     public void initializeWithParticipant(Participant participant) {
         this.editingParticipant = participant;
-        finishButton.setText("Edit");
         if (participant != null) {
+            finishButton.setText(bundle.getString("globals.edit"));
             bnrField.setText(participant.getIBAN());
             emailField.setText(participant.getEmail());
             nameField.setText(participant.getUserName());
+        }
+        else {
+            finishButton.setText(bundle.getString("globals.add"));
+            clearFields();
+            editingParticipant = null;
         }
     }
 

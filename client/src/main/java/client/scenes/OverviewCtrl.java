@@ -7,6 +7,7 @@ import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -22,9 +23,10 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.util.Pair;
 
-import java.util.*;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class OverviewCtrl {
+public class OverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -55,6 +57,7 @@ public class OverviewCtrl {
 
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
+    private ResourceBundle bundle;
 
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -67,7 +70,6 @@ public class OverviewCtrl {
         this.expenseScene = new Scene(pe.getValue());
     }
 
-    @FXML
     public void initialize() {
         if(event == null){
             return;
@@ -99,8 +101,8 @@ public class OverviewCtrl {
 
         for (Participant participant : event.getParticipants()) {
             Label nameLabel = new Label(participant.getUserName());
-            Button editButton = new Button("Edit");
-            Button removeButton = new Button("Remove");
+            Button editButton = new Button(bundle.getString("globals.edit"));
+            Button removeButton = new Button(bundle.getString("globals.remove"));
 
             editButton.setOnAction(e -> editParticipant(participant));
             removeButton.setOnAction(e -> removeParticipant(participant));
@@ -128,6 +130,7 @@ public class OverviewCtrl {
         updateParticipantsList();
         updateParticipantsComboBox();
         updateFinancialDashboard();
+        updateExpenseList();
     }
 
     private void editParticipant(Participant participant) {
@@ -147,7 +150,7 @@ public class OverviewCtrl {
         expenseListVBox.getChildren().clear();
 
         if (event.getExpenses().isEmpty()) {
-            Label label = new Label("No expenses yet");
+            Label label = new Label(bundle.getString("overview.no_expenses"));
             label.setStyle("-fx-font-size: 20");
             expenseListVBox.getChildren().add(label);
         }
@@ -157,10 +160,10 @@ public class OverviewCtrl {
 
             Text payer = new Text(expense.getCreator().getUserName());
             payer.setStyle("-fx-font-weight: bold");
-            Text textPaid = new Text(" paid ");
+            Text textPaid = new Text(" " + bundle.getString("overview.paid") + " ");
             Text amount = new Text("\u20ac" + expense.getTotalExpenseString());
             amount.setStyle("-fx-font-weight: bold");
-            Text textFor = new Text(" for ");
+            Text textFor = new Text(" " + bundle.getString("overview.for") + " ");
             Text title = new Text(expense.getTitle());
             flow.setStyle("-fx-font-size: 20");
             flow.getChildren().addAll(payer, textPaid, amount, textFor, title);
@@ -172,9 +175,9 @@ public class OverviewCtrl {
 
             HBox expenseHBox = new HBox(10);
             HBox.setMargin(flow, new Insets(0, 0, 0, 10));
-            Button editButton = new Button("Edit");
+            Button editButton = new Button(bundle.getString("globals.edit"));
             editButton.setAlignment(Pos.BASELINE_RIGHT);
-            Button deleteButton = new Button("Delete");
+            Button deleteButton = new Button(bundle.getString("globals.remove"));
 
             editButton.setOnAction(e -> editExpense(expense));
             deleteButton.setOnAction(e -> deleteExpense(expense));
@@ -209,7 +212,7 @@ public class OverviewCtrl {
 
     @FXML
     public void handleAddParticipantButton() {
-        mainCtrl.getParticipantCtrl().initialize();
+        mainCtrl.getParticipantCtrl().initializeWithParticipant(null);
         mainCtrl.showConfigParticipant(this);
     }
 
@@ -224,14 +227,14 @@ public class OverviewCtrl {
             titleHBox.getChildren().addFirst(titleTextField);
             titleTextField.setText(titleLabel.getText());
             titleHBox.getChildren().remove(titleLabel);
-            titleButton.setText("Apply Changes");
+            titleButton.setText(bundle.getString("overview.apply_changes"));
         } else {
             System.out.println(event.getId());
             this.event = server.updateEventTitle(event.getId(), titleTextField.getText());
             titleLabel.setText(event.getTitle());
             titleHBox.getChildren().remove(titleTextField);
             titleHBox.getChildren().addFirst(titleLabel);
-            titleButton.setText("Change Title");
+            titleButton.setText(bundle.getString("overview.change_title"));
         }
         try{
             server.updateLastUsedDate(event.getId());
@@ -255,6 +258,11 @@ public class OverviewCtrl {
 
     public void back(MouseEvent mouseEvent) {
         mainCtrl.showStartScreen();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resources) {
+        this.bundle = resources;
     }
 
     public void updateFinancialDashboard() {

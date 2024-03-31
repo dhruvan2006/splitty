@@ -8,13 +8,13 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StartScreenCtrl">
    <children>
-      <Label id="CreateEventLabel" fx:id="CreateEventLabel" layoutX="107.0" layoutY="37.0" text="Create New Event" />
+      <Label id="CreateEventLabel" fx:id="CreateEventLabel" layoutX="107.0" layoutY="37.0" text="%start_screen.create_event" />
       <TextField fx:id="createEventTextField" layoutX="107.0" layoutY="63.0" />
-      <Button fx:id="createButton" layoutX="428.0" layoutY="63.0" mnemonicParsing="false" onAction="#create" text="Create" />
+      <Button fx:id="createButton" layoutX="428.0" layoutY="63.0" mnemonicParsing="false" onAction="#create" text="%globals.create" />
       <TextField fx:id="joinEventTextField" layoutX="108.0" layoutY="157.0" />
-      <Label fx:id="JoinEventLabel" layoutX="107.0" layoutY="124.0" text="Join Event" />
-      <Button fx:id="joinButton" layoutX="427.0" layoutY="157.0" mnemonicParsing="false" onAction="#join" text="Join" />
-      <Label fx:id="recentlyViewedEventsLabel" layoutX="107.0" layoutY="208.0" text="Recently Viewed Events:" />
+      <Label fx:id="JoinEventLabel" layoutX="107.0" layoutY="124.0" text="%start_screen.join_event" />
+      <Button fx:id="joinButton" layoutX="427.0" layoutY="157.0" mnemonicParsing="false" onAction="#join" text="%start_screen.join_button" />
+      <Label fx:id="recentlyViewedEventsLabel" layoutX="107.0" layoutY="208.0" text="%start_screen.recent_event" />
       <ListView fx:id="recentlyViewedEvents" layoutX="107.0" layoutY="230.0" prefHeight="150.0" prefWidth="320.0" onMouseClicked="#handleRecentEventClick"/>
    </children>
 </AnchorPane>
