@@ -27,7 +27,6 @@ import java.util.List;
 
 import commons.Event;
 import commons.Participant;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
