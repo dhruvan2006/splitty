@@ -177,4 +177,12 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(new Form().param("password", password), APPLICATION_FORM_URLENCODED), Boolean.class);
 	}
+
+	public Event updateLastUsedDate(Long id){
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/event/" + id + "/date")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.put(Entity.text(""), Event.class);
+	}
 }

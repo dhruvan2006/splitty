@@ -103,6 +103,19 @@ public class StartScreenCtrl {
         }
 
         clearFields();
+        try{
+            server.updateLastUsedDate(event.getId());
+        }
+        catch (WebApplicationException e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            joinEventTextField.setStyle("-fx-border-color: #E80C0C");
+            System.out.println("Event does not exists");
+            createEventTextField.setStyle(borderColor);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Something went wrong");
+            alert.showAndWait();
+            return;
+        }
         observableEvents.remove(event);
         observableEvents.addFirst(event);
         mainCtrl.showOverviewWithEvent(event);
