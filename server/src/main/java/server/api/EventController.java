@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -112,6 +114,15 @@ public class EventController {
             if (!updated) {
                 return new ResponseEntity<Event>(HttpStatus.NOT_FOUND); // had problems with type casting
             }
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{eventId}/date")
+    public ResponseEntity<Event> updateEventLastAccess(@PathVariable("eventId") Long id){
+        return repo.findById(id).map(event -> {
+            event.setLastUsed(Timestamp.valueOf(LocalDateTime.now()));
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
