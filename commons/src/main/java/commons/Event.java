@@ -263,7 +263,7 @@ public class Event {
                 Participant other = debtEntry.getKey();
                 int debt = debtEntry.getValue();
 
-                if (debts.containsKey(other) && individualDebts.get(other).containsKey(participant)) {
+                if (debts.containsKey(other) && individualDebts.get(other) != null && individualDebts.get(other).containsKey(participant)) {
                     int otherDebt = individualDebts.get(other).get(participant);
                     if (debt == otherDebt) {
                         optimizedDebts.get(participant).remove(other);

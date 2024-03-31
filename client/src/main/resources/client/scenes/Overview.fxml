@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
-   <Button text="%globals.back" style="-fx-end-margin: 30" onMouseClicked="#back"/>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+   <Button onMouseClicked="#back" style="-fx-end-margin: 30" text="%globals.back" />
    <HBox fx:id="titleHBox" prefHeight="41.0" prefWidth="600.0">
       <Label fx:id="titleLabel" alignment="TOP_RIGHT" prefHeight="36.0">
          <font>
@@ -17,13 +17,12 @@
    <HBox prefHeight="105.0" prefWidth="600.0">
       <Label prefHeight="27.0" prefWidth="200.0" text="%overview.invite_code" textAlignment="RIGHT">
          <font>
-            <Font size="18.0"/>
+            <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="inviteCodeLabel" alignment="TOP_LEFT" prefHeight="36.0" prefWidth="101.0"
-             text="QWERTY" textAlignment="RIGHT">
+      <Label fx:id="inviteCodeLabel" alignment="TOP_LEFT" prefHeight="36.0" prefWidth="101.0" text="QWERTY" textAlignment="RIGHT">
          <font>
-            <Font name="System Bold" size="18.0"/>
+            <Font name="System Bold" size="18.0" />
          </font>
       </Label>
    </HBox>
@@ -32,16 +31,16 @@
          <HBox prefHeight="100.0" prefWidth="200.0">
             <Label text="%globals.participants">
                <font>
-                  <Font name="System Bold" size="18.0"/>
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Button mnemonicParsing="false" onAction="#handleAddParticipantButton" text="+"/>
+            <Button mnemonicParsing="false" onAction="#handleAddParticipantButton" text="+" />
          </HBox>
-         <VBox fx:id="participantsVBox" prefHeight="200.0" maxWidth="300.0">
+         <VBox fx:id="participantsVBox" maxWidth="300.0" prefHeight="200.0">
             <HBox prefHeight="100.0" prefWidth="300.0">
-               <Label text="Participant1"/>
-               <Button mnemonicParsing="false" text="%globals.edit"/>
-               <Button mnemonicParsing="false" text="%globals.remove"/>
+               <Label text="Participant1" />
+               <Button mnemonicParsing="false" text="%globals.edit" />
+               <Button mnemonicParsing="false" text="%globals.remove" />
             </HBox>
          </VBox>
       </VBox>
@@ -56,31 +55,29 @@
       <ComboBox fx:id="participantsComboBox" prefWidth="150.0" promptText="%globals.participants" />
       <Button mnemonicParsing="false" onAction="#addExpense" text="%overview.add_expense" />
    </HBox>
-   <VBox prefHeight="300.0" prefWidth="100.0">
-      <ScrollPane>
+   <VBox prefHeight="123.0" prefWidth="570.0">
+      <ScrollPane prefHeight="105.0" prefWidth="570.0">
          <VBox fx:id="expenseListVBox" />
       </ScrollPane>
    </VBox>
-   <Button fx:id="settleDebtsButton" mnemonicParsing="false" onAction="#handleSettleDebtsButton" text="%overview.settle_debts" />
 
    <!-- Financial Summary -->
-   <Label style="-fx-font-weight: bold;" text="Financial Summary" />
-   <VBox prefHeight="200.0" prefWidth="100.0">
-      <children>
-
+   <HBox prefHeight="211.0" prefWidth="570.0" style="-fx-padding: 10;">
+      <VBox prefWidth="200" spacing="10">
+         <Label style="-fx-font-weight: bold;" text="Financial Summary" />
          <HBox spacing="10">
             <Label text="Total Expenses: " />
-            <Label fx:id="totalExpensesLabel" />
+            <Label fx:id="totalExpensesLabel" style="-fx-font-weight: bold;" />
          </HBox>
          <HBox spacing="10">
             <Label text="Share per Person: " />
-            <Label fx:id="sharePerPersonLabel" />
+            <Label fx:id="sharePerPersonLabel" style="-fx-font-weight: bold;" />
          </HBox>
-
+      </VBox>
+      <VBox prefHeight="109.0" prefWidth="421.0" spacing="10">
          <Label style="-fx-font-weight: bold;" text="Debts Overview:" />
-         <ListView fx:id="debtsListView" prefWidth="772.0" />
-         <ListView fx:id="totalDebtsListView" prefHeight="200.0" prefWidth="200.0" />
-      </children>
-   </VBox>
+         <ListView fx:id="debtsListView" prefHeight="150.0" prefWidth="418.0" />
+      </VBox>
+   </HBox>
 
 </VBox>
