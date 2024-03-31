@@ -14,6 +14,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/event")
 public class EventController {
+    @Autowired
     private final EventRepository repo;
 
     @Autowired
