@@ -29,10 +29,7 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
-    private String adminPassword;
-
     private JoinAdminCtrl joinAdminCtrl;
-
     private Scene joinAdmin;
 
     private Stage primaryStage;
@@ -97,8 +94,6 @@ public class MainCtrl {
         primaryStage.setTitle("Join Admin");
         primaryStage.setScene(joinAdmin);
     }
-
-
 
     public void showConfigParticipant(OverviewCtrl overviewCtrl) {
         participantCtrl.setOverviewCtrl(overviewCtrl);

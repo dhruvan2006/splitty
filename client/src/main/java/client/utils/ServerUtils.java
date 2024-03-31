@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import static jakarta.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.io.BufferedReader;
@@ -32,6 +33,7 @@ import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 
@@ -131,11 +133,11 @@ public class ServerUtils {
 				.get(new GenericType<List<Event>>() {});
 	}
 
-	public String getPassword(){
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("/password") //
-				.request(MediaType.TEXT_PLAIN) //
-				.accept(MediaType.TEXT_PLAIN) //
-				.get(String.class);
+	public boolean authenticateAdmin(String password) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("admin/authenticate")
+				.request(APPLICATION_FORM_URLENCODED)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(new Form().param("password", password), APPLICATION_FORM_URLENCODED), Boolean.class);
 	}
 }

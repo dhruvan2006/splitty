@@ -27,7 +27,7 @@ public class Main {
     private static String password;
 
     public static void main(String[] args) {
-        setPassword(passwordGenerator());
+        password = passwordGenerator();
         System.out.println(password);
         SpringApplication.run(Main.class, args);
     }
@@ -42,15 +42,10 @@ public class Main {
             sb.append(characters.charAt(randomIndex));
         }
 
-        String result = sb.toString();
-        return result;
+        return sb.toString();
     }
 
     public static String getPassword() {
         return password;
-    }
-
-    public static void setPassword(String password) {
-        Main.password = password;
     }
 }
