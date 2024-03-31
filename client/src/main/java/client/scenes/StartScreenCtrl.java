@@ -87,6 +87,7 @@ public class StartScreenCtrl {
                 createEventTextField.setStyle(borderColor);
                 return;
             }
+            System.out.println(eventFromServer);
             event = eventFromServer.get(0);
         }
         catch (WebApplicationException e){

@@ -2,7 +2,6 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,9 +15,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/event")
 public class EventController {
+
     private final EventRepository repo;
 
-    @Autowired
     EventController(EventRepository repo){
         this.repo = repo;
     }
@@ -117,6 +116,15 @@ public class EventController {
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/{id}/participant")
+    public ResponseEntity<List<Participant>> getParticipants(@PathVariable("id") Long id){
+        var event = repo.findById(id);
+        if(event.isEmpty())
+            return ResponseEntity.badRequest().build();
+
+        var participants = event.get().getParticipants();
+        return ResponseEntity.ok(participants);
     }
 
     @PutMapping("/{eventId}/date")

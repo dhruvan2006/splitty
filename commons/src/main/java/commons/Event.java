@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -25,7 +26,8 @@ public class Event {
     @OneToMany(targetEntity = Participant.class, cascade = CascadeType.ALL)
     private List<Participant> participants;
 
-    @OneToMany(targetEntity = Expense.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Expense.class, cascade = CascadeType.ALL, mappedBy = "event")
+    @JsonManagedReference
     private List<Expense> expenses;
 
     public Event() {
