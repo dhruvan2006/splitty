@@ -6,6 +6,7 @@ import commons.Event;
 import commons.Expense;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
@@ -14,6 +15,8 @@ import java.util.Objects;
 public class ExpensesCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    public Button finishButton;
 
     @FXML
     private TextField username;
@@ -30,6 +33,12 @@ public class ExpensesCtrl {
     }
 
     public void setEditMode(boolean editMode) {
+        if (editMode){
+            finishButton.setText("edit");
+        }
+        else {
+            finishButton.setText("add");
+        }
         this.editMode = editMode;
     }
 
@@ -134,10 +143,6 @@ public class ExpensesCtrl {
     public void initializeWithExpense(Expense expense) {
         username.setText(expense.getCreator().getUserName());
         description.setText(expense.getTitle());
-        String amountInEur = "";
-        amountInEur += (expense.getTotalExpense()/100);
-        amountInEur += ".";
-        amountInEur += (expense.getTotalExpense()%100);
-        amount.setText(amountInEur);
+        amount.setText(expense.getTotalExpenseString());
     }
 }

@@ -79,6 +79,10 @@ public class Expense {
         return totalExpense;
     }
 
+    public String getTotalExpenseString(){
+        return String.format(java.util.Locale.US,"%.2f", totalExpense / 100f);
+    }
+
     public void setTotalExpense(int totalExpense) {
         this.totalExpense = totalExpense;
     }

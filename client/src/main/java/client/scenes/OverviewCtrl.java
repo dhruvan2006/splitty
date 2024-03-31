@@ -146,7 +146,7 @@ public class OverviewCtrl {
             Text payer = new Text(expense.getCreator().getUserName());
             payer.setStyle("-fx-font-weight: bold");
             Text textPaid = new Text(" paid ");
-            Text amount = new Text("\u20ac" + expense.getTotalExpense()*1.0/100);
+            Text amount = new Text("\u20ac" + expense.getTotalExpenseString());
             amount.setStyle("-fx-font-weight: bold");
             Text textFor = new Text(" for ");
             Text title = new Text(expense.getTitle());
