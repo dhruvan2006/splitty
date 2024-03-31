@@ -9,12 +9,12 @@
 <?import javafx.scene.text.Font?>
 
 <GridPane alignment="center" hgap="10" prefHeight="250" prefWidth="450" vgap="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ParticipantCtrl">
-    <Label style="-fx-padding: 0 0 10 5;" text="Configure Participant" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
+    <Label style="-fx-padding: 0 0 10 5;" text="%participant.title" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
         <font>
             <Font name="System Bold" size="30.0" />
         </font>
     </Label>
-    <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="1">
+    <Label text="%participant.name" GridPane.columnIndex="0" GridPane.rowIndex="1">
         <font>
             <Font name="System Bold" size="12.0" />
         </font>
@@ -32,12 +32,12 @@
         </font>
     </Label>
 
-    <TextField fx:id="nameField" prefWidth="250" promptText="Fill in your name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-    <TextField fx:id="emailField" promptText="Fill in your email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <TextField fx:id="bnrField" promptText="Fill in your bank account number" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <TextField fx:id="nameField" prefWidth="250" promptText="%participant.namePH" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <TextField fx:id="emailField" promptText="%participant.emailPH" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <TextField fx:id="bnrField" promptText="%participant.ibanPH" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-    <Button fx:id="cancel" mnemonicParsing="false" onAction="#Cancel" text="Cancel" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <Button fx:id="finishButton" mnemonicParsing="false" onAction="#handleFinishButton" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Button fx:id="cancel" mnemonicParsing="false" onAction="#Cancel" text="%globals.cancel" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <Button fx:id="finishButton" mnemonicParsing="false" onAction="#handleFinishButton" text="%globals.add" GridPane.columnIndex="1" GridPane.rowIndex="4" />
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />

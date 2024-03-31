@@ -11,32 +11,32 @@
 <?import javafx.scene.text.Text?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
-   <Button text="back" style="-fx-end-margin: 30" onMouseClicked="#back"/>
+   <Button text="%globals.back" style="-fx-end-margin: 30" onMouseClicked="#back"/>
    <HBox fx:id="titleHBox" prefHeight="41.0" prefWidth="600.0">
       <Label fx:id="titleLabel" alignment="TOP_RIGHT" prefHeight="36.0">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <Button fx:id="titleButton" mnemonicParsing="false" onAction="#handleTitleButton" text="Change Title" />
-      <HBox prefHeight="41.0" prefWidth="217.0">
-         <Label alignment="TOP_RIGHT" prefHeight="27.0" prefWidth="141.0" text="Invite Code: " textAlignment="RIGHT">
-            <font>
-               <Font size="18.0"/>
-            </font>
-         </Label>
-         <Label fx:id="inviteCodeLabel" alignment="TOP_LEFT" contentDisplay="RIGHT" prefHeight="36.0" prefWidth="101.0"
-                text="QWERTY" textAlignment="RIGHT">
-            <font>
-               <Font name="System Bold" size="18.0"/>
-            </font>
-         </Label>
-      </HBox>
+      <Button fx:id="titleButton" mnemonicParsing="false" onAction="#handleTitleButton" text="%overview.change_title" />
+   </HBox>
+   <HBox prefHeight="105.0" prefWidth="600.0">
+      <Label prefHeight="27.0" prefWidth="200.0" text="%overview.invite_code" textAlignment="RIGHT">
+         <font>
+            <Font size="18.0"/>
+         </font>
+      </Label>
+      <Label fx:id="inviteCodeLabel" alignment="TOP_LEFT" prefHeight="36.0" prefWidth="101.0"
+             text="QWERTY" textAlignment="RIGHT">
+         <font>
+            <Font name="System Bold" size="18.0"/>
+         </font>
+      </Label>
    </HBox>
    <HBox prefHeight="33.0" prefWidth="589.0">
-      <VBox prefHeight="33.0" prefWidth="191.0">
+      <VBox prefHeight="33.0" prefWidth="300.0">
          <HBox prefHeight="100.0" prefWidth="200.0">
-            <Label text="Participants">
+            <Label text="%globals.participants">
                <font>
                   <Font name="System Bold" size="18.0"/>
                </font>
@@ -46,26 +46,26 @@
          <VBox fx:id="participantsVBox" prefHeight="200.0" maxWidth="300.0">
             <HBox prefHeight="100.0" prefWidth="300.0">
                <Label text="Participant1"/>
-               <Button mnemonicParsing="false" text="Edit"/>
-               <Button mnemonicParsing="false" text="Remove"/>
+               <Button mnemonicParsing="false" text="%globals.edit"/>
+               <Button mnemonicParsing="false" text="%globals.remove"/>
             </HBox>
          </VBox>
       </VBox>
    </HBox>
    <Text fx:id="participantsText" strokeType="OUTSIDE" strokeWidth="0.0" />
-   <Label text="Expenses">
+   <Label text="%globals.expenses">
       <font>
          <Font name="System Bold" size="18.0" />
       </font>
    </Label>
    <HBox prefHeight="35.0" prefWidth="589.0">
-      <ComboBox fx:id="participantsComboBox" prefWidth="150.0" promptText="Participants..." />
-      <Button mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
+      <ComboBox fx:id="participantsComboBox" prefWidth="150.0" promptText="%globals.participants" />
+      <Button mnemonicParsing="false" onAction="#addExpense" text="%overview.add_expense" />
    </HBox>
-   <VBox prefHeight="200.0" prefWidth="100.0">
+   <VBox prefHeight="300.0" prefWidth="100.0">
       <ScrollPane>
          <VBox fx:id="expenseListVBox" />
       </ScrollPane>
    </VBox>
-   <Button fx:id="settleDebtsButton" mnemonicParsing="false" onAction="#handleSettleDebtsButton" text="Settle Debts" />
+   <Button fx:id="settleDebtsButton" mnemonicParsing="false" onAction="#handleSettleDebtsButton" text="%overview.settle_debts" />
 </VBox>
