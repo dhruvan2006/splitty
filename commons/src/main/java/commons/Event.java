@@ -245,5 +245,49 @@ public class Event {
         return ownedMap;
     }
 
+    /**
+     * Calculates the individual debts and then cancels out any debts that two participants owe each other
+     * @return the optimized debt map
+     */
+    public Map<Participant, Map<Participant, Integer>> calculateOptimizedDebts() {
+        Map<Participant, Map<Participant, Integer>> individualDebts = calculateIndividualDebt();
+        Map<Participant, Map<Participant, Integer>> optimizedDebts = new HashMap<>();
 
+        // First, cancel out any debts that cancel each other out
+        for (Map.Entry<Participant, Map<Participant, Integer>> entry : individualDebts.entrySet()) {
+            Participant participant = entry.getKey();
+            Map<Participant, Integer> debts = entry.getValue();
+            optimizedDebts.put(participant, new HashMap<>(debts));
+
+            for (Map.Entry<Participant, Integer> debtEntry : debts.entrySet()) {
+                Participant other = debtEntry.getKey();
+                int debt = debtEntry.getValue();
+
+                if (debts.containsKey(other) && individualDebts.get(other).containsKey(participant)) {
+                    int otherDebt = individualDebts.get(other).get(participant);
+                    if (debt == otherDebt) {
+                        optimizedDebts.get(participant).remove(other);
+                        optimizedDebts.computeIfPresent(other, (p, otherDebts) -> {
+                            otherDebts.remove(participant);
+                            return otherDebts;
+                        });
+                    } else if (debt < otherDebt) {
+                        optimizedDebts.get(participant).remove(other);
+                        optimizedDebts.computeIfPresent(other, (p, otherDebts) -> {
+                            otherDebts.put(participant, otherDebt - debt);
+                            return otherDebts;
+                        });
+                    } else {
+                        optimizedDebts.get(participant).put(other, debt - otherDebt);
+                        optimizedDebts.computeIfPresent(other, (p, otherDebts) -> {
+                            otherDebts.remove(participant);
+                            return otherDebts;
+                        });
+                    }
+                }
+            }
+        }
+
+        return optimizedDebts;
+    }
 }

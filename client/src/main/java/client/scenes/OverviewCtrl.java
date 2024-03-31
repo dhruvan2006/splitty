@@ -38,7 +38,7 @@ public class OverviewCtrl {
     public HBox titleHBox;
 
     @FXML
-    private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton, showDebtsButton;
+    private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
 
     @FXML
     private ComboBox<String> participantsComboBox;
@@ -47,7 +47,11 @@ public class OverviewCtrl {
     private TextField titleTextField;
 
     @FXML
-    private Label titleLabel, inviteCodeLabel;
+    private Label titleLabel, inviteCodeLabel, totalExpensesLabel, sharePerPersonLabel;
+
+    @FXML
+    private ListView<String> debtsListView;
+
 
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
@@ -76,6 +80,7 @@ public class OverviewCtrl {
         updateParticipantsComboBox();
         updateParticipantsList();
         updateExpenseList();
+        updateFinancialDashboard();
     }
 
     private void updateParticipantsComboBox() {
@@ -115,12 +120,14 @@ public class OverviewCtrl {
         this.event = server.addParticipantToEvent(event.getId(), participant);
         updateParticipantsList();
         updateParticipantsComboBox();
+        updateFinancialDashboard();
     }
 
     public void updateParticipant(Participant updatedParticipant) {
         this.event = server.updateParticipantInEvent(event.getId(), updatedParticipant);
         updateParticipantsList();
         updateParticipantsComboBox();
+        updateFinancialDashboard();
     }
 
     private void editParticipant(Participant participant) {
@@ -133,6 +140,7 @@ public class OverviewCtrl {
         this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
         updateParticipantsList();
         updateParticipantsComboBox();
+        updateFinancialDashboard();
     }
 
     public void updateExpenseList() {
@@ -188,6 +196,7 @@ public class OverviewCtrl {
         event.getExpenses().remove(expense);
         server.deleteExpense(expense.getId());
         updateExpenseList();
+        updateFinancialDashboard();
     }
 
     @FXML
@@ -195,6 +204,7 @@ public class OverviewCtrl {
         expensesCtrl.setEvent(event);
         expensesCtrl.initialize(null);
         mainCtrl.showScene(expenseScene, "Expenses");
+        updateFinancialDashboard();
     }
 
     @FXML
@@ -247,57 +257,25 @@ public class OverviewCtrl {
         mainCtrl.showStartScreen();
     }
 
-    @FXML
-    public void showDebtsButton() {
-    Map<Participant, Map<Participant, Integer>> debts = event.calculateIndividualDebt();
+    public void updateFinancialDashboard() {
+        double totalExpenses = event.getExpenses().stream().mapToDouble(Expense::getTotalExpense).sum();
+        totalExpensesLabel.setText(String.format(java.util.Locale.US, "\u20AC%.2f", totalExpenses / 100f));
 
-    participantsComboBox.setPromptText("Select a participant to view debts");
-    Label titleLabel = new Label("Open debts");
-    titleLabel.setStyle("-fx-font-weight: bold");
+        int participantCount = event.getParticipants().size();
+        double sharePerPerson = totalExpenses / participantCount;
+        sharePerPersonLabel.setText(String.format(java.util.Locale.US, "\u20AC%.2f", sharePerPerson / 100f));
+        debtsListView.getItems().clear();
 
-    Label selectedOption = new Label();
+        Map<Participant, Map<Participant, Integer>> optimizedDebts = event.calculateOptimizedDebts();
 
-    participantsComboBox.setCellFactory(param -> new ListCell<>() {
-        @Override
-        protected void updateItem(String participantName, boolean empty) {
-            super.updateItem(participantName, empty);
-
-            if (empty || participantName == null) {
-                setText(null);
-            } else {
-                Participant participant = event.getParticipants().stream()
-                        .filter(p -> p.getUserName().equals(participantName))
-                        .findFirst()
-                        .orElse(null);
-
-                if (participant != null) {
-                    Map<Participant, Integer> participantDebts = debts.get(participant);
-
-                    if (participantDebts.size() > 0) {
-                        StringBuilder result = new StringBuilder(participant.getUserName() + "\n");
-                        for (Map.Entry<Participant, Integer> entry : participantDebts.entrySet())
-                            result.append("owes ").append(entry.getValue()).append(" to ").append(entry.getKey().getUserName()).append(".\n");
-                        setText(result.toString());
-
-                    } else {
-                        setText("No debts found for " + participant.getUserName());
-                    }
-                }
+        // Display the individual debts
+        for (Map.Entry<Participant, Map<Participant, Integer>> entry : optimizedDebts.entrySet()) {
+            Participant participant = entry.getKey();
+            Map<Participant, Integer> debts = entry.getValue();
+            for (Map.Entry<Participant, Integer> debtEntry : debts.entrySet()) {
+                String debtInfo = String.format("%s owes %s: \u20AC%.2f", participant.getUserName(), debtEntry.getKey().getUserName(), debtEntry.getValue() / 100f);
+                debtsListView.getItems().add(debtInfo);
             }
         }
-    });
-
-    participantsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-        if (newValue != null) {
-            selectedOption.setText("Debts for " + newValue);
-        }
-    });
-
-    VBox root = new VBox(10, titleLabel, participantsComboBox, selectedOption);
-    root.setPrefWidth(200);
-
-    expenseScene.setRoot(root);
     }
-
-
 }
