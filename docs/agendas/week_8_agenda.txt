@@ -1,0 +1,25 @@
+Date: 2024-04-02
+Time: 16:45
+Location: Flux B
+Chair: Apolozan Octavian - Alexis
+Minute Taker: Dhruvan Gnanadhandayuthapani
+
+Agenda Items//
+-Opening by chair (1 min)/
+
+-Announcements by the TA (1 min)/
+
+-Presentation of the current state of the app to the TA (4 min)/
+
+-Discuss each members' work over the previous week(3 min)/
+
+-Other talking points:/
+1.Basic requirements and making everything clearer(6 min)
+2.Splitting work over the basic requirements and admin page based on what everyone has finished so far(10 min)
+3.Improvement of previous features - splitting the debt, general UI and admin page (15 min)
+
+-Summarize action points (2 min)/
+
+-Closure (1 min)/
+
+Estimated time: 43 min
