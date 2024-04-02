@@ -28,6 +28,7 @@ import java.util.List;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import client.config.Configuration;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -39,7 +40,8 @@ import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 
-	private static final String SERVER = "http://localhost:8080/";
+//	private static final String SERVER = "http://localhost:8080/";
+	private static final String SERVER = Configuration.getServerUrl();
 
 	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
 		var url = new URI("http://localhost:8080/api/quotes").toURL();
