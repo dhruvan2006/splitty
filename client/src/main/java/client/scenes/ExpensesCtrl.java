@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -81,7 +80,6 @@ public class ExpensesCtrl implements Initializable {
     public void modify() {
         Expense modify = getExpenses();
         if (modify == null) return;
-        if (!updateLastUsed()) return;
         System.out.println(modify.getCreator());
         if (!editMode){
             Expense added = server.addExpense(modify);
@@ -165,19 +163,5 @@ public class ExpensesCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.bundle = resourceBundle;
-    }
-
-    private boolean updateLastUsed() {
-        try{
-            server.updateLastUsedDate(event.getId());
-        }
-        catch (WebApplicationException e){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Something went wrong");
-            alert.showAndWait();
-            return false;
-        }
-        return true;
     }
 }

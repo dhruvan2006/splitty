@@ -2,14 +2,10 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Participant;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
-
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.ArrayList;
@@ -108,7 +104,6 @@ public class ParticipantCtrl implements Initializable {
         if(!Validate()){
             return;
         }
-        if(!updateLastUsed()) return;
         if (editingParticipant != null) {
             editingParticipant.setIBAN(bnrField.getText());
             editingParticipant.setEmail(emailField.getText());
@@ -119,19 +114,5 @@ public class ParticipantCtrl implements Initializable {
             overviewCtrl.addParticipant(participant);
         }
         mainCtrl.showOverview();
-    }
-
-    private boolean updateLastUsed() {
-        try{
-            server.updateLastUsedDate(overviewCtrl.getEvent().getId());
-        }
-        catch (WebApplicationException e){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Something went wrong");
-            alert.showAndWait();
-            return false;
-        }
-        return true;
     }
 }
