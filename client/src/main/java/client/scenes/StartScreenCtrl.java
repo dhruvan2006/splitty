@@ -109,7 +109,6 @@ public class StartScreenCtrl {
         catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);
             joinEventTextField.setStyle("-fx-border-color: #E80C0C");
-            System.out.println("Event does not exists");
             createEventTextField.setStyle(borderColor);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("Something went wrong");
@@ -168,6 +167,16 @@ public class StartScreenCtrl {
     public void handleRecentEventClick(MouseEvent arg0) {
         Event event = recentlyViewedEvents.getSelectionModel().getSelectedItem();
         if (event == null) return;
+        try{
+            server.updateLastUsedDate(event.getId());
+        }
+        catch (WebApplicationException e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Something went wrong");
+            alert.showAndWait();
+            return;
+        }
         observableEvents.remove(event);
         observableEvents.addFirst(event);
         mainCtrl.showOverviewWithEvent(event);
