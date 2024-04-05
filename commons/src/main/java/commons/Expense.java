@@ -92,15 +92,27 @@ public class Expense {
         return Objects.hash(id, title, creator);//, expenses);
     }
 
+//    @Override
+//    public String toString() {
+//        return "Expense " + id +
+//                " - " + title +
+//                ", created by " + creator.toString() + "\n";
+//    }
+
+
     @Override
     public String toString() {
-        return "Expense " + id +
-                " - " + title +
-                ", created by " + creator.toString() + "\n";
+        return "Expense{" +
+                "id=" + id +
+                ", creator=" + creator +
+                ", event=" + event +
+                ", totalExpense=" + totalExpense +
+                ", title='" + title + '\'' +
+                '}';
     }
 
     public int getSharePerPerson(int amountParticipants){
         int participantsSize = amountParticipants-1;
-        return getTotalExpense()/participantsSize;
+        return participantsSize == 0 ? getTotalExpense() : getTotalExpense()/participantsSize;
     }
 }

@@ -14,10 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
@@ -267,6 +264,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void updateFinancialDashboard() {
+        System.out.println("Event's expenses: " + event.getExpenses());
         double totalExpenses = event.getExpenses().stream().mapToDouble(Expense::getTotalExpense).sum();
         totalExpensesLabel.setText(String.format(java.util.Locale.US, "\u20AC%.2f", totalExpenses / 100f));
 
@@ -285,6 +283,19 @@ public class OverviewCtrl implements Initializable {
                 String debtInfo = String.format("%s owes %s: \u20AC%.2f", participant.getUserName(), debtEntry.getKey().getUserName(), debtEntry.getValue() / 100f);
                 debtsListView.getItems().add(debtInfo);
             }
+        }
+
+        if (debtsListView.getItems().isEmpty()) {
+            Label noDebtsLabel = new Label("No outstanding debts");
+            noDebtsLabel.setStyle("-fx-text-fill: black; -fx-font-size: 16px;");
+            noDebtsLabel.setAlignment(Pos.CENTER);
+
+            StackPane placeholderPane = new StackPane(noDebtsLabel);
+            placeholderPane.setAlignment(Pos.CENTER);
+
+            debtsListView.setPlaceholder(placeholderPane);
+        } else {
+            debtsListView.setPlaceholder(new Label(""));
         }
     }
 }

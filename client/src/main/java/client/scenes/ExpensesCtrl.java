@@ -92,6 +92,7 @@ public class ExpensesCtrl implements Initializable {
         }
         clearFields();
         mainCtrl.getOverviewCtrl().updateExpenseList();
+        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
     }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
