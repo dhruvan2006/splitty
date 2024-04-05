@@ -64,18 +64,18 @@
    <!-- Financial Summary -->
    <HBox prefHeight="211.0" prefWidth="570.0" style="-fx-padding: 10;">
       <VBox prefWidth="200" spacing="10">
-         <Label style="-fx-font-weight: bold;" text="Financial Summary" />
+         <Label style="-fx-font-weight: bold;" text="%overview.financial_summary" />
          <HBox spacing="10">
-            <Label text="Total Expenses: " />
+            <Label text="%overview.total_expense" />
             <Label fx:id="totalExpensesLabel" style="-fx-font-weight: bold;" />
          </HBox>
          <HBox spacing="10">
-            <Label text="Share per Person: " />
+            <Label text="%overview.share_per_person" />
             <Label fx:id="sharePerPersonLabel" style="-fx-font-weight: bold;" />
          </HBox>
       </VBox>
       <VBox prefHeight="109.0" prefWidth="421.0" spacing="10">
-         <Label style="-fx-font-weight: bold;" text="Debts Overview:" />
+         <Label style="-fx-font-weight: bold;" text="%overview.debts_overview" />
          <ListView fx:id="debtsListView" prefHeight="150.0" prefWidth="418.0" />
       </VBox>
    </HBox>

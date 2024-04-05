@@ -113,6 +113,6 @@ public class Expense {
 
     public int getSharePerPerson(int amountParticipants){
         int participantsSize = amountParticipants-1;
-        return participantsSize == 0 ? getTotalExpense() : getTotalExpense()/participantsSize;
+        return getTotalExpense() == 0 ? 0 : participantsSize == 0 ? getTotalExpense() : getTotalExpense()/participantsSize;
     }
 }

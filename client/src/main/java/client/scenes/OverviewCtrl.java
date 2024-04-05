@@ -280,13 +280,13 @@ public class OverviewCtrl implements Initializable {
             Participant participant = entry.getKey();
             Map<Participant, Integer> debts = entry.getValue();
             for (Map.Entry<Participant, Integer> debtEntry : debts.entrySet()) {
-                String debtInfo = String.format("%s owes %s: \u20AC%.2f", participant.getUserName(), debtEntry.getKey().getUserName(), debtEntry.getValue() / 100f);
+                String debtInfo = String.format(bundle.getString("overview.owes") + ": \u20AC%.2f", participant.getUserName(), debtEntry.getKey().getUserName(), debtEntry.getValue() / 100f);
                 debtsListView.getItems().add(debtInfo);
             }
         }
 
         if (debtsListView.getItems().isEmpty()) {
-            Label noDebtsLabel = new Label("No outstanding debts");
+            Label noDebtsLabel = new Label(bundle.getString("overview.no_outstanding_debts"));
             noDebtsLabel.setStyle("-fx-text-fill: black; -fx-font-size: 16px;");
             noDebtsLabel.setAlignment(Pos.CENTER);
 
