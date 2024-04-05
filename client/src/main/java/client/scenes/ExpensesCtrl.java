@@ -141,7 +141,7 @@ public class ExpensesCtrl implements Initializable {
                 alert.showAndWait();
                 return null;
             }
-            if(unit > 100) {
+            if(unit >= 100) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText(bundle.getString("expense.too_much_decimals"));
