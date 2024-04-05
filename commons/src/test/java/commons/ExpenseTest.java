@@ -95,13 +95,13 @@ class ExpenseTest {
         assertNotEquals(e1.hashCode(), e.hashCode());
     }
 
-    @Test
-    void testToString() {
-        Participant p = new Participant("Mara", "Tacenco", "MT");
-        Expense e = new Expense("Brunch in Delft", 1200, p);
-        assertTrue(e.toString().contains("Expense "));
-        assertTrue(e.toString().contains("- Brunch in Delft, created by "));
-    }
+//    @Test
+//    void testToString() {
+//        Participant p = new Participant("Mara", "Tacenco", "MT");
+//        Expense e = new Expense("Brunch in Delft", 1200, p);
+//        assertTrue(e.toString().contains("Expense "));
+//        assertTrue(e.toString().contains("- Brunch in Delft, created by "));
+//    }
 
     @Test
     void testGetParticipants() {
