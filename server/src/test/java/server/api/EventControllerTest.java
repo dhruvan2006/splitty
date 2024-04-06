@@ -139,7 +139,7 @@ public class EventControllerTest {
     }
 
     @Test
-    void testGetEventUpdatesTimeout() {
+    void testGetEventUpdatesTimeout() throws InterruptedException {
         Event event = new Event("New Year");
         List<Event> events = new ArrayList<>();
         events.add(event);
