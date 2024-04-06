@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.springframework.http.HttpStatus;
+//import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
 
@@ -117,7 +117,7 @@ public class EventControllerTest {
         DeferredResult<ResponseEntity<Event>> deferredResult = eventController.getEventUpdates(eventId);
 
         long startTime = System.currentTimeMillis();
-        long timeoutInMillis = 10000; 
+        long timeoutInMillis = 2500; 
         ResponseEntity<Event> responseEntity = null;
 
         //Poll every 100 milliseconds
