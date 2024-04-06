@@ -92,14 +92,6 @@ public class Expense {
         return Objects.hash(id, title, creator);//, expenses);
     }
 
-//    @Override
-//    public String toString() {
-//        return "Expense " + id +
-//                " - " + title +
-//                ", created by " + creator.toString() + "\n";
-//    }
-
-
     @Override
     public String toString() {
         return "Expense{" +
