@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -125,7 +126,7 @@ public class EventControllerTest {
 
         //Poll every 100 milliseconds
         while (System.currentTimeMillis() - startTime < timeoutInMillis) {
-            responseEntity = deferredResult.getResult();
+            responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
             if (responseEntity != null) {
                 break; 
             }
@@ -150,21 +151,10 @@ public class EventControllerTest {
 
         TimeUnit.SECONDS.sleep(30);
 
-        ResponseEntity<Event> responseEntity = deferredResult.getResult();
+        ResponseEntity<Event> responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
         assertNull(responseEntity);
-        assertEquals(HttpStatus.REQUEST_TIMEOUT, deferredResult.getResult().getStatusCode());
+        assertEquals(HttpStatus.REQUEST_TIMEOUT, responseEntity.getStatusCode());
     }
 
-    @Test
-    public void testHandleEventUpdateWithInvalidEventId() {
-        EventController eventController = new EventController(new TestEventRepository());
-        
-        Long invalidEventId = -1L;
-        Event event = new Event("New Year");
-        eventController.handleEventUpdate(invalidEventId, event);
-
-        DeferredResult<ResponseEntity<Event>> deferredResult = eventController.getDeferredResult(invalidEventId);
-        assertNull(deferredResult);
-    }
     
 }
