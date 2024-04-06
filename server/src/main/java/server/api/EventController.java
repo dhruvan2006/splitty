@@ -158,6 +158,7 @@ public class EventController {
     public void handleEventUpdate(Long eventId, Event event) {
         DeferredResult<ResponseEntity<Event>> deferredResult = deferredResults.get(eventId);
         if (deferredResult != null) {
+            ResponseEntity<Event> responseEntity = ResponseEntity.ok(event);
             deferredResult.setResult(event);
         }
     }
