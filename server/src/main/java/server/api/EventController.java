@@ -7,16 +7,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequestMapping("/api/event")
 public class EventController {
 
     private final EventRepository repo;
+    private final Map<Long, DeferredResult<Event>> deferredResults = new ConcurrentHashMap<>();
 
     EventController(EventRepository repo){
         this.repo = repo;
@@ -134,5 +138,27 @@ public class EventController {
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{eventId}/updates")
+    public DeferredResult<ResponseEntity<Event>> getEventUpdates(@PathVariable("eventId") Long eventId) {
+        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
+        deferredResults.put(eventId, deferredResult);
+        deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
+
+        // The timeout for long polling
+        deferredResult.onTimeout(() -> {
+            deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(null));
+        });
+
+        return deferredResult;
+    }
+
+    // Method to handle updates to events
+    public void handleEventUpdate(Long eventId, Event event) {
+        DeferredResult<Event> deferredResult = deferredResults.get(eventId);
+        if (deferredResult != null) {
+            deferredResult.setResult(event);
+        }
     }
 }

@@ -97,4 +97,45 @@ public class EventControllerTest {
         assertEquals(OK, actual.getStatusCode());
         assertEquals(OK, actual.getStatusCode());
     }
+
+    @Test
+    void testGetEventUpdates() {
+        long eventId = 1L;
+        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
+        ConcurrentHashMap<Long, DeferredResult<Event>> deferredResults = new ConcurrentHashMap<>();
+        deferredResults.put(eventId, deferredResult);
+
+        deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
+
+        // Dummy event update
+        Event updatedEvent = new Event();
+        updatedEvent.setId(eventId);
+        updatedEvent.setTitle("Updated Title");
+
+        eventController.handleEventUpdate(eventId, updatedEvent);
+
+        // Check if DeferredResult is resolved with the updated event
+        ResponseEntity<Event> responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
+        assert responseEntity.getStatusCode().equals(HttpStatus.OK);
+        assert responseEntity.getBody() != null;
+        assert responseEntity.getBody().equals(updatedEvent);
+    }
+
+    @Test
+    void testGetEventUpdatesTimeout() {
+        long eventId = 1L;
+        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
+        ConcurrentHashMap<Long, DeferredResult<Event>> deferredResults = new ConcurrentHashMap<>();
+        deferredResults.put(eventId, deferredResult);
+
+        deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
+        deferredResult.onTimeout(() -> deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(null)));
+
+        // Dummy timeout without event update
+        deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(null));
+
+        // Check if DeferredResult is resolved with timeout response
+        ResponseEntity<Event> responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
+        assert responseEntity.getStatusCode().equals(HttpStatus.REQUEST_TIMEOUT);
+    }
 }

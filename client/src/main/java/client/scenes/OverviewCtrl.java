@@ -267,4 +267,26 @@ public class OverviewCtrl implements Initializable {
         }
         return true;
     }
+
+     public void subscribeForEventUpdates(String serverUrl, long eventId) {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(serverUrl + "/api/event/" + eventId + "/updates"))
+                .build();
+
+        httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response -> {
+                    if (response.statusCode() == 200) {
+                        String eventData = response.body();
+                        System.out.println("Received event update: " + eventData);
+                    } else {
+                        System.out.println("Failed to subscribe for event updates: " + response.statusCode());
+                    }
+                })
+                .exceptionally(e -> {
+                    System.out.println("Error occurred while subscribing for event updates: " + e.getMessage());
+                    return null;
+                });
+    }
+    
 }
