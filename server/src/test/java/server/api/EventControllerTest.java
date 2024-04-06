@@ -18,7 +18,8 @@ package server.api;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
-import static org.mockito.Mockito.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 
 
 import commons.Event;
@@ -32,6 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
+
+
 
 public class EventControllerTest {
 
@@ -122,6 +125,9 @@ public class EventControllerTest {
         updatedEvent.setTitle("Updated Title");
 
         eventController.handleEventUpdate(eventId, updatedEvent);
+
+        // Wait for the DeferredResult to be set
+        await().atMost(5, SECONDS).until(deferredResult::getResult, notNullValue());
 
         // Check if DeferredResult is resolved with the updated event
         ResponseEntity<Event> responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
