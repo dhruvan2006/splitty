@@ -133,9 +133,23 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void removeParticipant(Participant participant) {
-        this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
-        updateParticipantsList();
-        updateParticipantsComboBox();
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setTitle("Delete participant");
+        alert.setHeaderText("Delete " + participant.userName + " from event?");
+        alert.setContentText("Are you sure you want to delete this participant? All expenses of this participant will also be removed!");
+        ButtonType ok = new ButtonType("Delete");
+        ButtonType cancel = new ButtonType("Cancel");
+        alert.getDialogPane().getButtonTypes().clear();
+        alert.getDialogPane().getButtonTypes().add(ok);
+        alert.getDialogPane().getButtonTypes().add(cancel);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ok){
+                this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
+                updateParticipantsList();
+                updateParticipantsComboBox();
+            }
+        });
     }
 
     public void updateExpenseList() {
