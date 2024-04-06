@@ -115,12 +115,14 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void addParticipant(Participant participant) {
+        if (!updateLastUsed()) return;
         this.event = server.addParticipantToEvent(event.getId(), participant);
         updateParticipantsList();
         updateParticipantsComboBox();
     }
 
     public void updateParticipant(Participant updatedParticipant) {
+        if (!updateLastUsed()) return;
         this.event = server.updateParticipantInEvent(event.getId(), updatedParticipant);
         updateParticipantsList();
         updateParticipantsComboBox();
@@ -128,12 +130,14 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void editParticipant(Participant participant) {
+        if (!updateLastUsed()) return;
         ParticipantCtrl participantCtrl = mainCtrl.getParticipantCtrl();
         participantCtrl.initializeWithParticipant(participant);
         mainCtrl.showConfigParticipant(this);
     }
 
     private void removeParticipant(Participant participant) {
+        if (!updateLastUsed()) return;
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setTitle(bundle.getString("overview.remove_participant_alert.title"));
@@ -206,12 +210,14 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void editExpense(Expense expense) {
+        if (!updateLastUsed()) return;
         expensesCtrl.setEvent(event);
         expensesCtrl.initialize(expense);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
 
     private void deleteExpense(Expense expense) {
+        if (!updateLastUsed()) return;
         event.getExpenses().remove(expense);
         server.deleteExpense(expense.getId());
         updateExpenseList();
@@ -219,6 +225,7 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private void addExpense() {
+        if (!updateLastUsed()) return;
         expensesCtrl.setEvent(event);
         expensesCtrl.initialize(null);
         mainCtrl.showScene(expenseScene, "Expenses");
@@ -226,17 +233,19 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     public void handleAddParticipantButton() {
+        if (!updateLastUsed()) return;
         mainCtrl.getParticipantCtrl().initializeWithParticipant(null);
         mainCtrl.showConfigParticipant(this);
     }
-
     @FXML
     public void handleSettleDebtsButton() {
+        if (!updateLastUsed()) return;
         System.out.println("Settling debts among participants");
     }
 
     @FXML
     public void handleTitleButton() {
+        if (!updateLastUsed()) return;
         if (!titleHBox.getChildren().contains(titleTextField)) {
             titleHBox.getChildren().addFirst(titleTextField);
             titleTextField.setText(titleLabel.getText());
@@ -249,16 +258,6 @@ public class OverviewCtrl implements Initializable {
             titleHBox.getChildren().remove(titleTextField);
             titleHBox.getChildren().addFirst(titleLabel);
             titleButton.setText(bundle.getString("overview.change_title"));
-        }
-        try{
-            server.updateLastUsedDate(event.getId());
-        }
-        catch (WebApplicationException e){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Something went wrong");
-            alert.showAndWait();
-            return;
         }
     }
 
@@ -277,5 +276,19 @@ public class OverviewCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resources) {
         this.bundle = resources;
+    }
+
+    private boolean updateLastUsed() {
+        try{
+            server.updateLastUsedDate(event.getId());
+        }
+        catch (WebApplicationException e){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Something went wrong");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
     }
 }
