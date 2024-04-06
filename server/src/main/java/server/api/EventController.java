@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EventController {
 
     private final EventRepository repo;
-    private final Map<Long, DeferredResult<Event>> deferredResults = new ConcurrentHashMap<>();
+    private final Map<Long, DeferredResult<ResponseEntity<Event>>> deferredResults = new ConcurrentHashMap<>();
 
     EventController(EventRepository repo){
         this.repo = repo;
