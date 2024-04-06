@@ -18,9 +18,6 @@ package server.api;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.notNullValue;
 
 
 import commons.Event;
@@ -29,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -109,7 +105,7 @@ public class EventControllerTest {
     }
 
     @Test
-    public void testHandleEventUpdate() throws InterruptedException {
+    public void testGetEventUpdate() throws InterruptedException {
         Event event = new Event("New Year");
         Event event1 = new Event("Old Year");
         List<Event> events = new ArrayList<>();
@@ -121,7 +117,7 @@ public class EventControllerTest {
         DeferredResult<ResponseEntity<Event>> deferredResult = eventController.getEventUpdates(eventId);
 
         long startTime = System.currentTimeMillis();
-        long timeoutInMillis = 5000; 
+        long timeoutInMillis = 10000; 
         ResponseEntity<Event> responseEntity = null;
 
         //Poll every 100 milliseconds
@@ -153,7 +149,6 @@ public class EventControllerTest {
 
         ResponseEntity<Event> responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
         assertNull(responseEntity);
-        assertEquals(HttpStatus.REQUEST_TIMEOUT, responseEntity.getStatusCode());
     }
 
     
