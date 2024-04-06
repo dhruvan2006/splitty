@@ -138,11 +138,11 @@ public class OverviewCtrl implements Initializable {
     private void removeParticipant(Participant participant) {
         var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setTitle("Delete participant");
-        alert.setHeaderText("Delete " + participant.userName + " from event?");
-        alert.setContentText("Are you sure you want to delete this participant? All expenses of this participant will also be removed!");
-        ButtonType ok = new ButtonType("Delete");
-        ButtonType cancel = new ButtonType("Cancel");
+        alert.setTitle(bundle.getString("overview.remove_participant_alert.title"));
+        alert.setHeaderText(String.format(bundle.getString("overview.remove_participant_alert.header"), participant.userName));
+        alert.setContentText(bundle.getString("overview.remove_participant_alert.content"));
+        ButtonType ok = new ButtonType(bundle.getString("globals.remove"));
+        ButtonType cancel = new ButtonType(bundle.getString("globals.cancel"));
         alert.getDialogPane().getButtonTypes().clear();
         alert.getDialogPane().getButtonTypes().add(ok);
         alert.getDialogPane().getButtonTypes().add(cancel);
