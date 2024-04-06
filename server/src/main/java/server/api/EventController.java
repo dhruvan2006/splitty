@@ -156,7 +156,7 @@ public class EventController {
 
     // Method to handle updates to events
     public void handleEventUpdate(Long eventId, Event event) {
-        DeferredResult<Event> deferredResult = deferredResults.get(eventId);
+        DeferredResult<ResponseEntity<Event>> deferredResult = deferredResults.get(eventId);
         if (deferredResult != null) {
             deferredResult.setResult(event);
         }
