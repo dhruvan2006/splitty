@@ -134,7 +134,7 @@ public class EventControllerTest {
     void testGetEventUpdatesTimeout() {
         long eventId = 1L;
         DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
-        ConcurrentHashMap<Long, DeferredResult<Event>> deferredResults = new ConcurrentHashMap<>();
+        ConcurrentHashMap<Long, DeferredResult<ResponseEntity<Event>>> deferredResults = new ConcurrentHashMap<>();
         deferredResults.put(eventId, deferredResult);
 
         deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
