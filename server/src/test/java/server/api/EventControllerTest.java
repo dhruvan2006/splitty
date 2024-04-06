@@ -25,8 +25,6 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import commons.Event;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +37,6 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 public class EventControllerTest {
 
-    @InjectMocks
-    private EventController eventController;
 
     @Test
     public void cannotBeNull() {
@@ -112,46 +108,63 @@ public class EventControllerTest {
     }
 
     @Test
-    void testGetEventUpdates() {
-        long eventId = 1L;
-        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
-        ConcurrentHashMap<Long, DeferredResult<ResponseEntity<Event>>> deferredResults = new ConcurrentHashMap<>();
-        deferredResults.put(eventId, deferredResult);
+    public void testHandleEventUpdate() throws InterruptedException {
+        Event event = new Event("New Year");
+        Event event1 = new Event("Old Year");
+        List<Event> events = new ArrayList<>();
+        events.add(event);
+        TestEventRepository repo = new TestEventRepository(events);
+        EventController eventController = new EventController(repo);
 
-        deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
+        Long eventId = event.getId();
+        DeferredResult<ResponseEntity<Event>> deferredResult = eventController.getEventUpdates(eventId);
 
-        // Dummy event update
-        Event updatedEvent = new Event();
-        updatedEvent.setId(eventId);
-        updatedEvent.setTitle("Updated Title");
+        long startTime = System.currentTimeMillis();
+        long timeoutInMillis = 5000; 
+        ResponseEntity<Event> responseEntity = null;
 
-        eventController.handleEventUpdate(eventId, updatedEvent);
+        //Poll every 100 milliseconds
+        while (System.currentTimeMillis() - startTime < timeoutInMillis) {
+            responseEntity = deferredResult.getResult();
+            if (responseEntity != null) {
+                break; 
+            }
+            Thread.sleep(100); 
+        }
 
-        // Wait for the DeferredResult to be set
-        await().atMost(5, SECONDS).until(deferredResult::getResult, notNullValue());
-
-        // Check if DeferredResult is resolved with the updated event
-        ResponseEntity<Event> responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
-        assert responseEntity.getStatusCode().equals(HttpStatus.OK);
-        assert responseEntity.getBody() != null;
-        assert responseEntity.getBody().equals(updatedEvent);
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(event1, responseEntity.getBody());
     }
 
     @Test
     void testGetEventUpdatesTimeout() {
-        long eventId = 1L;
-        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
-        ConcurrentHashMap<Long, DeferredResult<ResponseEntity<Event>>> deferredResults = new ConcurrentHashMap<>();
-        deferredResults.put(eventId, deferredResult);
+        Event event = new Event("New Year");
+        List<Event> events = new ArrayList<>();
+        events.add(event);
+        TestEventRepository repo = new TestEventRepository(events);
+        EventController eventController = new EventController(repo);
 
-        deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
-        deferredResult.onTimeout(() -> deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(null)));
+        Long eventId = event.getId();
+        DeferredResult<ResponseEntity<Event>> deferredResult = eventController.getEventUpdates(eventId);
 
-        // Dummy timeout without event update
-        deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(null));
+        TimeUnit.SECONDS.sleep(30);
 
-        // Check if DeferredResult is resolved with timeout response
-        ResponseEntity<Event> responseEntity = (ResponseEntity<Event>) deferredResult.getResult();
-        assert responseEntity.getStatusCode().equals(HttpStatus.REQUEST_TIMEOUT);
+        ResponseEntity<Event> responseEntity = deferredResult.getResult();
+        assertNull(responseEntity);
+        assertEquals(HttpStatus.REQUEST_TIMEOUT, deferredResult.getResult().getStatusCode());
     }
+
+    @Test
+    public void testHandleEventUpdateWithInvalidEventId() {
+        EventController eventController = new EventController(new TestEventRepository());
+        
+        Long invalidEventId = -1L;
+        Event event = new Event("New Year");
+        eventController.handleEventUpdate(invalidEventId, event);
+
+        DeferredResult<ResponseEntity<Event>> deferredResult = eventController.getDeferredResult(invalidEventId);
+        assertNull(deferredResult);
+    }
+    
 }
