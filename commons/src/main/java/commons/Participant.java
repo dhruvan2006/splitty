@@ -65,8 +65,8 @@ public class Participant{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Participant that)) return false;
-        return getId() == that.getId() && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getIBAN(), that.getIBAN()) && Objects.equals(getUserName(), that.getUserName());
+        if (!(o instanceof Participant)) return false;
+        return getId() == ((Participant)o).getId();
     }
 
     @Override

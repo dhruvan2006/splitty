@@ -24,6 +24,9 @@ import javafx.stage.Modality;
 import javafx.util.Pair;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -146,8 +149,19 @@ public class OverviewCtrl implements Initializable {
         alert.showAndWait().ifPresent(response -> {
             if (response == ok){
                 this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
+                ArrayList<Expense> toDelete = new ArrayList<Expense>();
+                for (Expense expense: this.event.getExpenses()){
+                    if (expense.getCreator().getId() == participant.getId()){
+                        server.deleteExpense(expense.getId());
+                        toDelete.add(expense);
+                    }
+                }
+                for (Expense expense: toDelete){
+                    this.event.getExpenses().remove(expense);
+                }
                 updateParticipantsList();
                 updateParticipantsComboBox();
+                updateExpenseList();
             }
         });
     }
@@ -195,8 +209,6 @@ public class OverviewCtrl implements Initializable {
 
     private void editExpense(Expense expense) {
         expensesCtrl.setEvent(event);
-        //expensesCtrl.setExpense(expense);
-        //expensesCtrl.initializeWithExpense(expense);
         expensesCtrl.initialize(expense);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
