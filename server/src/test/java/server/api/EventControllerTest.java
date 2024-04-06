@@ -18,10 +18,13 @@ package server.api;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
+import static org.mockito.Mockito.*;
 
 
 import commons.Event;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,8 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 public class EventControllerTest {
 
+    @InjectMocks
+    private EventController eventController;
 
     @Test
     public void cannotBeNull() {
@@ -106,7 +111,7 @@ public class EventControllerTest {
     void testGetEventUpdates() {
         long eventId = 1L;
         DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
-        ConcurrentHashMap<Long, DeferredResult<Event>> deferredResults = new ConcurrentHashMap<>();
+        ConcurrentHashMap<Long, DeferredResult<ResponseEntity<Event>>> deferredResults = new ConcurrentHashMap<>();
         deferredResults.put(eventId, deferredResult);
 
         deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
