@@ -29,6 +29,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -142,9 +143,34 @@ public class OverviewCtrl implements Initializable {
 
     private void removeParticipant(Participant participant) {
         if (!updateLastUsed()) return;
-        this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
-        updateParticipantsList();
-        updateParticipantsComboBox();
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setTitle(bundle.getString("overview.remove_participant_alert.title"));
+        alert.setHeaderText(String.format(bundle.getString("overview.remove_participant_alert.header"), participant.userName));
+        alert.setContentText(bundle.getString("overview.remove_participant_alert.content"));
+        ButtonType ok = new ButtonType(bundle.getString("globals.remove"));
+        ButtonType cancel = new ButtonType(bundle.getString("globals.cancel"));
+        alert.getDialogPane().getButtonTypes().clear();
+        alert.getDialogPane().getButtonTypes().add(ok);
+        alert.getDialogPane().getButtonTypes().add(cancel);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ok){
+                this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
+                ArrayList<Expense> toDelete = new ArrayList<Expense>();
+                for (Expense expense: this.event.getExpenses()){
+                    if (expense.getCreator().getId() == participant.getId()){
+                        server.deleteExpense(expense.getId());
+                        toDelete.add(expense);
+                    }
+                }
+                for (Expense expense: toDelete){
+                    this.event.getExpenses().remove(expense);
+                }
+                updateParticipantsList();
+                updateParticipantsComboBox();
+                updateExpenseList();
+            }
+        });
     }
 
     public void updateExpenseList() {
@@ -191,8 +217,6 @@ public class OverviewCtrl implements Initializable {
     private void editExpense(Expense expense) {
         if (!updateLastUsed()) return;
         expensesCtrl.setEvent(event);
-        //expensesCtrl.setExpense(expense);
-        //expensesCtrl.initializeWithExpense(expense);
         expensesCtrl.initialize(expense);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
@@ -251,6 +275,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void back(MouseEvent mouseEvent) {
+        handleTitleButton();
         mainCtrl.showStartScreen();
     }
 
