@@ -123,33 +123,6 @@ class EventTest {
         Event e = new Event("x");
         assertTrue(e.toString().contains("x (code: "));
     }
-
-    @Test
-    void totalDebtTest()
-    {
-        Event event = new Event("z");
-        Participant a = new Participant("a","a","a");
-        Participant b = new Participant("b","b","b");
-        Participant c = new Participant("c","c","c");
-        Participant d = new Participant("d","d","d");
-        Participant e = new Participant("e","e","e");
-        event.addParticipant(a);
-        event.addParticipant(b);
-        event.addParticipant(c);
-        event.addParticipant(d);
-        event.addParticipant(e);
-        Expense expense = new Expense("TEST",20,e,event);
-        Expense expense2 = new Expense("TEST",16,a,event);
-        event.addExpense(expense);
-        event.addExpense(expense2);
-
-        Map<Participant,Integer> result = event.calculateTotalDebt();
-
-        assertEquals(result.get(a),5);
-        assertEquals(result.get(b),9);
-        assertEquals(result.get(e),4);
-    }
-
     
     @Test
     void individualDebtTest()
@@ -172,69 +145,10 @@ class EventTest {
 
         Map<Participant,Map<Participant,Integer>> result = event.calculateIndividualDebt();
         
-        assertEquals(result.get(a).get(e),5);
-        assertEquals(result.get(a).get(b),null);
-        assertEquals(result.get(b).get(a),4);
-        assertEquals(result.get(b).get(e),5);
-        assertEquals(result.get(e).get(a),4);
+        assertEquals(4, result.get(a).get(e));
+        assertNull(result.get(a).get(b));
+        assertEquals(3, result.get(b).get(a));
+        assertEquals(4, result.get(b).get(e));
+        assertEquals(3, result.get(e).get(a));
     }
-
-
-    @Test
-    void totalOwnedTest()
-    {
-        Event event = new Event("z");
-        Participant a = new Participant("a","a","a");
-        Participant b = new Participant("b","b","b");
-        Participant c = new Participant("c","c","c");
-        Participant d = new Participant("d","d","d");
-        Participant e = new Participant("e","e","e");
-        event.addParticipant(a);
-        event.addParticipant(b);
-        event.addParticipant(c);
-        event.addParticipant(d);
-        event.addParticipant(e);
-        Expense expense = new Expense("TEST",20,e,event);
-        Expense expense2 = new Expense("TEST",16,a,event);
-        event.addExpense(expense);
-        event.addExpense(expense2);
-
-        Map<Participant,Integer> result = event.calculateTotalOwned();
-
-        assertEquals(result.get(a),16);
-        assertEquals(result.get(b),0);
-        assertEquals(result.get(e),20);
-        // for now that's all we can test since there is no settling the debt mechanic
-      
-    }
-
-    @Test
-    void individualOwnedTest()
-    {
-        Event event = new Event("z");
-        Participant a = new Participant("a","a","a");
-        Participant b = new Participant("b","b","b");
-        Participant c = new Participant("c","c","c");
-        Participant d = new Participant("d","d","d");
-        Participant e = new Participant("e","e","e");
-        event.addParticipant(a);
-        event.addParticipant(b);
-        event.addParticipant(c);
-        event.addParticipant(d);
-        event.addParticipant(e);
-        Expense expense = new Expense("TEST",20,e,event);
-        Expense expense2 = new Expense("TEST",16,a,event);
-        event.addExpense(expense);
-        event.addExpense(expense2);
-
-        Map<Participant,Map<Participant,Integer>> result = event.calculateIndividualOwned();
-        
-        assertEquals(result.get(a).get(e),4);
-        assertEquals(result.get(a).get(b),4);
-        assertEquals(result.get(b).get(a),null);
-        assertEquals(result.get(b).get(e),null);
-        assertEquals(result.get(e).get(a),5);
-        assertEquals(result.get(e).get(b),5);
-    }
-
 }

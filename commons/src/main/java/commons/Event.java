@@ -145,28 +145,6 @@ public class Event {
                 ")";
     }
 
-     /**
-     * showing the total debt owed for this event for each person
-     */
-    public Map<Participant,Integer> calculateTotalDebt() {
-        Map<Participant,Integer> map = new HashMap<>();
-        var indDebts = calculateIndividualDebt();
-
-        for (Participant participant : participants) {
-            Map<Participant, Integer> debts = indDebts.get(participant);
-            int totalSum = 0;
-            for (Participant other : participants) {
-
-                if (other.equals(participant)) continue;
-                totalSum+= debts.getOrDefault(other,0);
-            }
-
-            map.put(participant,totalSum);
-        }
-
-        return map;
-
-    }
 
     /**
      * does the same, but for each participant within the event
@@ -191,58 +169,6 @@ public class Event {
         }
 
         return indDebtsMap;
-    }
-
-    /**
-     * showing the total money that a participant is owned
-     * could've been made easier by calculating the cost of the expenses a participant has created
-     * but this will come in handy when participants will start paying off their debts, so the map
-     * will be modified and therefore the total sum will also be modified
-     */
-    public Map<Participant,Integer> calculateTotalOwned() {
-        Map<Participant,Integer> map = new HashMap<>();
-        var indOwned = calculateIndividualOwned();
-
-        for (Participant participant : participants) {
-            Map<Participant, Integer> owned = indOwned.get(participant);
-            int totalOwned = 0;
-            for (Participant other : participants) {
-
-                if (other.equals(participant)) continue;
-                totalOwned+= owned.getOrDefault(other,0);
-            }
-
-            map.put(participant,totalOwned);
-        }
-
-        return map;
-
-    }
-
-
-    /**
-    * the same thing as above but a map so a participant can see who owes him how much within an event
-    */
-    public Map<Participant, Map<Participant, Integer>> calculateIndividualOwned() {
-        Map<Participant, Map<Participant, Integer>> ownedMap = new HashMap<>();
-
-        for (Participant participant : participants) {
-            ownedMap.put(participant, new HashMap<>());
-        }
-
-        for (Expense expense : expenses) {
-            int sharePerParticipant = expense.getSharePerPerson(participants.size());
-
-            for (Participant other : participants) {
-                if (other.equals(expense.getCreator())) continue;
-
-                int currentOwned = ownedMap.get(expense.getCreator()).getOrDefault(other, 0);
-                currentOwned += sharePerParticipant;
-                ownedMap.get(expense.getCreator()).put(other, currentOwned);
-            }
-        }
-
-        return ownedMap;
     }
 
     /**
