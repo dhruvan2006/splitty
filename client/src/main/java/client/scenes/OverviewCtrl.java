@@ -255,6 +255,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void back(MouseEvent mouseEvent) {
+        handleTitleButton();
         mainCtrl.showStartScreen();
     }
 

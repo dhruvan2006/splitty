@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +22,7 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -170,12 +172,13 @@ public class AdminCtrl implements Initializable {
             List<Event> existingEvents = server.getEventByInviteCode(inviteCode);
 
             if (existingEvents.isEmpty()) {
-                clearIds(eventToImport);
-                server.addEvent(eventToImport);
+                var lostExpenses = clearIds(eventToImport);
+                Event newEvent = server.addEvent(eventToImport);
+                addExpenses(lostExpenses, newEvent);
                 refresh();
                 mainCtrl.showNotification("Event imported successfully", "#4CAF50");
             } else {
-                handleInviteCodeConflict(eventToImport, existingEvents);
+                handleInviteCodeConflict(eventToImport);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,7 +186,7 @@ public class AdminCtrl implements Initializable {
         }
     }
 
-    private void handleInviteCodeConflict(Event eventToImport, List<Event> existingEvents) {
+    private void handleInviteCodeConflict(Event eventToImport) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Invite Code Conflict");
         alert.setHeaderText("An event with the same invite code already exists.");
@@ -193,8 +196,9 @@ public class AdminCtrl implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             String newInviteCode = generateUniqueInviteCode();
             eventToImport.setInviteCode(newInviteCode);
-            clearIds(eventToImport);
-            server.addEvent(eventToImport);
+            var lostExpenses = clearIds(eventToImport);
+            Event newEvent = server.addEvent(eventToImport);
+            addExpenses(lostExpenses, newEvent);
             refresh();
             mainCtrl.showNotification("Event imported successfully", "#4CAF50");
         } else {
@@ -202,10 +206,21 @@ public class AdminCtrl implements Initializable {
         }
     }
 
-    private void clearIds(Event event) {
+    private List<Expense> clearIds(Event event) {
         event.setId(0);
         event.getParticipants().forEach(participant -> participant.setId(0));
-        event.getExpenses().forEach(expense -> expense.setId(0));
+        var lostExpenses = event.getExpenses();
+        event.setExpenses(null);
+        return lostExpenses;
+    }
+
+    private void addExpenses(List<Expense> expenses, Event newEvent){
+        for (Expense expense: expenses){
+            var participantsWithSameUsername = newEvent.getParticipants().stream().filter(p -> Objects.equals(p.getUserName(), expense.getCreator().getUserName())).toList();
+            expense.setCreator(participantsWithSameUsername.getFirst());
+            expense.setEvent(newEvent);
+            server.addExpense(expense);
+        }
     }
 
     private String generateUniqueInviteCode() {
