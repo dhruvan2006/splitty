@@ -14,16 +14,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.util.Pair;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -50,7 +48,11 @@ public class OverviewCtrl implements Initializable {
     private TextField titleTextField;
 
     @FXML
-    private Label titleLabel, inviteCodeLabel;
+    private Label titleLabel, inviteCodeLabel, totalExpensesLabel, sharePerPersonLabel;
+
+    @FXML
+    private ListView<String> debtsListView;
+
 
     private ExpensesCtrl expensesCtrl;
     private Scene expenseScene;
@@ -79,6 +81,7 @@ public class OverviewCtrl implements Initializable {
         updateParticipantsComboBox();
         updateParticipantsList();
         updateExpenseList();
+        updateFinancialDashboard();
     }
 
     private void updateParticipantsComboBox() {
@@ -119,6 +122,7 @@ public class OverviewCtrl implements Initializable {
         this.event = server.addParticipantToEvent(event.getId(), participant);
         updateParticipantsList();
         updateParticipantsComboBox();
+        updateFinancialDashboard();
     }
 
     public void updateParticipant(Participant updatedParticipant) {
@@ -126,6 +130,7 @@ public class OverviewCtrl implements Initializable {
         this.event = server.updateParticipantInEvent(event.getId(), updatedParticipant);
         updateParticipantsList();
         updateParticipantsComboBox();
+        updateFinancialDashboard();
         updateExpenseList();
     }
 
@@ -134,6 +139,7 @@ public class OverviewCtrl implements Initializable {
         ParticipantCtrl participantCtrl = mainCtrl.getParticipantCtrl();
         participantCtrl.initializeWithParticipant(participant);
         mainCtrl.showConfigParticipant(this);
+        updateFinancialDashboard();
     }
 
     private void removeParticipant(Participant participant) {
@@ -164,6 +170,7 @@ public class OverviewCtrl implements Initializable {
                 updateParticipantsList();
                 updateParticipantsComboBox();
                 updateExpenseList();
+                updateFinancialDashboard();
             }
         });
     }
@@ -212,6 +219,7 @@ public class OverviewCtrl implements Initializable {
     private void editExpense(Expense expense) {
         if (!updateLastUsed()) return;
         expensesCtrl.setEvent(event);
+        updateFinancialDashboard();
         expensesCtrl.initialize(expense);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
@@ -221,6 +229,7 @@ public class OverviewCtrl implements Initializable {
         event.getExpenses().remove(expense);
         server.deleteExpense(expense.getId());
         updateExpenseList();
+        updateFinancialDashboard();
     }
 
     @FXML
@@ -229,6 +238,7 @@ public class OverviewCtrl implements Initializable {
         expensesCtrl.setEvent(event);
         expensesCtrl.initialize(null);
         mainCtrl.showScene(expenseScene, "Expenses");
+        updateFinancialDashboard();
     }
 
     @FXML
@@ -237,6 +247,7 @@ public class OverviewCtrl implements Initializable {
         mainCtrl.getParticipantCtrl().initializeWithParticipant(null);
         mainCtrl.showConfigParticipant(this);
     }
+
     @FXML
     public void handleSettleDebtsButton() {
         if (!updateLastUsed()) return;
@@ -291,5 +302,41 @@ public class OverviewCtrl implements Initializable {
             return false;
         }
         return true;
+    }
+
+    public void updateFinancialDashboard() {
+        System.out.println("Event's expenses: " + event.getExpenses());
+        double totalExpenses = event.getExpenses().stream().mapToDouble(Expense::getTotalExpense).sum();
+        totalExpensesLabel.setText(String.format(java.util.Locale.US, "\u20AC%.2f", totalExpenses / 100f));
+
+        int participantCount = event.getParticipants().size();
+        double sharePerPerson = totalExpenses / participantCount;
+        sharePerPersonLabel.setText(String.format(java.util.Locale.US, "\u20AC%.2f", sharePerPerson / 100f));
+        debtsListView.getItems().clear();
+
+        Map<Participant, Map<Participant, Integer>> optimizedDebts = event.calculateOptimizedDebts();
+
+        // Display the individual debts
+        for (Map.Entry<Participant, Map<Participant, Integer>> entry : optimizedDebts.entrySet()) {
+            Participant participant = entry.getKey();
+            Map<Participant, Integer> debts = entry.getValue();
+            for (Map.Entry<Participant, Integer> debtEntry : debts.entrySet()) {
+                String debtInfo = String.format(bundle.getString("overview.owes") + ": \u20AC%.2f", participant.getUserName(), debtEntry.getKey().getUserName(), debtEntry.getValue() / 100f);
+                debtsListView.getItems().add(debtInfo);
+            }
+        }
+
+        if (debtsListView.getItems().isEmpty()) {
+            Label noDebtsLabel = new Label(bundle.getString("overview.no_outstanding_debts"));
+            noDebtsLabel.setStyle("-fx-text-fill: black; -fx-font-size: 16px;");
+            noDebtsLabel.setAlignment(Pos.CENTER);
+
+            StackPane placeholderPane = new StackPane(noDebtsLabel);
+            placeholderPane.setAlignment(Pos.CENTER);
+
+            debtsListView.setPlaceholder(placeholderPane);
+        } else {
+            debtsListView.setPlaceholder(new Label(""));
+        }
     }
 }

@@ -2,8 +2,7 @@ package commons;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -117,5 +116,11 @@ class EventTest {
         expenses.add(expense);
 
         assertEquals(expenses, e.getExpenses());
+    }
+
+    @Test
+    void toStringTest(){
+        Event e = new Event("x");
+        assertTrue(e.toString().contains("x (code: "));
     }
 }

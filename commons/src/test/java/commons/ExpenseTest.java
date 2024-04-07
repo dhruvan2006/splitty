@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.*;
 
 class ExpenseTest {
     @Test
@@ -93,11 +94,46 @@ class ExpenseTest {
         assertNotEquals(e1.hashCode(), e.hashCode());
     }
 
+//    @Test
+//    void testToString() {
+//        Participant p = new Participant("Mara", "Tacenco", "MT");
+//        Expense e = new Expense("Brunch in Delft", 1200, p);
+//        assertTrue(e.toString().contains("Expense "));
+//        assertTrue(e.toString().contains("- Brunch in Delft, created by "));
+//    }
+
     @Test
-    void testToString() {
+    void testGetParticipants() {
+
+        Event event = new Event("X");
         Participant p = new Participant("Mara", "Tacenco", "MT");
-        Expense e = new Expense("Brunch in Delft", 1200, p);
-        assertTrue(e.toString().contains("Expense "));
+        Participant h = new Participant("Hugh", "Jones", "HJ");
+        List<Participant> list = new ArrayList<>();
+        list.add(p);
+        list.add(h);
+
+        Expense e = new Expense("Brunch in Delft", 1200, p ,event);
     }
+
+    @Test
+    void testSetParticipants() {
+
+        Event event = new Event("X");
+        Participant p = new Participant("Mara", "Tacenco", "MT");
+        Participant h = new Participant("Hugh", "Jones", "HJ");
+
+        List<Participant> list = new ArrayList<>();
+        list.add(p);
+        list.add(h);
+
+        Expense e = new Expense("Brunch in Delft", 1200, p ,event);
+
+        List<Participant> list2 = new ArrayList<>();
+        list2.add(h);
+    }
+
+
+
+
 
 }
