@@ -24,6 +24,9 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import commons.Event;
 import commons.Expense;
@@ -37,6 +40,9 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+
 
 public class ServerUtils {
 
@@ -186,4 +192,52 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.put(Entity.text(""), Event.class);
 	}
+
+    public void subscribeToEventUpdates(Long eventId, EventUpdateListener listener) {
+		AtomicBoolean shouldPoll = new AtomicBoolean(true);
+
+		CompletableFuture.runAsync(() -> {
+			WebTarget target = ClientBuilder.newClient(new ClientConfig())
+					.target(SERVER).path("api/event/" + eventId + "/updates");
+
+			while (shouldPoll.get()) {
+				try {
+					Response response = target.request(MediaType.APPLICATION_JSON).get();
+					if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+						listener.onEventUpdate(response.readEntity(Event.class));
+					} else if (response.getStatus() == Response.Status.REQUEST_TIMEOUT.getStatusCode()) {
+						listener.onTimeout();
+					} else {
+						listener.onError(response.getStatusInfo().getReasonPhrase());
+					}
+					response.close();
+				} catch (Exception e) {
+					listener.onError(e.getMessage());
+				}
+
+				// Wait before making the next request
+				try {
+					TimeUnit.SECONDS.sleep(0.5);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+		});
+	}
+
+	//to be implemented
+	public interface EventUpdateListener {
+        void onEventUpdate(Event event);
+
+        void onTimeout();
+
+        void onError(String msg);
+    }
+
+
+	public void stopPolling() {
+        shouldPoll.set(false);
+    }
+
+
 }
