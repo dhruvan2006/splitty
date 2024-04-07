@@ -47,6 +47,7 @@ import jakarta.ws.rs.core.MediaType;
 public class ServerUtils {
 
 	private static final String SERVER = Configuration.getInstance().getServerUrl();
+	private AtomicBoolean shouldPoll = new AtomicBoolean(true);
 
 	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
 		var url = new URI("http://localhost:8080/api/quotes").toURL();
@@ -194,7 +195,7 @@ public class ServerUtils {
 	}
 
     public void subscribeToEventUpdates(Long eventId, EventUpdateListener listener) {
-		AtomicBoolean shouldPoll = new AtomicBoolean(true);
+		shouldPoll.set(true);
 
 		CompletableFuture.runAsync(() -> {
 			WebTarget target = ClientBuilder.newClient(new ClientConfig())
@@ -217,7 +218,7 @@ public class ServerUtils {
 
 				// Wait before making the next request
 				try {
-					TimeUnit.SECONDS.sleep(0.5);
+					TimeUnit.SECONDS.sleep((long) 0.5);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
@@ -233,7 +234,6 @@ public class ServerUtils {
 
         void onError(String msg);
     }
-
 
 	public void stopPolling() {
         shouldPoll.set(false);
