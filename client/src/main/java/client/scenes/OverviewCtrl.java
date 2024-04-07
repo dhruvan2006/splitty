@@ -186,8 +186,6 @@ public class OverviewCtrl implements Initializable {
     private void editExpense(Expense expense) {
         if (!updateLastUsed()) return;
         expensesCtrl.setEvent(event);
-        //expensesCtrl.setExpense(expense);
-        //expensesCtrl.initializeWithExpense(expense);
         expensesCtrl.initialize(expense);
         mainCtrl.showScene(expenseScene, "Edit Expense");
     }
@@ -246,6 +244,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void back(MouseEvent mouseEvent) {
+        handleTitleButton();
         mainCtrl.showStartScreen();
     }
 
