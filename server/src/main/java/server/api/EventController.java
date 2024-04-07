@@ -4,6 +4,8 @@ import commons.Event;
 import commons.Participant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
@@ -11,6 +13,7 @@ import server.database.EventRepository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/event")
@@ -134,5 +137,13 @@ public class EventController {
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
+    }
+    @MessageMapping("/websocket/{eventId}/participants")
+    @SendTo("/topic/participant")
+    public Optional<Event> addParticipantToEventWS(@PathVariable("eventId") Long eventId, @RequestBody Participant participant) {
+        return repo.findById(eventId).map(event -> {
+            event.addParticipant(participant);
+            return repo.save(event);
+        });
     }
 }

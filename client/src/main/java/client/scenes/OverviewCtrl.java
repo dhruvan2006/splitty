@@ -78,6 +78,7 @@ public class OverviewCtrl implements Initializable {
         updateParticipantsComboBox();
         updateParticipantsList();
         updateExpenseList();
+        server.registerForMessages("/topic/participant", Event.class, event1 -> {System.out.println("changed");});
     }
 
     private void updateParticipantsComboBox() {
@@ -118,6 +119,7 @@ public class OverviewCtrl implements Initializable {
         this.event = server.addParticipantToEvent(event.getId(), participant);
         updateParticipantsList();
         updateParticipantsComboBox();
+        server.send("/api/event/websocket/{eventId}/participants",participant);
     }
 
     public void updateParticipant(Participant updatedParticipant) {

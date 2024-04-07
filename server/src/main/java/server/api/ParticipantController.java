@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Participant;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.ParticipantRepository;
@@ -82,5 +83,4 @@ public class ParticipantController {
         }
         return ResponseEntity.ok(participants);
     }
-
 }
