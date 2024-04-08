@@ -5,7 +5,6 @@ import commons.Participant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,7 +15,6 @@ import server.database.EventRepository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/event")
@@ -146,11 +144,5 @@ public class EventController {
     @SendTo("/topic/event")
     public Event addParticipantToEventWS(@Payload Event event) {
         return event;
-    }
-    @MessageMapping("/vorvzakone")
-    @SendTo("/topic/participant")
-    public String vor(@Payload Participant participant) {
-        System.out.println("idi nahuj "+participant.getUserName());
-        return "idi nahuj " + participant.getUserName();
     }
 }
