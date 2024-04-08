@@ -2,9 +2,12 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ public class EventController {
 
     private final EventRepository repo;
 
+    @Autowired
     EventController(EventRepository repo){
         this.repo = repo;
     }
@@ -138,12 +142,15 @@ public class EventController {
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
     }
-    @MessageMapping("/websocket/{eventId}/participants")
+    @MessageMapping("/websocket/notify/event")
+    @SendTo("/topic/event")
+    public Event addParticipantToEventWS(@Payload Event event) {
+        return event;
+    }
+    @MessageMapping("/vorvzakone")
     @SendTo("/topic/participant")
-    public Optional<Event> addParticipantToEventWS(@PathVariable("eventId") Long eventId, @RequestBody Participant participant) {
-        return repo.findById(eventId).map(event -> {
-            event.addParticipant(participant);
-            return repo.save(event);
-        });
+    public String vor(@Payload Participant participant) {
+        System.out.println("idi nahuj "+participant.getUserName());
+        return "idi nahuj " + participant.getUserName();
     }
 }

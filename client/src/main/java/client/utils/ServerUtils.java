@@ -41,10 +41,8 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -52,15 +50,15 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 public class ServerUtils {
 
 	private static final String SERVER = Configuration.getInstance().getServerUrl();
-	private StompSession session = connect("ws//localhost:8080/websocket");
+	private StompSession session = connect("ws://localhost:8080/websocket");
 	private StompSession connect(String url){
 		var client = new StandardWebSocketClient();
 		var stomp = new WebSocketStompClient(client);
+		stomp.setMessageConverter(new MappingJackson2MessageConverter());
 		try {
-			return stomp.connect(url, new StompSessionHandler() {
+			return stomp.connectAsync(url, new StompSessionHandler() {
 				@Override
 				public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-
 				}
 
 				@Override
@@ -87,23 +85,9 @@ public class ServerUtils {
 			throw new RuntimeException(e);
 		}
 	}
+	//TO FINISH
 	public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
-		session.subscribe(SERVER, new StompSessionHandler() {
-			@Override
-			public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-
-			}
-
-			@Override
-			public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
-
-			}
-
-			@Override
-			public void handleTransportError(StompSession session, Throwable exception) {
-
-			}
-
+		session.subscribe(dest, new StompFrameHandler() {
 			@Override
 			public Type getPayloadType(StompHeaders headers) {
 				return type;
