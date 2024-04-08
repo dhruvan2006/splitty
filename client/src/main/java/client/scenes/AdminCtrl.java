@@ -209,6 +209,7 @@ public class AdminCtrl implements Initializable {
     private List<Expense> clearIds(Event event) {
         event.setId(0);
         event.getParticipants().forEach(participant -> participant.setId(0));
+        event.getExpenses().forEach(expense -> expense.setId(0));
         var lostExpenses = event.getExpenses();
         event.setExpenses(null);
         return lostExpenses;

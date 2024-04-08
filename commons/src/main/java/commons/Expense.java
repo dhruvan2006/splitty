@@ -3,7 +3,7 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -76,7 +76,6 @@ public class Expense {
         this.creator = creator;
     }
 
-
     public int getTotalExpense() {
         return totalExpense;
     }
@@ -95,8 +94,16 @@ public class Expense {
 
     @Override
     public String toString() {
-        return "Expense " + id +
-                " - " + title +
-                ", created by " + creator.toString() + "\n";
+        return "Expense{" +
+                "id=" + id +
+                ", creator=" + creator +
+                ", event=" + event +
+                ", totalExpense=" + totalExpense +
+                ", title='" + title + '\'' +
+                '}';
+    }
+
+    public int getSharePerPerson(int amountParticipants){
+        return getTotalExpense() == 0 ? 0 : amountParticipants == 0 ? getTotalExpense() : getTotalExpense()/amountParticipants;
     }
 }

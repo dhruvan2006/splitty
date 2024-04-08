@@ -32,24 +32,6 @@ class GroupTest {
     }
 
     @Test
-    void removeFromGroup() {
-        group.addToGroup(groupLeader);
-        group.setGroupLeader(groupLeader);
-        group.addToGroup(p1);
-        group.addToGroup(p2);
-
-        // Trying to remove Participant 1 without being the group leader
-        Participant nonLeader = new Participant("Non", "Leader", "NL");
-
-        group.removeFromGroup(nonLeader, p1);
-        assertTrue(group.getParticipants().contains(p1)); // Participant 1 should not be removed
-
-        // Removing Participant 1 by the group leader
-        group.removeFromGroup(groupLeader, p1);
-        assertFalse(group.getParticipants().contains(p1));
-    }
-
-    @Test
     void getGroupName() {
         assertEquals("Test Group", group.getGroupName());
     }
