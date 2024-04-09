@@ -65,8 +65,9 @@ public class OverviewCtrl implements Initializable {
         this.server = server;
         server.registerForMessages("/topic/event", Event.class, event1 -> {System.out.println("received");
             Platform.runLater(() -> {
-                if(event1.getId() == event.getId())
-                    mainCtrl.showOverviewWithEvent(event1);
+                if(event != null && event1.getId() == event.getId()) {
+                    event = event1;
+                    mainCtrl.showOverviewWithEvent(event);}
             });});
     }
 
