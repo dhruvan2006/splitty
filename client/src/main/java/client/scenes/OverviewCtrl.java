@@ -63,11 +63,13 @@ public class OverviewCtrl implements Initializable {
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        server.registerForMessages("/topic/event", Event.class, event1 -> {System.out.println("received");
+        server.registerForMessages("/topic/event", Event.class, event1 -> {
+            System.out.println("received");
             Platform.runLater(() -> {
                 if(event1.getId() == event.getId())
                     mainCtrl.showOverviewWithEvent(event1);
-            });});
+            });
+        });
     }
 
     public void initialize(Pair<ExpensesCtrl, Parent> pe) {
@@ -140,6 +142,7 @@ public class OverviewCtrl implements Initializable {
         updateParticipantsComboBox();
         updateFinancialDashboard();
         updateExpenseList();
+        server.send("/app/websocket/notify/event", event);
     }
 
     private void editParticipant(Participant participant) {
@@ -165,6 +168,7 @@ public class OverviewCtrl implements Initializable {
         alert.showAndWait().ifPresent(response -> {
             if (response == ok){
                 this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
+                server.send("/app/websocket/notify/event", event);
                 ArrayList<Expense> toDelete = new ArrayList<Expense>();
                 for (Expense expense: this.event.getExpenses()){
                     if (expense.getCreator().getId() == participant.getId()){
