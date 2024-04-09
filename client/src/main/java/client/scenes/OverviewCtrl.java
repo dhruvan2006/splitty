@@ -140,6 +140,7 @@ public class OverviewCtrl implements Initializable {
         updateParticipantsComboBox();
         updateFinancialDashboard();
         updateExpenseList();
+        server.send("/app/websocket/notify/event", event);
     }
 
     private void editParticipant(Participant participant) {
@@ -165,6 +166,7 @@ public class OverviewCtrl implements Initializable {
         alert.showAndWait().ifPresent(response -> {
             if (response == ok){
                 this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
+                server.send("/app/websocket/notify/event", event);
                 ArrayList<Expense> toDelete = new ArrayList<Expense>();
                 for (Expense expense: this.event.getExpenses()){
                     if (expense.getCreator().getId() == participant.getId()){
