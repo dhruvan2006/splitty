@@ -93,6 +93,7 @@ public class ExpensesCtrl implements Initializable {
             event.addExpense(updated);
         }
         clearFields();
+        server.send("/app/websocket/notify/event", event);
         mainCtrl.getOverviewCtrl().updateExpenseList();
         mainCtrl.showOverview();
     }

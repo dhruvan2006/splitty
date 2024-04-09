@@ -133,6 +133,7 @@ public class OverviewCtrl implements Initializable {
         updateParticipantsList();
         updateParticipantsComboBox();
         updateExpenseList();
+        server.send("/app/websocket/notify/event", event);
     }
 
     private void editParticipant(Participant participant) {
@@ -147,6 +148,7 @@ public class OverviewCtrl implements Initializable {
         this.event = server.removeParticipantFromEvent(event.getId(), participant.getId());
         updateParticipantsList();
         updateParticipantsComboBox();
+        server.send("/app/websocket/notify/event", event);
     }
 
     public void updateExpenseList() {
@@ -202,6 +204,7 @@ public class OverviewCtrl implements Initializable {
         event.getExpenses().remove(expense);
         server.deleteExpense(expense.getId());
         updateExpenseList();
+        server.send("/app/websocket/notify/event", event);
     }
 
     @FXML
