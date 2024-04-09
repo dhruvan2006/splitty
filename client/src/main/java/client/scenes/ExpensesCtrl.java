@@ -95,6 +95,7 @@ public class ExpensesCtrl implements Initializable {
         clearFields();
         server.send("/app/websocket/notify/event", event);
         mainCtrl.getOverviewCtrl().updateExpenseList();
+        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
     }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
@@ -143,7 +144,7 @@ public class ExpensesCtrl implements Initializable {
                 alert.showAndWait();
                 return null;
             }
-            if(unit > 100) {
+            if(unit >= 100) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText(bundle.getString("expense.too_much_decimals"));

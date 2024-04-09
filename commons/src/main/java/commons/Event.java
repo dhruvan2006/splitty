@@ -6,9 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Event {
@@ -147,4 +145,75 @@ public class Event {
                 ")";
     }
 
+
+    /**
+     * does the same, but for each participant within the event
+     */
+    public Map<Participant, Map<Participant, Integer>> calculateIndividualDebt() {
+        Map<Participant, Map<Participant, Integer>> indDebtsMap = new HashMap<>();
+
+        for (Participant participant : participants) {
+            indDebtsMap.put(participant, new HashMap<>());
+        }
+
+        for (Expense expense : expenses) {
+            int sharePerParticipant = expense.getSharePerPerson(participants.size());
+
+            for (Participant participant : participants) {
+                if (participant.equals(expense.getCreator())) continue;
+
+                int currentDebt = indDebtsMap.get(participant).getOrDefault(expense.getCreator(), 0);
+                currentDebt += sharePerParticipant;
+                indDebtsMap.get(participant).put(expense.getCreator(), currentDebt);
+            }
+        }
+
+        return indDebtsMap;
+    }
+
+    /**
+     * Calculates the individual debts and then cancels out any debts that two participants owe each other
+     * @return the optimized debt map
+     */
+    public Map<Participant, Map<Participant, Integer>> calculateOptimizedDebts() {
+        Map<Participant, Map<Participant, Integer>> individualDebts = calculateIndividualDebt();
+        Map<Participant, Map<Participant, Integer>> optimizedDebts = new HashMap<>();
+
+        // First, cancel out any debts that cancel each other out
+        for (Map.Entry<Participant, Map<Participant, Integer>> entry : individualDebts.entrySet()) {
+            Participant participant = entry.getKey();
+            Map<Participant, Integer> debts = entry.getValue();
+            optimizedDebts.put(participant, new HashMap<>(debts));
+
+            for (Map.Entry<Participant, Integer> debtEntry : debts.entrySet()) {
+                Participant other = debtEntry.getKey();
+                int debt = debtEntry.getValue();
+
+                if (debts.containsKey(other) && individualDebts.get(other) != null && individualDebts.get(other).containsKey(participant)) {
+                    int otherDebt = individualDebts.get(other).get(participant);
+                    if (debt == otherDebt) {
+                        optimizedDebts.get(participant).remove(other);
+                        optimizedDebts.computeIfPresent(other, (p, otherDebts) -> {
+                            otherDebts.remove(participant);
+                            return otherDebts;
+                        });
+                    } else if (debt < otherDebt) {
+                        optimizedDebts.get(participant).remove(other);
+                        optimizedDebts.computeIfPresent(other, (p, otherDebts) -> {
+                            otherDebts.put(participant, otherDebt - debt);
+                            return otherDebts;
+                        });
+                    } else {
+                        optimizedDebts.get(participant).put(other, debt - otherDebt);
+                        optimizedDebts.computeIfPresent(other, (p, otherDebts) -> {
+                            otherDebts.remove(participant);
+                            return otherDebts;
+                        });
+                    }
+                }
+            }
+        }
+
+        return optimizedDebts;
+    }
 }
