@@ -63,11 +63,13 @@ public class OverviewCtrl implements Initializable {
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        server.registerForMessages("/topic/event", Event.class, event1 -> {System.out.println("received");
+        server.registerForMessages("/topic/event", Event.class, event1 -> {
+            System.out.println("received");
             Platform.runLater(() -> {
                 if(event1.getId() == event.getId())
                     mainCtrl.showOverviewWithEvent(event1);
-            });});
+            });
+        });
     }
 
     public void initialize(Pair<ExpensesCtrl, Parent> pe) {
