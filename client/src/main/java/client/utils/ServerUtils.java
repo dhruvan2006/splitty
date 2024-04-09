@@ -21,9 +21,11 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.function.Consumer;
 
 import commons.Event;
 import commons.Expense;
@@ -37,11 +39,67 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.*;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
 	private static final String SERVER = Configuration.getInstance().getServerUrl();
+	private StompSession session = connect("ws://localhost:8080/websocket");
+	private StompSession connect(String url){
+		var client = new StandardWebSocketClient();
+		var stomp = new WebSocketStompClient(client);
+		stomp.setMessageConverter(new MappingJackson2MessageConverter());
+		try {
+			return stomp.connectAsync(url, new StompSessionHandler() {
+				@Override
+				public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+				}
 
+				@Override
+				public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
+
+				}
+
+				@Override
+				public void handleTransportError(StompSession session, Throwable exception) {
+
+				}
+
+				@Override
+				public Type getPayloadType(StompHeaders headers) {
+					return null;
+				}
+
+				@Override
+				public void handleFrame(StompHeaders headers, Object payload) {
+
+				}
+			}).get();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	//TO FINISH
+	public <T> void registerForMessages(String dest, Class<T> type, Consumer<T> consumer) {
+		session.subscribe(dest, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return type;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((T) payload);
+			}
+		});
+	}
+
+	public void send(String dest, Object o){
+		session.send(dest, o);
+	}
 	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
 		var url = new URI("http://localhost:8080/api/quotes").toURL();
 		var is = url.openConnection().getInputStream();

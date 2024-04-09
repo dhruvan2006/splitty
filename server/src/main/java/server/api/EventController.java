@@ -2,8 +2,12 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import server.database.EventRepository;
@@ -18,6 +22,7 @@ public class EventController {
 
     private final EventRepository repo;
 
+    @Autowired
     EventController(EventRepository repo){
         this.repo = repo;
     }
@@ -134,5 +139,10 @@ public class EventController {
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
+    }
+    @MessageMapping("/websocket/notify/event")
+    @SendTo("/topic/event")
+    public Event addParticipantToEventWS(@Payload Event event) {
+        return event;
     }
 }
