@@ -47,7 +47,11 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 public class ServerUtils {
 
 	private static final String SERVER = Configuration.getInstance().getServerUrl();
-	private StompSession session = connect("ws://localhost:8080/websocket");
+	private StompSession session;
+
+	public void connectWebSocket(){
+		session = connect("ws://"+ SERVER.substring(7, SERVER.length()-1) +"/websocket");
+	}
 	private StompSession connect(String url){
 		var client = new StandardWebSocketClient();
 		var stomp = new WebSocketStompClient(client);

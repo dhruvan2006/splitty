@@ -38,7 +38,7 @@ public class StartScreenCtrl {
     public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-
+        server.connectWebSocket();
         server.registerForMessages("/topic/event", Event.class, this::updateRecentEvents);
     }
 

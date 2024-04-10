@@ -63,6 +63,7 @@ public class OverviewCtrl implements Initializable {
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        server.connectWebSocket();
         server.registerForMessages("/topic/event", Event.class, event1 -> {
             System.out.println("received");
             Platform.runLater(() -> {

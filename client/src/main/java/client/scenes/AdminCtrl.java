@@ -59,6 +59,7 @@ public class AdminCtrl implements Initializable {
     public AdminCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        server.connectWebSocket();
     }
 
     @Override
