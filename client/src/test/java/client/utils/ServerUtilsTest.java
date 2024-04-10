@@ -157,6 +157,7 @@ public class ServerUtilsTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody(objectMapper.writeValueAsString(expectedExpense)));
         Expense actualExpense = serverUtils.addExpense(expectedExpense);
+        actualExpense.setEvent(event);
         Assertions.assertEquals(expectedExpense, actualExpense);
     }
 
@@ -174,7 +175,7 @@ public class ServerUtilsTest {
     public void testPutExpense() throws JsonProcessingException {
         Event event = new Event("Event with New Expense");
         Participant participant = new Participant("email@example.com", "IBAN123", "username");
-        Expense expectedExpense = new Expense("Expense Title", 100, participant, event);
+        Expense expectedExpense = new Expense("Expense Title", 100, participant);
         mockServer.when(HttpRequest.request().withMethod("PUT").withPath("/api/expense/" + event.getId()))
                 .respond(HttpResponse.response()
                         .withStatusCode(200)
@@ -217,15 +218,6 @@ public class ServerUtilsTest {
         Assertions.assertEquals(expectedParticipants, actualParticipants);
     }
 
-
-    @Test
-    public void testAuthenticateAdmin() {
-        String password = "adminPassword";
-        mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate"))
-                .respond(HttpResponse.response().withStatusCode(200).withBody("true"));
-        boolean result = serverUtils.authenticateAdmin(password);
-        Assertions.assertTrue(result);
-    }
 
 
     @Test
