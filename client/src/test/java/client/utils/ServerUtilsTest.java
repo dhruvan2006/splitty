@@ -13,7 +13,7 @@ import java.util.List;
 import static org.mockserver.verify.VerificationTimes.once;
 
 public class ServerUtilsTest {
-    private static final int MOCK_SERVER_PORT = 8080;
+    private static final int MOCK_SERVER_PORT = 1234;
     private static ClientAndServer mockServer;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private ServerUtils serverUtils;
@@ -31,6 +31,7 @@ public class ServerUtilsTest {
     @BeforeEach
     public void setUp() {
         serverUtils = new ServerUtils();
+        serverUtils.setSERVER("http://localhost:"+ MOCK_SERVER_PORT+ "/");
     }
 
     @AfterEach

@@ -46,12 +46,19 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
-	private static final String SERVER = Configuration.getInstance().getServerUrl();
+	private static String SERVER = Configuration.getInstance().getServerUrl();
 	private StompSession session;
 
 	public void connectWebSocket(){
 		session = connect("ws://"+ SERVER.substring(7, SERVER.length()-1) +"/websocket");
 	}
+
+
+	//For testing
+	public void setSERVER(String SERVER) {
+		this.SERVER = SERVER;
+	}
+
 	private StompSession connect(String url){
 		var client = new StandardWebSocketClient();
 		var stomp = new WebSocketStompClient(client);
