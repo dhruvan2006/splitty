@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import server.database.EventRepository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -31,15 +34,21 @@ class EventControllerTest {
 
     private Event event;
     private Participant participant;
+    private Participant updatedParticipant;
 
 
     @BeforeEach
     void setUp() {
         event = new Event("Sample Event");
         event.setId(1L);
+        event.setLastUsed(Timestamp.valueOf(LocalDateTime.now().minusDays(1)));
+
         participant = new Participant();
         participant.setId(1L);
         event.addParticipant(participant);
+
+        updatedParticipant = new Participant();
+        updatedParticipant.setId(1L);
     }
 
 
@@ -242,5 +251,76 @@ class EventControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         verify(eventRepository, never()).deleteById(nonExistentId);
+    }
+
+
+    @Test
+    void testUpdateEventLastAccess() {
+        Long eventId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+        when(eventRepository.save(event)).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ResponseEntity<Event> response = eventController.updateEventLastAccess(eventId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(eventId, response.getBody().getId());
+        assertTrue(response.getBody().getLastUsed().toLocalDateTime().isAfter(now.minusSeconds(1))); // check if the lastUsed time changed from previous day to rn
+        verify(eventRepository).save(event);
+    }
+
+    @Test
+    void testUpdateEventLastAccess_NotFound() {
+        Long eventId = 2L;
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        ResponseEntity<Event> response = eventController.updateEventLastAccess(eventId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+
+    @Test
+    void testValidUpdateParticipantInEvent() {
+        Long eventId = 1L;
+        Long participantId = 1L;
+
+        Event mockEvent = mock(Event.class);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(mockEvent));
+        when(mockEvent.updateParticipant(participantId, updatedParticipant)).thenReturn(true);
+        when(eventRepository.save(mockEvent)).thenReturn(mockEvent);
+
+        ResponseEntity<Event> response = eventController.updateParticipantInEvent(eventId, participantId, updatedParticipant);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        verify(eventRepository).save(mockEvent);
+    }
+
+    @Test
+    void testUpdateParticipantInEvent_ParticipantNotFound() {
+        Long eventId = 1L;
+        Long participantId = 2L;
+
+        Event mockEvent = mock(Event.class);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(mockEvent));
+        when(mockEvent.updateParticipant(participantId, updatedParticipant)).thenReturn(false);
+
+        ResponseEntity<Event> response = eventController.updateParticipantInEvent(eventId, participantId, updatedParticipant);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(eventRepository, never()).save(event);
+    }
+
+    @Test
+    void testUpdateParticipantInEvent_EventNotFound() {
+        Long eventId = 99L;
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        ResponseEntity<Event> response = eventController.updateParticipantInEvent(eventId, 1L, updatedParticipant);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }
