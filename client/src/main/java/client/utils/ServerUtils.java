@@ -218,7 +218,7 @@ public class ServerUtils {
 					if (response.statusCode() == 200) {
 						Gson gson = new Gson();
 						Event event = gson.fromJson(response.body(), Event.class);
-						listener.onEventUpdate(response.body());
+						listener.onEventUpdate(event);
 					} else if (response.statusCode() == 204) {
 						listener.onTimeout();
 					} else {
