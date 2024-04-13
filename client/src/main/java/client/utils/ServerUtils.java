@@ -47,6 +47,7 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 
+import com.google.gson.Gson;
 
 
 public class ServerUtils {
@@ -211,9 +212,12 @@ public class ServerUtils {
 								.GET()
 								.build();
 
-					HttpResponse<Event> response = httpClient.send(request, HttpResponse.BodyHandlers.ofObject(Event.class));
+					HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+	
 
 					if (response.statusCode() == 200) {
+						Gson gson = new Gson();
+						Event event = gson.fromJson(response.body(), Event.class);
 						listener.onEventUpdate(response.body());
 					} else if (response.statusCode() == 204) {
 						listener.onTimeout();
@@ -235,16 +239,13 @@ public class ServerUtils {
 
 		private AtomicBoolean isTimeout = new AtomicBoolean(false);
 
-
 		public void onEventUpdate(Event event) {
 			System.out.println("Received event update: " + event.toString());
 		}
 
-
 		public void onTimeout() {
 			isTimeout.set(true);
 		}
-
 
 		public void onError(String msg) {
 			System.err.println("Error during long-polling: " + msg);
