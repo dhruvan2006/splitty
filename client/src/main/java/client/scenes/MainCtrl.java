@@ -127,7 +127,11 @@ public class MainCtrl {
         return overviewCtrl;
     }
 
-    public void showNotification(String message, String color) {
+    public Scene getCurrentScene(){
+        return primaryStage.getScene();
+    }
+
+    public void showNotification(String message, String color, double duration) {
         Popup popup = new Popup();
         Label label = new Label(message);
         label.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-padding: 10;");
@@ -139,7 +143,7 @@ public class MainCtrl {
         });
         popup.show(primaryStage);
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        PauseTransition delay = new PauseTransition(Duration.seconds(duration));
         delay.setOnFinished(e -> popup.hide());
         delay.play();
     }

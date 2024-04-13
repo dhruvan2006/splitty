@@ -69,6 +69,9 @@ public class OverviewCtrl implements Initializable {
                 if(event1.getId() == event.getId()) {
                     setEvent(event1);
                     initialize();
+                    if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())){
+                        mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 15);
+                    };
                 }
             });
         });
