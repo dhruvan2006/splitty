@@ -2,7 +2,6 @@ package server.service;
 
 import commons.Expense;
 import org.springframework.stereotype.Service;
-import server.database.ExpensePayedRepository;
 import server.database.ExpensesRepository;
 
 import java.util.List;
@@ -11,11 +10,9 @@ import java.util.Optional;
 @Service
 public class ExpenseService {
     private final ExpensesRepository expensesRepository;
-    private final ExpensePayedRepository expensePayedRepository;
 
-    public ExpenseService(ExpensesRepository expensesRepository, ExpensePayedRepository expensePayedRepository) {
+    public ExpenseService(ExpensesRepository expensesRepository) {
         this.expensesRepository = expensesRepository;
-        this.expensePayedRepository = expensePayedRepository;
     }
 
     public List<Expense> getAllExpenses(int page, int size, String sortBy, String sortOrder) {
