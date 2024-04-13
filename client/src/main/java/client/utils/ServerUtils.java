@@ -195,47 +195,66 @@ public class ServerUtils {
 	}
 
     public void subscribeToEventUpdates(Long eventId, EventUpdateListener listener) {
-		shouldPoll.set(true);
-
 		CompletableFuture.runAsync(() -> {
-			WebTarget target = ClientBuilder.newClient(new ClientConfig())
-					.target(SERVER).path("api/event/" + eventId + "/updates");
-
-			while (shouldPoll.get()) {
+			// Continuously poll for updates until interrupted or timeout
+			while (!Thread.currentThread().isInterrupted()) {
 				try {
-					Response response = target.request(MediaType.APPLICATION_JSON).get();
-					if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-						listener.onEventUpdate(response.readEntity(Event.class));
-					} else if (response.getStatus() == Response.Status.REQUEST_TIMEOUT.getStatusCode()) {
+					// Perform long-polling request to the server
+					HttpClient httpClient = HttpClient.newHttpClient();
+					HttpRequest request = HttpRequest.newBuilder()
+								.uri(URI.create("/api/event/" + eventId + "/updates"))
+								.GET()
+								.build();
+
+					HttpResponse<Event> response = httpClient.send(request, HttpResponse.BodyHandlers.ofObject(Event.class));
+
+					if (response.statusCode() == 200) {
+						listener.onEventUpdate(response.body());
+					} else if (response.statusCode() == 204) {
 						listener.onTimeout();
 					} else {
-						listener.onError(response.getStatusInfo().getReasonPhrase());
+						listener.onError("Error: " + response.statusCode());
 					}
-					response.close();
-				} catch (Exception e) {
-					listener.onError(e.getMessage());
-				}
 
-				// Wait before making the next request
-				try {
-					TimeUnit.SECONDS.sleep((long) 0.5);
+					TimeUnit.SECONDS.sleep(1); 
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
+				} catch (Exception e) {
+					listener.onError(e.getMessage());
 				}
 			}
 		});
 	}
 
-	//to be implemented
-	public interface EventUpdateListener {
-        void onEventUpdate(Event event);
+	public class EventUpdateListener {
 
-        void onTimeout();
+		private AtomicBoolean isTimeout = new AtomicBoolean(false);
 
-        void onError(String msg);
-    }
+		@Override
+		public void onEventUpdate(Event event) {
+			System.out.println("Received event update: " + event.toString());
+		}
 
-	public void stopPolling() {
+		@Override
+		public void onTimeout() {
+			isTimeout.set(true);
+		}
+
+		@Override
+		public void onError(String msg) {
+			System.err.println("Error during long-polling: " + msg);
+		}
+
+		public boolean isTimeout() {
+			return isTimeout.get();
+		}
+
+		public void resetTimeout() {
+			isTimeout.set(false);
+		}
+	}
+
+	protected void stopPolling() {
         shouldPoll.set(false);
     }
 

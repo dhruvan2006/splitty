@@ -142,19 +142,16 @@ public class EventController {
 
     @GetMapping("/{eventId}/updates")
     public DeferredResult<ResponseEntity<Event>> getEventUpdates(@PathVariable("eventId") Long eventId) {
-        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>();
-        deferredResults.put(eventId, deferredResult);
-        deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
+        DeferredResult<ResponseEntity<Event>> deferredResult = new DeferredResult<>(5000L); // 5 seconds timeout
 
-        // The timeout for long polling
-        deferredResult.onTimeout(() -> {
-            deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(null));
-        });
+        deferredResults.put(eventId, deferredResult);
+
+        deferredResult.onCompletion(() -> deferredResults.remove(eventId, deferredResult));
+        deferredResult.onTimeout(() -> deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(null)));
 
         return deferredResult;
     }
 
-    // Method to handle updates to events
     public void handleEventUpdate(Long eventId, Event event) {
         DeferredResult<ResponseEntity<Event>> deferredResult = deferredResults.get(eventId);
         if (deferredResult != null) {
