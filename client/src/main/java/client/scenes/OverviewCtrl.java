@@ -31,8 +31,6 @@ public class OverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    boolean isEditingTitle = false;
-
     private Event event;
 
     @FXML
@@ -66,10 +64,12 @@ public class OverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.server = server;
         server.registerForMessages("/topic/event", Event.class, event1 -> {
-            System.out.println("received");
+            if (this.event == null) return;
             Platform.runLater(() -> {
-                if(event1.getId() == event.getId())
-                    mainCtrl.showOverviewWithEvent(event1);
+                if(event1.getId() == event.getId()) {
+                    setEvent(event1);
+                    initialize();
+                }
             });
         });
     }
@@ -271,7 +271,6 @@ public class OverviewCtrl implements Initializable {
     @FXML
     public void handleTitleButton() {
         if (!updateLastUsed()) return;
-        isEditingTitle = !isEditingTitle;
         if (!titleHBox.getChildren().contains(titleTextField)) {
             titleHBox.getChildren().addFirst(titleTextField);
             titleTextField.setText(titleLabel.getText());
@@ -296,7 +295,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void back(MouseEvent mouseEvent) {
-        if (isEditingTitle) handleTitleButton();
+        handleTitleButton();
         mainCtrl.showStartScreen();
     }
 
