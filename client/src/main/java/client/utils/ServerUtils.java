@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 import commons.Event;
 import commons.Expense;
@@ -42,6 +46,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+
 
 
 public class ServerUtils {
@@ -230,17 +235,17 @@ public class ServerUtils {
 
 		private AtomicBoolean isTimeout = new AtomicBoolean(false);
 
-		@Override
+
 		public void onEventUpdate(Event event) {
 			System.out.println("Received event update: " + event.toString());
 		}
 
-		@Override
+
 		public void onTimeout() {
 			isTimeout.set(true);
 		}
 
-		@Override
+
 		public void onError(String msg) {
 			System.err.println("Error during long-polling: " + msg);
 		}
