@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -181,5 +182,65 @@ class EventControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         verify(eventRepository).findById(1L);
         verify(eventRepository, never()).save(any(Event.class));
+    }
+
+
+    @Test
+    void testValidCreateEvent() {
+        when(eventRepository.save(event)).thenReturn(event);
+
+        ResponseEntity<Event> response = eventController.createEvent(event);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(event, response.getBody());
+        verify(eventRepository).save(event);
+    }
+
+    @Test
+    void testInvalidCreateEvent() {
+        Event invalidEvent = new Event("Invalid Event") {
+            @Override
+            public boolean checkNull() {
+                return false; // simulate a failure of eduard's check
+            }
+        };
+
+        ResponseEntity<Event> response = eventController.createEvent(invalidEvent);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+    @Test
+    void testNullCreateEvent() {
+        ResponseEntity<Event> response = eventController.createEvent(null);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+
+    @Test
+    void testValidDeleteEvent() {
+        Long validId = 1L;
+        when(eventRepository.existsById(validId)).thenReturn(true);
+
+        ResponseEntity<Void> response = eventController.deleteEvent(validId);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(eventRepository).deleteById(validId);
+    }
+
+    @Test
+    void testInvalidDeleteEvent() {
+        Long nonExistentId = 2L;
+        when(eventRepository.existsById(nonExistentId)).thenReturn(false);
+
+        ResponseEntity<Void> response = eventController.deleteEvent(nonExistentId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        verify(eventRepository, never()).deleteById(nonExistentId);
     }
 }
