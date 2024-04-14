@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
+import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -146,4 +147,42 @@ public class EventController {
     public Event addParticipantToEventWS(@Payload Event event) {
         return event;
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable("id") Long id) {
+        Optional<Event> event = repo.findById(id);
+        return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/participants")
+    public ResponseEntity<List<Participant>> getParticipantsByEventId(@PathVariable("id") Long id) {
+        return repo.findById(id)
+                .map(event -> ResponseEntity.ok(event.getParticipants()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/expenses")
+    public ResponseEntity<List<Expense>> getExpensesByEventId(@PathVariable("id") Long id) {
+        return repo.findById(id)
+                .map(event -> ResponseEntity.ok(event.getExpenses()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{id}/expenses")
+    public ResponseEntity<Event> addExpenseToEvent(@PathVariable("id") Long eventId, @RequestBody Expense expense) {
+        return repo.findById(eventId).map(event -> {
+            event.addExpense(expense);
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{eventId}/debts")
+    public ResponseEntity<Map<Participant, Map<Participant, Integer>>> calculateDebtsForEvent(@PathVariable("eventId") Long eventId) {
+        return repo.findById(eventId)
+                .map(Event::calculateOptimizedDebts)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }

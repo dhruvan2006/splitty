@@ -1,6 +1,7 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
+import client.interactors.Interactor;
+import client.utils.ServerUtilsInterface;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
@@ -8,26 +9,28 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ExpensesCtrl implements Initializable {
-    private final ServerUtils server;
+    private final ServerUtilsInterface server;
     private final MainCtrl mainCtrl;
+    private final Interactor expenseInteractor;
     @FXML
     public Button finishButton;
 
     @FXML
-    private ComboBox username;
+    private ComboBox<String> username;
     @FXML
     private TextField description;
+
+
     @FXML
     private TextField amount;
     private Event event;
@@ -61,10 +64,12 @@ public class ExpensesCtrl implements Initializable {
         this.event = event;
     }
 
+
     @Inject
-    public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl, Interactor expenseInteractor) {
+        this.expenseInteractor = expenseInteractor;
         this.server = server;
-        server.connectWebSocket();
+        //server.connectWebSocket();
         this.mainCtrl = mainCtrl;
         editMode = false;
         expense = null;
@@ -74,9 +79,9 @@ public class ExpensesCtrl implements Initializable {
         mainCtrl.showOverview();
     }
 
-    private void clearFields() {
-        description.clear();
-        amount.clear();
+    public void clearFields() {
+        expenseInteractor.clear(description);
+        expenseInteractor.clear(amount);
     }
 
     public void modify() {
@@ -98,25 +103,41 @@ public class ExpensesCtrl implements Initializable {
         mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
     }
+//    public void modify(String sUsername, String sAmount, String sDescription) {
+//        Expense modify = getExpenses();
+//        if (modify == null) return;
+//        if (!updateLastUsed()) return;
+//        System.out.println(modify.getCreator());
+//        if (!editMode){
+//            Expense added = server.addExpense(modify);
+//            event.addExpense(added);
+//        }
+//        else {
+//            event.getExpenses().remove(expense);
+//            Expense updated = server.putExpense(expense.getId(), modify);
+//            event.addExpense(updated);
+//        }
+//        clearFields();
+//        mainCtrl.getOverviewCtrl().updateExpenseList();
+//        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
+//        mainCtrl.showOverview();
+//    }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
         var participants = mainCtrl.getOverviewCtrl().getEvent().getParticipants();
-        var filtered = participants.stream().filter(x -> Objects.equals(username.getSelectionModel().getSelectedItem(), x.getUserName()));
+        return getExpenses(participants, username.getSelectionModel().getSelectedItem(), amount.getText(), description.getText());
+    }
+    public Expense getExpenses(List<Participant> participants, String sUsername, String sAmount, String sDescription) {
+        var filtered = participants.stream().filter(x -> Objects.equals(sUsername, x.getUserName()));
         var any = filtered.findAny();
         if(any.isEmpty()) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(bundle.getString("expense.participant_not_found"));
-            alert.showAndWait();
+            expenseInteractor.createAlert(bundle.getString("expense.participant_not_found"));
             return null;
         }
         int totalExpense;
-        String[] twoParts = amount.getText().split("\\.");
+        String[] twoParts = sAmount.split("\\.");
         if(twoParts.length > 2) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("At most one \".\"");
-            alert.showAndWait();
+            expenseInteractor.createAlert("At most one \".\"");
             return null;
         }
         String first = twoParts[0];
@@ -125,10 +146,7 @@ public class ExpensesCtrl implements Initializable {
             centum = Integer.parseInt(first);
         }
         catch (Exception e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(bundle.getString("expense.error_amount"));
-            alert.showAndWait();
+            expenseInteractor.createAlert(bundle.getString("expense.error_amount"));
             return null;
         }
         int unit = 0;
@@ -138,46 +156,36 @@ public class ExpensesCtrl implements Initializable {
                 unit = Integer.parseInt(second);
             }
             catch (Exception e) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(bundle.getString("expense.error_amount"));
-                alert.showAndWait();
+                expenseInteractor.createAlert(bundle.getString("expense.error_amount"));
                 return null;
             }
             if(unit >= 100) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(bundle.getString("expense.too_much_decimals"));
-                alert.showAndWait();
+                expenseInteractor.createAlert(bundle.getString("expense.too_much_decimals"));
                 return null;
             }
             if(second.length() == 1)
                 unit*=10;
         }
         totalExpense = centum*100+unit;
-        return new Expense(description.getText(), totalExpense, any.get(), event);
+        return new Expense(sDescription, totalExpense, any.get(), event);
     }
 
     public void initializeWithExpense(Expense expense) {
-        username.getSelectionModel().select(expense.getCreator().getUserName());
-        description.setText(expense.getTitle());
-        amount.setText(expense.getTotalExpenseString());
+        expenseInteractor.select(username, expense.getCreator().getUserName());
+        expenseInteractor.setText(description, expense.getTitle());
+        expenseInteractor.setText(amount, expense.getTotalExpenseString());
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.bundle = resourceBundle;
     }
 
-    private boolean updateLastUsed() {
+    public boolean updateLastUsed() {
         try{
             server.updateLastUsedDate(event.getId());
         }
         catch (WebApplicationException e){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Something went wrong");
-            alert.showAndWait();
+            expenseInteractor.createAlert("Something went wrong");
             return false;
         }
         return true;

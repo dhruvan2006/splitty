@@ -42,7 +42,7 @@ import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-public class ServerUtils {
+public class ServerUtils implements ServerUtilsInterface {
 
 	private static String SERVER = Configuration.getInstance().getServerUrl();
 
@@ -224,6 +224,7 @@ public class ServerUtils {
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
+
 	public boolean authenticateAdmin(String password) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("admin/authenticate")
@@ -231,6 +232,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(new Form().param("password", password), APPLICATION_FORM_URLENCODED), Boolean.class);
 	}
+
 
 	public Event updateLastUsedDate(Long id){
 		return ClientBuilder.newClient(new ClientConfig())

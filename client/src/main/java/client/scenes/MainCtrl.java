@@ -142,4 +142,7 @@ public class MainCtrl {
         delay.play();
     }
 
+    public Stage getPrimaryStage() {
+        return this.primaryStage;
+    }
 }

@@ -46,6 +46,7 @@ public class Main extends Application {
 
 
     public void start(Stage primaryStage) throws IOException {
+        FXML.updateLanguage();
         var expense = FXML.load(ExpensesCtrl.class, "client", "scenes", "Expenses.fxml");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
