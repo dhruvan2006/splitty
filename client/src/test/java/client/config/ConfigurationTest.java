@@ -57,7 +57,7 @@ class ConfigurationTest {
         testProperties2.setProperty("server.url", "https://example.com:6969/");
         Configuration configuration2 = Configuration.getInstance(testProperties2);
 
-        assertEquals(configuration1.hashCode(), configuration2.hashCode());
+        assertEquals(configuration.hashCode(), configuration2.hashCode());
         
     }
 
