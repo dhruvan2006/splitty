@@ -31,11 +31,18 @@ class ConfigurationTest {
     }
 
     @Test
-    void testDefaultProperties() {
+    void testDefaultSame() {
         Configuration configuration1 = Configuration.getInstance();
         Configuration configuration2 = Configuration.getInstance();
         assertSame(configuration1,configuration2);
     }
+
+    @Test
+    void testDefaultURL() {
+        Configuration configuration = Configuration.getInstance();
+        assertEquals("http://localhost:8080/",configuration.getServerUrl());
+    }
+
 
     @Test
     void testEquals() {
