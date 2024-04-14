@@ -24,10 +24,7 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 
 import java.net.URL;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class OverviewCtrl implements Initializable {
 
@@ -101,6 +98,11 @@ public class OverviewCtrl implements Initializable {
         updateParticipantsComboBox();
         updateExpenseList();
         updateFinancialDashboard();
+        server.getEventTitle(q -> {
+            Platform.runLater(() -> {
+                titleLabel.setText(q);
+            });
+            }, event.getId());
     }
 
     private void updateParticipantsComboBox() {
@@ -391,5 +393,9 @@ public class OverviewCtrl implements Initializable {
     public void test(ActionEvent actionEvent) {
         participantsComboBox.getValue();
         updateExpenseList();
+    }
+
+    public void stop(){
+        server.stop();
     }
 }

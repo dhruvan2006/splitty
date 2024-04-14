@@ -11,11 +11,16 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Controller
 @RequestMapping("/api/event")
@@ -31,6 +36,41 @@ public class EventController {
     @GetMapping("")
     public ResponseEntity<List<Event>> getAllEvents() {
         return ResponseEntity.ok(repo.findAll());
+    }
+
+
+    private Map<Object, Consumer<String>> listeners = new HashMap<>();
+    @GetMapping("/{id}/title")
+    public DeferredResult<ResponseEntity<String>> getEventTitle(@PathVariable("id") long id) {
+
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<String>>(10000L, noContent);
+
+        var key = new Object();
+        listeners.put(key, t -> {
+            res.setResult(ResponseEntity.ok(t));
+        });
+
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return res;
+    }
+
+    @PutMapping("/{id}/title")
+    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") long id, @RequestBody String newTitle) {
+        if (newTitle == null || newTitle.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        listeners.forEach((k,l) -> l.accept(newTitle));
+
+        return repo.findById(id).map(event -> {
+            event.setTitle(newTitle);
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/invite/{inviteCode}")
@@ -60,19 +100,6 @@ public class EventController {
         repo.deleteById(id);
 
         return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{id}/title")
-    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") long id, @RequestBody String newTitle) {
-        if (newTitle == null || newTitle.trim().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return repo.findById(id).map(event -> {
-            event.setTitle(newTitle);
-            Event updatedEvent = repo.save(event);
-            return ResponseEntity.ok(updatedEvent);
-        }).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{eventId}/participants")
