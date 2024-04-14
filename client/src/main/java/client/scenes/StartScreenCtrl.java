@@ -13,8 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
@@ -68,6 +71,23 @@ public class StartScreenCtrl {
         languageDropdown.getItems().addAll(
                 List.of("en", "nl")
         );
+        languageDropdown.setCellFactory(e -> new ListCell<String>() {
+            private final ImageView view = new ImageView();
+            @Override
+            public void updateItem(String name, boolean empty) {
+                super.updateItem(name, empty);
+                if(empty) {
+                    setGraphic(null);
+                }
+                else {
+                    view.setImage(new Image(String.format("images/%s.jpg", name)));
+                    view.setFitWidth(30);
+                    view.setFitHeight(20);
+                    setGraphic(view);
+                    setText(name);
+                }
+            }
+        });
     }
 
 
