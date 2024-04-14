@@ -200,9 +200,23 @@ public class ServerUtilsTest {
         Assertions.assertEquals(expectedEvent, actualEvent);
     }
 
+    @Test
+    public void testAuthenticateAdmin() {
+        String correctPassword = "correctPassword";
+        String incorrectPassword = "incorrectPassword";
 
+        mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate"))
+                .respond(HttpResponse.response().withStatusCode(200).withBody("true"));
 
+        boolean authenticated = serverUtils.authenticateAdmin(correctPassword);
+        Assertions.assertTrue(authenticated);
 
+        mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate"))
+                .respond(HttpResponse.response().withStatusCode(200).withBody("false"));
+
+        authenticated = serverUtils.authenticateAdmin(incorrectPassword);
+        Assertions.assertFalse(authenticated);
+    }
 
 
 
