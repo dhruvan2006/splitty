@@ -151,18 +151,6 @@ public class EventController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{eventId}/expenses/{expenseId}")
-    public ResponseEntity<Event> removeExpenseFromEvent(@PathVariable("eventId") Long eventId, @PathVariable("expenseId") Long expenseId) {
-        return repo.findById(eventId).map(event -> {
-            boolean removed = event.getExpenses().removeIf(expense -> Objects.equals(expense.getId(), expenseId));
-            if (!removed) {
-                return ResponseEntity.notFound().build();
-            }
-            Event updatedEvent = repo.save(event);
-            return ResponseEntity.ok(updatedEvent);
-        }).orElse(ResponseEntity.notFound().<Event>build());
-    }
-
     @GetMapping("/{eventId}/debts")
     public ResponseEntity<Map<Participant, Map<Participant, Integer>>> calculateDebtsForEvent(@PathVariable("eventId") Long eventId) {
         return repo.findById(eventId)
