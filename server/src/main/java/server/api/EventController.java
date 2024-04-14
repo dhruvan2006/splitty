@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
+import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import server.database.EventRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/api/event")
@@ -159,7 +160,7 @@ public class EventController {
             }
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
-        }).orElse(ResponseEntity.notFound().build());
+        }).orElse(ResponseEntity.notFound().<Event>build());
     }
 
     @GetMapping("/{eventId}/debts")
