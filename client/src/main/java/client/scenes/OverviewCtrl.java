@@ -20,7 +20,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
-import javafx.util.Callback;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
