@@ -121,6 +121,7 @@ public class ParticipantCtrl implements Initializable {
             overviewCtrl.addParticipant(participant);
         }
         mainCtrl.showOverview();
+        editingParticipant = null;
     }
 
     public boolean checkParticipantExistence(List<Participant> participantList) {

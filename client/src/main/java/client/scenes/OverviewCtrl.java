@@ -7,6 +7,7 @@ import commons.Expense;
 import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -20,10 +21,12 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.util.Pair;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -43,7 +46,7 @@ public class OverviewCtrl implements Initializable {
     private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
 
     @FXML
-    private ComboBox<String> participantsComboBox;
+    private ComboBox<Participant> participantsComboBox;
 
     @FXML
     private TextField titleTextField;
@@ -100,10 +103,28 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void updateParticipantsComboBox() {
+        Participant oldValue = participantsComboBox.getValue();
+        participantsComboBox.setConverter(new StringConverter<Participant>() {
+            @Override
+            public String toString(Participant participant) {
+                if (participant == null) return null;
+                return participant.getUserName();
+            }
+
+            @Override
+            public Participant fromString(String string) {
+                return null;
+            }
+        });
         participantsComboBox.getItems().clear();
+        participantsComboBox.getItems().add(null);
         participantsComboBox.getItems().addAll(
-                event.getParticipants().stream().map(Participant::getUserName).toList()
+                event.getParticipants()
         );
+        if (participantsComboBox.getItems().contains(oldValue)) {
+            participantsComboBox.setValue(oldValue);
+        }
+        else participantsComboBox.setValue(participantsComboBox.getItems().getFirst());
     }
 
     private void updateParticipantsList() {
@@ -200,9 +221,14 @@ public class OverviewCtrl implements Initializable {
             Label label = new Label(bundle.getString("overview.no_expenses"));
             label.setStyle("-fx-font-size: 20");
             expenseListVBox.getChildren().add(label);
+            return;
         }
 
         for (Expense expense : event.getExpenses()) {
+            if (!Objects.equals(expense.getCreator(), participantsComboBox.getValue())
+                    && !Objects.equals(participantsComboBox.getValue(), null)){
+                continue;
+            }
             TextFlow flow = new TextFlow();
 
             Text payer = new Text(expense.getCreator().getUserName());
@@ -231,6 +257,14 @@ public class OverviewCtrl implements Initializable {
 
             expenseHBox.getChildren().addAll(flow, spacer, editButton, deleteButton);
             expenseListVBox.getChildren().add(expenseHBox);
+        }
+
+        if (expenseListVBox.getChildren().isEmpty()) {
+            Label label = new Label(bundle.getString("overview.no_expenses") + " "
+                    + bundle.getString("globals.of") + " "
+                    + participantsComboBox.getValue().getUserName());
+            label.setStyle("-fx-font-size: 20");
+            expenseListVBox.getChildren().add(label);
         }
     }
 
@@ -356,5 +390,10 @@ public class OverviewCtrl implements Initializable {
         } else {
             debtsListView.setPlaceholder(new Label(""));
         }
+    }
+
+    public void test(ActionEvent actionEvent) {
+        participantsComboBox.getValue();
+        updateExpenseList();
     }
 }
