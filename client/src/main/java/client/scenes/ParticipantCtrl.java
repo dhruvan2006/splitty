@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -79,7 +80,7 @@ public class ParticipantCtrl implements Initializable {
 
     public void Cancel() {
         clearFields();
-        System.out.println("Canceled creation of event");
+        editingParticipant = null;
         mainCtrl.showOverview();
     }
 
@@ -120,6 +121,15 @@ public class ParticipantCtrl implements Initializable {
             overviewCtrl.addParticipant(participant);
         }
         mainCtrl.showOverview();
+    }
+
+    public boolean checkParticipantExistence(List<Participant> participantList) {
+        // editingParticipant != null means we are editing a participant, not creating one
+        if (editingParticipant != null && !participantList.contains(editingParticipant)) {
+            Cancel();
+            return false;
+        }
+        return true;
     }
 
     private boolean updateLastUsed() {

@@ -65,10 +65,15 @@ public class OverviewCtrl implements Initializable {
         this.server = server;
         server.connectWebSocket();
         server.registerForMessages("/topic/event", Event.class, event1 -> {
-            System.out.println("received");
+            if (this.event == null) return;
             Platform.runLater(() -> {
-                if(event1.getId() == event.getId())
-                    mainCtrl.showOverviewWithEvent(event1);
+                if(event1.getId() == event.getId()) {
+                    setEvent(event1);
+                    initialize();
+                    if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())){
+                        mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 15);
+                    };
+                }
             });
         });
     }

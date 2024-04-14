@@ -91,7 +91,7 @@ public class AdminCtrl implements Initializable {
                             server.deleteEventById(eventToDelete.getId());
                             refresh();
                             // success
-                            mainCtrl.showNotification("Event deleted successfully", "#4CAF50");
+                            mainCtrl.showNotification("Event deleted successfully", "#4CAF50", 2);
                         }
                     });
                 }
@@ -117,12 +117,12 @@ public class AdminCtrl implements Initializable {
                             boolean saved = saveJsonToFile(json, eventData.getTitle());
                             if (saved) {
                                 // success
-                                mainCtrl.showNotification("Event exported successfully", "#4CAF50");
+                                mainCtrl.showNotification("Event exported successfully", "#4CAF50", 2);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                             // error
-                            mainCtrl.showNotification("Event export failed", "#F44336");
+                            mainCtrl.showNotification("Event export failed", "#F44336", 2);
                         }
                     });
                 }
@@ -177,7 +177,7 @@ public class AdminCtrl implements Initializable {
                 importEventFromJSON(jsonContent);
             } catch (IOException e) {
                 e.printStackTrace();
-                mainCtrl.showNotification("Error importing event", "#F44336");
+                mainCtrl.showNotification("Error importing event", "#F44336", 2);
             }
         }
     }
@@ -195,13 +195,13 @@ public class AdminCtrl implements Initializable {
                 Event newEvent = server.addEvent(eventToImport);
                 addExpenses(lostExpenses, newEvent);
                 refresh();
-                mainCtrl.showNotification("Event imported successfully", "#4CAF50");
+                mainCtrl.showNotification("Event imported successfully", "#4CAF50", 2);
             } else {
                 handleInviteCodeConflict(eventToImport);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            mainCtrl.showNotification("Error importing event", "#F44336");
+            mainCtrl.showNotification("Error importing event", "#F44336", 2);
         }
     }
 
@@ -219,9 +219,9 @@ public class AdminCtrl implements Initializable {
             Event newEvent = server.addEvent(eventToImport);
             addExpenses(lostExpenses, newEvent);
             refresh();
-            mainCtrl.showNotification("Event imported successfully", "#4CAF50");
+            mainCtrl.showNotification("Event imported successfully", "#4CAF50", 2);
         } else {
-            mainCtrl.showNotification("Event import canceled", "#F44336");
+            mainCtrl.showNotification("Event import canceled", "#F44336", 2);
         }
     }
 
