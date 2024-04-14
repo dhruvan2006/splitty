@@ -59,6 +59,8 @@ public class OverviewCtrl implements Initializable {
     private Scene expenseScene;
     private ResourceBundle bundle;
 
+    boolean isEditingTitle = false;
+
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -72,7 +74,7 @@ public class OverviewCtrl implements Initializable {
                     initialize();
                     if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())){
                         mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 15);
-                    };
+                    }
                 }
             });
         });
@@ -88,8 +90,7 @@ public class OverviewCtrl implements Initializable {
             return;
         }
 
-        titleTextField = new TextField();
-        titleTextField.setPromptText("Enter title here...");
+        if (titleTextField == null) titleTextField = new TextField();
 
         titleLabel.setText(event.getTitle());
         inviteCodeLabel.setText(event.getInviteCode());
@@ -267,15 +268,9 @@ public class OverviewCtrl implements Initializable {
     }
 
     @FXML
-    public void handleSettleDebtsButton() {
-        if (!updateLastUsed()) return;
-        System.out.println("Settling debts among participants");
-    }
-
-    @FXML
     public void handleTitleButton() {
         if (!updateLastUsed()) return;
-        if (!titleHBox.getChildren().contains(titleTextField)) {
+        if (!isEditingTitle) {
             titleHBox.getChildren().addFirst(titleTextField);
             titleTextField.setText(titleLabel.getText());
             titleHBox.getChildren().remove(titleLabel);
@@ -288,6 +283,7 @@ public class OverviewCtrl implements Initializable {
             titleHBox.getChildren().addFirst(titleLabel);
             titleButton.setText(bundle.getString("overview.change_title"));
         }
+        isEditingTitle = !isEditingTitle;
     }
 
     public Event getEvent() {
@@ -299,7 +295,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void back(MouseEvent mouseEvent) {
-        handleTitleButton();
+        if (isEditingTitle) handleTitleButton();
         mainCtrl.showStartScreen();
     }
 
