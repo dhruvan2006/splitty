@@ -232,4 +232,17 @@ class EventTest {
 
         assertEquals(e1, e2);
     }
+
+    @Test
+    void testCheckNullWithTitle() {
+        Event e = new Event("Test");
+        assertTrue(e.checkNull());
+    }
+
+    @Test
+    void testCheckNullWithoutTitle() {
+        Event e = new Event();
+        assertFalse(e.checkNull());
+    }
+    
 }

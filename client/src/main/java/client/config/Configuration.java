@@ -2,7 +2,7 @@ package client.config;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.*;
 
 public class Configuration {
 
@@ -48,5 +48,18 @@ public class Configuration {
     // For testing: Allow resetting the Configuration singleton
     public static void reset() {
         instance = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Configuration that = (Configuration) o;
+        return Objects.equals(configProperties, that.configProperties);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(configProperties);
     }
 }
