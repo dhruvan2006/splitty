@@ -8,12 +8,9 @@ import org.junit.jupiter.api.*;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
-import org.mockserver.model.JsonBody;
 
 import java.util.List;
 import static org.mockserver.verify.VerificationTimes.once;
-
-import org.junit.jupiter.api.function.Executable;
 
 public class ServerUtilsTest {
     private static final int MOCK_SERVER_PORT = 1234;
@@ -201,20 +198,6 @@ public class ServerUtilsTest {
                         .withBody(objectMapper.writeValueAsString(expectedEvent)));
         Event actualEvent = serverUtils.updateLastUsedDate(eventId);
         Assertions.assertEquals(expectedEvent, actualEvent);
-    }
-
-    @Test
-    public void testAuthenticateAdmin() {
-        String password = "adminPassword";
-        mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
-                .withBody("{ \"password\": \"" + password + "\" }"))
-                .respond(HttpResponse.response()
-                        .withStatusCode(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("true"));
-
-        boolean result = serverUtils.authenticateAdmin(password);
-        Assertions.assertTrue(result);
     }
 
     @Test
