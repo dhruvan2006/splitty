@@ -10,17 +10,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 import server.database.ExpensesRepository;
+import server.database.EventRepository;
 
 import java.util.*;
+
 
 @RestController
 @RequestMapping("/api/expense")
 public class ExpenseController {
     private final ExpensesRepository repo;
+    
+    @Autowired
+    private EventRepository eventRepository; 
 
     public ExpenseController(ExpensesRepository repo) {
         this.repo = repo;
+
     }
 
     @PostMapping(path = {"/addToEvent/{event_id}"})
