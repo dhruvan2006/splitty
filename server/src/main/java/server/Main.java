@@ -49,7 +49,7 @@ public class Main {
         return password;
     }
 
-    public static void setPassword(String newPassword) {
+    protected static void setPassword(String newPassword) {
         password = newPassword;
     }
 

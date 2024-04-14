@@ -19,7 +19,7 @@ public class AdminController {
     }
 
     @PostMapping("/changePassword")
-    public boolean changePassword(@RequestBody String newPassword) {
+    protected boolean changePassword(@RequestBody String newPassword) {
         if (newPassword == null || newPassword.isEmpty()) {
             return false;
         }
