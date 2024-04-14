@@ -200,15 +200,35 @@ public class ServerUtilsTest {
         Assertions.assertEquals(expectedEvent, actualEvent);
     }
 
-     @Test
+    
+    @Test
     public void testAuthenticateAdmin() {
-        String password = "adminpassword";
-        mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate").withBody("password=adminpassword"))
-                .respond(HttpResponse.response().withStatusCode(200).withBody("true"));
+        String password = "adminPassword";
+        mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
+                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), Times.once()))
+                .respond(HttpResponse.response()
+                        .withStatusCode(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("true"));
+
         boolean result = serverUtils.authenticateAdmin(password);
         Assertions.assertTrue(result);
     }
 
+    @Test
+    public void testGivesProcessingException() {
+        String password = "adminPassword";
+        mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
+                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), Times.once()))
+                .respond(HttpResponse.response()
+                        .withStatusCode(500)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("Internal Server Error"));
+
+        Assertions.assertThrows(ResponseProcessingException.class, () -> {
+            serverUtils.authenticateAdmin(password);
+        });
+    }
 
 
 
