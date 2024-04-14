@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.Main;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -8,20 +9,34 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 
 
 public class StartScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final Main main;
+    @FXML
+    public ComboBox<String> languageDropdown;
+
     @FXML
     private TextField createEventTextField;
 
@@ -35,7 +50,8 @@ public class StartScreenCtrl {
 
 
     @Inject
-    public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl, Main main) {
+        this.main = main;
         this.mainCtrl = mainCtrl;
         this.server = server;
         server.connectWebSocket();
@@ -52,6 +68,26 @@ public class StartScreenCtrl {
         recentlyViewedEvents.setItems(observableEvents);
         createEventTextField.setStyle(borderColor);
         joinEventTextField.setStyle(borderColor);
+        languageDropdown.getItems().addAll(
+                List.of("en", "nl")
+        );
+        languageDropdown.setCellFactory(e -> new ListCell<String>() {
+            private final ImageView view = new ImageView();
+            @Override
+            public void updateItem(String name, boolean empty) {
+                super.updateItem(name, empty);
+                if(empty) {
+                    setGraphic(null);
+                }
+                else {
+                    view.setImage(new Image(String.format("images/%s.jpg", name)));
+                    view.setFitWidth(30);
+                    view.setFitHeight(20);
+                    setGraphic(view);
+                    setText(name);
+                }
+            }
+        });
     }
 
 
@@ -199,5 +235,23 @@ public class StartScreenCtrl {
         observableEvents.remove(event);
         observableEvents.addFirst(event);
         mainCtrl.showOverviewWithEvent(event);
+    }
+
+    public void changeLanguage(ActionEvent actionEvent) throws IOException {
+        Properties props = new Properties();
+        String fileName = "client/config.properties";
+        try (FileInputStream in = new FileInputStream(fileName)) {
+            props.load(in);
+        }
+        try (FileOutputStream out = new FileOutputStream(fileName))
+        {
+            if (Objects.equals(props.getProperty("LANGUAGE"), languageDropdown.getValue())) return;
+            props.setProperty("LANGUAGE", languageDropdown.getValue());
+            props.store(out, null);
+            main.start(mainCtrl.getPrimaryStage());
+        }
+        catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
     }
 }

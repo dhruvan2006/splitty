@@ -15,12 +15,18 @@
  */
 package client;
 
+
+import client.interactors.DefaultInteractor;
+import client.interactors.Interactor;
 import client.scenes.OverviewCtrl;
 import client.scenes.ParticipantCtrl;
 import client.scenes.StartScreenCtrl;
 
+import client.utils.ServerUtils;
+import client.utils.ServerUtilsInterface;
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import client.scenes.MainCtrl;
 
@@ -33,4 +39,8 @@ public class MyModule implements Module {
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ParticipantCtrl.class).in(Scopes.SINGLETON);
     }
+    @Provides
+    public ServerUtilsInterface providesServerUtils() {return new ServerUtils();}
+    @Provides
+    public Interactor provideExpenseInteractor() {return new DefaultInteractor();}
 }

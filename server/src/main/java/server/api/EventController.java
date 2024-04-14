@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Event;
 import commons.Participant;
+import commons.Expense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,16 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.EventRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Controller
 @RequestMapping("/api/event")
@@ -32,9 +38,39 @@ public class EventController {
         return ResponseEntity.ok(repo.findAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventsById(@PathVariable("id") long id) {
-        return repo.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+
+    private Map<Object, Consumer<String>> listeners = new HashMap<>();
+    @GetMapping("/{id}/title")
+    public DeferredResult<ResponseEntity<String>> getEventTitle(@PathVariable("id") long id) {
+
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<String>>(10000L, noContent);
+
+        var key = new Object();
+        listeners.put(key, t -> {
+            res.setResult(ResponseEntity.ok(t));
+        });
+
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return res;
+    }
+
+    @PutMapping("/{id}/title")
+    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") long id, @RequestBody String newTitle) {
+        if (newTitle == null || newTitle.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        listeners.forEach((k,l) -> l.accept(newTitle));
+
+        return repo.findById(id).map(event -> {
+            event.setTitle(newTitle);
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/invite/{inviteCode}")
@@ -64,19 +100,6 @@ public class EventController {
         repo.deleteById(id);
 
         return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{id}/title")
-    public ResponseEntity<Event> updateEventTitle(@PathVariable("id") long id, @RequestBody String newTitle) {
-        if (newTitle == null || newTitle.trim().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return repo.findById(id).map(event -> {
-            event.setTitle(newTitle);
-            Event updatedEvent = repo.save(event);
-            return ResponseEntity.ok(updatedEvent);
-        }).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{eventId}/participants")
@@ -125,4 +148,42 @@ public class EventController {
     public Event addParticipantToEventWS(@Payload Event event) {
         return event;
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable("id") Long id) {
+        Optional<Event> event = repo.findById(id);
+        return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/participants")
+    public ResponseEntity<List<Participant>> getParticipantsByEventId(@PathVariable("id") Long id) {
+        return repo.findById(id)
+                .map(event -> ResponseEntity.ok(event.getParticipants()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/expenses")
+    public ResponseEntity<List<Expense>> getExpensesByEventId(@PathVariable("id") Long id) {
+        return repo.findById(id)
+                .map(event -> ResponseEntity.ok(event.getExpenses()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{id}/expenses")
+    public ResponseEntity<Event> addExpenseToEvent(@PathVariable("id") Long eventId, @RequestBody Expense expense) {
+        return repo.findById(eventId).map(event -> {
+            event.addExpense(expense);
+            Event updatedEvent = repo.save(event);
+            return ResponseEntity.ok(updatedEvent);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{eventId}/debts")
+    public ResponseEntity<Map<Participant, Map<Participant, Integer>>> calculateDebtsForEvent(@PathVariable("eventId") Long eventId) {
+        return repo.findById(eventId)
+                .map(Event::calculateOptimizedDebts)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }

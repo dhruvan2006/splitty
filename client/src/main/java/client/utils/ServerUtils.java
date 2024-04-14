@@ -20,6 +20,9 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import commons.Event;
@@ -27,6 +30,7 @@ import commons.Expense;
 import commons.Participant;
 import client.config.Configuration;
 import jakarta.ws.rs.core.Response;
+import javafx.application.Platform;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -38,9 +42,12 @@ import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-public class ServerUtils {
+public class ServerUtils implements ServerUtilsInterface {
 
 	private static String SERVER = Configuration.getInstance().getServerUrl();
+
+	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+	private static final Executor JAVAFX_EXEC = Platform::runLater;
 	private StompSession session;
 
 	public void connectWebSocket(){
@@ -113,6 +120,27 @@ public class ServerUtils {
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(participant, APPLICATION_JSON), Event.class);
+	}
+
+
+	public void getEventTitle(Consumer<String> consumer, long eventId){
+		EXEC.submit(() -> {
+			while(!Thread.interrupted()){
+			var response = ClientBuilder.newClient(new ClientConfig()) //
+					.target(SERVER).path("api/event/" + eventId + "/title") //
+					.request(APPLICATION_JSON) //
+					.accept(APPLICATION_JSON) //
+					.get(Response.class);
+
+
+			if(response.getStatus() == 204){
+				continue;
+			}
+			var e = response.readEntity(String.class);
+			consumer.accept(e);
+			}
+		});
+
 	}
 
 	public Event removeParticipantFromEvent(long eventId, long participantId) {
@@ -205,6 +233,7 @@ public class ServerUtils {
 				.put(Entity.entity(expense, APPLICATION_JSON), Expense.class);
 	}
 
+
 	public boolean authenticateAdmin(String password) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("admin/authenticate")
@@ -213,11 +242,16 @@ public class ServerUtils {
 				.post(Entity.entity(new Form().param("password", password), APPLICATION_FORM_URLENCODED), Boolean.class);
 	}
 
+
 	public Event updateLastUsedDate(Long id){
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/event/" + id + "/date")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.text(""), Event.class);
+	}
+
+	public void stop(){
+		EXEC.shutdownNow();
 	}
 }

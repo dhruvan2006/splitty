@@ -46,6 +46,7 @@ public class Main extends Application {
 
 
     public void start(Stage primaryStage) throws IOException {
+        FXML.updateLanguage();
         var expense = FXML.load(ExpensesCtrl.class, "client", "scenes", "Expenses.fxml");
         var overview = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var start = FXML.load(StartScreenCtrl.class, "client", "scenes", "StartScreen.fxml");
@@ -55,6 +56,9 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         overview.getKey().initialize(expense);
         mainCtrl.initialize(primaryStage, start, cParticipant, overview, admin, joinAdmin);
+        primaryStage.setOnCloseRequest(e -> {
+            overview.getKey().stop();
+        });
 
         if (showAdminPage) {
             mainCtrl.showJoinAdmin();
