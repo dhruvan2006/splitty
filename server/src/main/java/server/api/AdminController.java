@@ -11,7 +11,7 @@ import server.Main;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final String adminPassword = Main.getPassword();
+    private String adminPassword = Main.getPassword();
 
     @PostMapping("/authenticate")
     public boolean authenticate(@RequestParam String password) {
@@ -19,11 +19,12 @@ public class AdminController {
     }
 
     @PostMapping("/changePassword")
-    public boolean changePasswordInMain(@RequestBody String newPassword) {
+    public boolean changePassword(@RequestBody String newPassword) {
         if (newPassword == null || newPassword.isEmpty()) {
             return false;
         }
         Main.setPassword(newPassword);
+        adminPassword = newPassword;
         
         return true;
     }

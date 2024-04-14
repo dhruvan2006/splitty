@@ -1,4 +1,4 @@
-package server;
+package server.api;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,15 +8,30 @@ class AdminControllerTest {
     @Test
     void testChangePassword() {
         AdminController contr = new AdminController();
-        assertTrue(contr.changePasswordInMain("password"));
+        assertTrue(contr.changePassword("password"));
         assertEquals("password",Main.getPassword());
     }
 
     @Test
     void testChangePasswordInvalid() {
         AdminController contr = new AdminController();
-        assertFalse(contr.changePasswordInMain(null));
+        assertFalse(contr.changePassword(null));
     }
+
+    @Test 
+    void testAuth(){
+        AdminController contr = new AdminController();
+        contr.changePassword("password");
+        assertEquals("password",Main.getPassword());
+    }
+
+    @Test 
+    void testAuthInvalid(){
+        AdminController contr = new AdminController();
+        assertFalse(contr.changePassword(null));
+    }
+
+
 
 
 }
