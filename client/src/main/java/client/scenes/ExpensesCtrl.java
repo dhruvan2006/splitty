@@ -1,6 +1,6 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
+import client.utils.ServerUtilsInterface;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
@@ -15,19 +15,22 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ExpensesCtrl implements Initializable {
-    private final ServerUtils server;
+    private final ServerUtilsInterface server;
     private final MainCtrl mainCtrl;
     @FXML
     public Button finishButton;
 
     @FXML
-    private ComboBox username;
+    private ComboBox<String> username;
     @FXML
     private TextField description;
+
+
     @FXML
     private TextField amount;
     private Event event;
@@ -62,9 +65,9 @@ public class ExpensesCtrl implements Initializable {
     }
 
     @Inject
-    public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl) {
         this.server = server;
-        server.connectWebSocket();
+        //server.connectWebSocket();
         this.mainCtrl = mainCtrl;
         editMode = false;
         expense = null;
@@ -98,10 +101,33 @@ public class ExpensesCtrl implements Initializable {
         mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
     }
+    //TODO I will figue out how I can test this method later
+//    public void modify(String sUsername, String sAmount, String sDescription) {
+//        Expense modify = getExpenses();
+//        if (modify == null) return;
+//        if (!updateLastUsed()) return;
+//        System.out.println(modify.getCreator());
+//        if (!editMode){
+//            Expense added = server.addExpense(modify);
+//            event.addExpense(added);
+//        }
+//        else {
+//            event.getExpenses().remove(expense);
+//            Expense updated = server.putExpense(expense.getId(), modify);
+//            event.addExpense(updated);
+//        }
+//        clearFields();
+//        mainCtrl.getOverviewCtrl().updateExpenseList();
+//        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
+//        mainCtrl.showOverview();
+//    }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
         var participants = mainCtrl.getOverviewCtrl().getEvent().getParticipants();
-        var filtered = participants.stream().filter(x -> Objects.equals(username.getSelectionModel().getSelectedItem(), x.getUserName()));
+        return getExpenses(participants, username.getSelectionModel().getSelectedItem(), amount.getText(), description.getText());
+    }
+    public Expense getExpenses(List<Participant> participants, String sUsername, String sAmount, String sDescription) {
+        var filtered = participants.stream().filter(x -> Objects.equals(sUsername, x.getUserName()));
         var any = filtered.findAny();
         if(any.isEmpty()) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -111,7 +137,7 @@ public class ExpensesCtrl implements Initializable {
             return null;
         }
         int totalExpense;
-        String[] twoParts = amount.getText().split("\\.");
+        String[] twoParts = sAmount.split("\\.");
         if(twoParts.length > 2) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -155,7 +181,7 @@ public class ExpensesCtrl implements Initializable {
                 unit*=10;
         }
         totalExpense = centum*100+unit;
-        return new Expense(description.getText(), totalExpense, any.get(), event);
+        return new Expense(sDescription, totalExpense, any.get(), event);
     }
 
     public void initializeWithExpense(Expense expense) {
@@ -169,7 +195,7 @@ public class ExpensesCtrl implements Initializable {
         this.bundle = resourceBundle;
     }
 
-    private boolean updateLastUsed() {
+    public boolean updateLastUsed() {
         try{
             server.updateLastUsedDate(event.getId());
         }
