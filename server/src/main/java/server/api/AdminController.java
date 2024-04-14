@@ -2,6 +2,7 @@ package server.api;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.Main;
@@ -18,12 +19,11 @@ public class AdminController {
     }
 
     @PostMapping("/changePassword")
-    public boolean changePassword(@RequestBody String newPassword) {
+    public boolean changePasswordInMain(@RequestBody String newPassword) {
         if (newPassword == null || newPassword.isEmpty()) {
             return false;
         }
         Main.setPassword(newPassword);
-        adminPassword = newPassword;
         
         return true;
     }

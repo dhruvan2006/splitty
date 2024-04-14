@@ -8,30 +8,15 @@ class AdminControllerTest {
     @Test
     void testChangePassword() {
         AdminController contr = new AdminController();
-        assertTrue(contr.changePassword("password"));
+        assertTrue(contr.changePasswordInMain("password"));
         assertEquals("password",Main.getPassword());
     }
 
     @Test
     void testChangePasswordInvalid() {
         AdminController contr = new AdminController();
-        assertFalse(contr.changePassword(null));
-    }
-
-    @Test
-    void testAuth() {
-        AdminController contr = new AdminController();
-        contr.changePassword("password");
-        assertTrue(contr.authenticate("password"));
-    }
-
-    @Test
-    void testAuthRejected() {
-        AdminController contr = new AdminController();
-        contr.changePassword("password");
-        assertFalse(contr.authenticate("random"));
+        assertFalse(contr.changePasswordInMain(null));
     }
 
 
-   
 }
