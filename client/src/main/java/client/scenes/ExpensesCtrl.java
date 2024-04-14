@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -43,9 +44,7 @@ public class ExpensesCtrl implements Initializable {
     public void initialize(Expense expense) {
         this.editMode = expense != null;
         username.getItems().clear();
-        username.getItems().addAll(
-                event.getParticipants().stream().map(Participant::getUserName).toList()
-        );
+        fillParticipantDropdown();
         if (editMode){
             assert expense != null;
             setExpense(expense);
@@ -55,6 +54,12 @@ public class ExpensesCtrl implements Initializable {
         else {
             finishButton.setText(bundle.getString("globals.add"));
         }
+    }
+
+    public void fillParticipantDropdown(){
+        username.getItems().addAll(
+                event.getParticipants().stream().map(Participant::getUserName).toList()
+        );
     }
 
     public void setEvent(Event event) {
@@ -71,12 +76,22 @@ public class ExpensesCtrl implements Initializable {
     }
     public void cancel() {
         clearFields();
+        expense = null;
         mainCtrl.showOverview();
     }
 
     private void clearFields() {
         description.clear();
         amount.clear();
+    }
+
+    public boolean checkExpenseExistence(List<Expense> expenses) {
+        // expense != null means we are editing a participant, not creating one
+        if (expense != null && !expenses.contains(expense)) {
+            cancel();
+            return false;
+        }
+        return true;
     }
 
     public void modify() {

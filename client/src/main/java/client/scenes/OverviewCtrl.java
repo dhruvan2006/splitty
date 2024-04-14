@@ -73,7 +73,10 @@ public class OverviewCtrl implements Initializable {
             Platform.runLater(() -> {
                 this.initialize();
                 if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())) {
-                    mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 15);
+                    mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 5);
+                }
+                if (!this.expensesCtrl.checkExpenseExistence(event1.getExpenses())) {
+                    mainCtrl.showNotification(bundle.getString("overview.removed_expense_popup"), "#d14c04", 5);
                 }
             });
         });
