@@ -70,10 +70,12 @@ public class OverviewCtrl implements Initializable {
         this.server = server;
         server.connectWebSocket();
         server.registerForMessages("/topic/event", Event.class, event1 -> {System.out.println("received");
-            Platform.runLater(this::initialize);
-            if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())){
-                mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 15);
-            }
+            Platform.runLater(() -> {
+                this.initialize();
+                if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())) {
+                    mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 15);
+                }
+            });
         });
     }
 
