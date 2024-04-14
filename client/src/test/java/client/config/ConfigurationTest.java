@@ -31,10 +31,10 @@ class ConfigurationTest {
     }
 
     @Test
-    void testExceptionThrowing() {
-        assertThrows(RuntimeException.class, () -> {
-        final Configuration configuration = Configuration.getInstance();
-        });
+    void testDefaultProperties() {
+        Configuration configuration1 = Configuration.getInstance();
+        Configuration configuration2 = Configuration.getInstance();
+        assertSame(configuration1,configuration2);
     }
 
     @Test
