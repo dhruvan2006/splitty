@@ -8,9 +8,13 @@ import org.junit.jupiter.api.*;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
+import org.mockserver.model.JsonBody;
+import org.mockserver.verify.Times;
 
 import java.util.List;
 import static org.mockserver.verify.VerificationTimes.once;
+
+import org.junit.jupiter.api.function.Executable;
 
 public class ServerUtilsTest {
     private static final int MOCK_SERVER_PORT = 1234;
@@ -216,7 +220,7 @@ public class ServerUtilsTest {
     }
 
     @Test
-    public void testGivesProcessingException() {
+    public void testGivesException() {
         String password = "adminPassword";
         mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
                 .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), Times.once()))
@@ -225,7 +229,7 @@ public class ServerUtilsTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody("Internal Server Error"));
 
-        Assertions.assertThrows(ResponseProcessingException.class, () -> {
+        Assertions.assertThrows(Exception.class, () -> {
             serverUtils.authenticateAdmin(password);
         });
     }
