@@ -29,7 +29,6 @@ import client.config.Configuration;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.client.Entity;
