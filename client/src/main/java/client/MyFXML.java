@@ -40,15 +40,6 @@ public class MyFXML {
 
     public MyFXML(Injector injector) {
         this.injector = injector;
-        Properties prop = new Properties();
-        String fileName = "client/config.properties";
-        try (FileInputStream fis = new FileInputStream(fileName)) {
-            prop.load(fis);
-            language = prop.getProperty("LANGUAGE");
-            System.out.println(language);
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
     }
 
     public <T> Pair<T, Parent> load(Class<T> c, String... parts) {
@@ -60,6 +51,18 @@ public class MyFXML {
             return new Pair<>(ctrl, parent);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void updateLanguage(){
+        Properties prop = new Properties();
+        String fileName = "client/config.properties";
+        try (FileInputStream fis = new FileInputStream(fileName)) {
+            prop.load(fis);
+            language = prop.getProperty("LANGUAGE");
+            System.out.println(language);
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
         }
     }
 
