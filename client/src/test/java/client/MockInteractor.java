@@ -1,8 +1,8 @@
 package client;
 
-import client.interactors.ExpenseInteractor;
+import client.interactors.Interactor;
 
-public class MockExpenseInteractor implements ExpenseInteractor {
+public class MockInteractor implements Interactor {
     @Override
     public String getText(Object o) {
         return null;
@@ -20,6 +20,11 @@ public class MockExpenseInteractor implements ExpenseInteractor {
 
     @Override
     public <T> void select(Object o, T t) {
+
+    }
+
+    @Override
+    public void createAlert(String s) {
 
     }
 }

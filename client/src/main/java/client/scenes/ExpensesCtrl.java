@@ -1,6 +1,6 @@
 package client.scenes;
 
-import client.interactors.ExpenseInteractor;
+import client.interactors.Interactor;
 import client.utils.ServerUtilsInterface;
 import com.google.inject.Inject;
 import commons.Event;
@@ -9,11 +9,9 @@ import commons.Participant;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.ResourceBundle;
 public class ExpensesCtrl implements Initializable {
     private final ServerUtilsInterface server;
     private final MainCtrl mainCtrl;
-    private final ExpenseInteractor expenseInteractor;
+    private final Interactor expenseInteractor;
     @FXML
     public Button finishButton;
 
@@ -68,7 +66,7 @@ public class ExpensesCtrl implements Initializable {
 
 
     @Inject
-    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl, ExpenseInteractor expenseInteractor) {
+    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl, Interactor expenseInteractor) {
         this.expenseInteractor = expenseInteractor;
         this.server = server;
         //server.connectWebSocket();
@@ -105,25 +103,25 @@ public class ExpensesCtrl implements Initializable {
         mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
     }
-    public void modify(String sUsername, String sAmount, String sDescription) {
-        Expense modify = getExpenses();
-        if (modify == null) return;
-        if (!updateLastUsed()) return;
-        System.out.println(modify.getCreator());
-        if (!editMode){
-            Expense added = server.addExpense(modify);
-            event.addExpense(added);
-        }
-        else {
-            event.getExpenses().remove(expense);
-            Expense updated = server.putExpense(expense.getId(), modify);
-            event.addExpense(updated);
-        }
-        clearFields();
-        mainCtrl.getOverviewCtrl().updateExpenseList();
-        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
-        mainCtrl.showOverview();
-    }
+//    public void modify(String sUsername, String sAmount, String sDescription) {
+//        Expense modify = getExpenses();
+//        if (modify == null) return;
+//        if (!updateLastUsed()) return;
+//        System.out.println(modify.getCreator());
+//        if (!editMode){
+//            Expense added = server.addExpense(modify);
+//            event.addExpense(added);
+//        }
+//        else {
+//            event.getExpenses().remove(expense);
+//            Expense updated = server.putExpense(expense.getId(), modify);
+//            event.addExpense(updated);
+//        }
+//        clearFields();
+//        mainCtrl.getOverviewCtrl().updateExpenseList();
+//        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
+//        mainCtrl.showOverview();
+//    }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
         var participants = mainCtrl.getOverviewCtrl().getEvent().getParticipants();
@@ -133,19 +131,13 @@ public class ExpensesCtrl implements Initializable {
         var filtered = participants.stream().filter(x -> Objects.equals(sUsername, x.getUserName()));
         var any = filtered.findAny();
         if(any.isEmpty()) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(bundle.getString("expense.participant_not_found"));
-            alert.showAndWait();
+            expenseInteractor.createAlert(bundle.getString("expense.participant_not_found"));
             return null;
         }
         int totalExpense;
         String[] twoParts = sAmount.split("\\.");
         if(twoParts.length > 2) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("At most one \".\"");
-            alert.showAndWait();
+            expenseInteractor.createAlert("At most one \".\"");
             return null;
         }
         String first = twoParts[0];
@@ -154,10 +146,7 @@ public class ExpensesCtrl implements Initializable {
             centum = Integer.parseInt(first);
         }
         catch (Exception e) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(bundle.getString("expense.error_amount"));
-            alert.showAndWait();
+            expenseInteractor.createAlert(bundle.getString("expense.error_amount"));
             return null;
         }
         int unit = 0;
@@ -167,17 +156,11 @@ public class ExpensesCtrl implements Initializable {
                 unit = Integer.parseInt(second);
             }
             catch (Exception e) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(bundle.getString("expense.error_amount"));
-                alert.showAndWait();
+                expenseInteractor.createAlert(bundle.getString("expense.error_amount"));
                 return null;
             }
             if(unit >= 100) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(bundle.getString("expense.too_much_decimals"));
-                alert.showAndWait();
+                expenseInteractor.createAlert(bundle.getString("expense.too_much_decimals"));
                 return null;
             }
             if(second.length() == 1)
@@ -202,10 +185,7 @@ public class ExpensesCtrl implements Initializable {
             server.updateLastUsedDate(event.getId());
         }
         catch (WebApplicationException e){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Something went wrong");
-            alert.showAndWait();
+            expenseInteractor.createAlert("Something went wrong");
             return false;
         }
         return true;

@@ -1,14 +1,12 @@
 package client;
 
-import client.interactors.ExpenseInteractor;
+import client.interactors.Interactor;
 import client.scenes.ExpensesCtrl;
 import client.scenes.MainCtrl;
-import client.utils.ServerUtils;
 import client.utils.ServerUtilsInterface;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +17,7 @@ import java.util.Objects;
 
 public class ExpenseCtrlTest{
     ExpensesCtrl expensesCtrl;
-    ExpenseInteractor expenseInteractor;
+    Interactor interactor;
     ServerUtilsInterface su;
     MainCtrl mainCtrl;
     Participant p;
@@ -27,10 +25,10 @@ public class ExpenseCtrlTest{
     List<Participant> participants;
     @BeforeEach
     public void setup() {
-        expenseInteractor = new MockExpenseInteractor();
+        interactor = new MockInteractor();
         su = new MockServerUtils();
         mainCtrl = new MainCtrl();
-        expensesCtrl = new ExpensesCtrl(su, mainCtrl, expenseInteractor);
+        expensesCtrl = new ExpensesCtrl(su, mainCtrl, interactor);
         p = new Participant("Z", "X", "ZX");
         e = new Expense("title", 1200, p);
         participants = new ArrayList<>();
@@ -47,10 +45,9 @@ public class ExpenseCtrlTest{
         assert(Objects.equals(expense, new Expense("L", 100, p)));
     }
     @Test void modifyTest() {
-        ExpenseInteractor expenseInteractor = new MockExpenseInteractor();
         ServerUtilsInterface su = new MockServerUtils();
         MainCtrl mainCtrl = new MainCtrl();
-        expensesCtrl = new ExpensesCtrl(su, mainCtrl, expenseInteractor);
+        expensesCtrl = new ExpensesCtrl(su, mainCtrl, interactor);
         Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         List<Participant> participants = new ArrayList<Participant>();

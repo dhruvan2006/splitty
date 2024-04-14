@@ -15,8 +15,9 @@
  */
 package client;
 
-import client.interactors.DefaultExpenseInteractor;
-import client.interactors.ExpenseInteractor;
+
+import client.interactors.DefaultInteractor;
+import client.interactors.Interactor;
 import client.scenes.OverviewCtrl;
 import client.scenes.ParticipantCtrl;
 import client.scenes.StartScreenCtrl;
@@ -41,5 +42,5 @@ public class MyModule implements Module {
     @Provides
     public ServerUtilsInterface providesServerUtils() {return new ServerUtils();}
     @Provides
-    public ExpenseInteractor provideExpenseInteractor() {return new DefaultExpenseInteractor();}
+    public Interactor provideExpenseInteractor() {return new DefaultInteractor();}
 }

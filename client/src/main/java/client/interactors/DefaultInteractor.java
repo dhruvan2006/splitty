@@ -1,9 +1,11 @@
 package client.interactors;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 
-public class DefaultExpenseInteractor implements ExpenseInteractor {
+public class DefaultInteractor implements Interactor {
 
     @Override
     public String getText(Object o) {
@@ -26,5 +28,13 @@ public class DefaultExpenseInteractor implements ExpenseInteractor {
     public <T> void select(Object o, T t) {
         ComboBox<T> cb = (ComboBox<T>) o;
         cb.getSelectionModel().select(t);
+    }
+
+    @Override
+    public void createAlert(String s) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(s);
+        alert.showAndWait();
     }
 }
