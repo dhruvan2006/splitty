@@ -37,8 +37,6 @@ public class MainCtrl {
     private OverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
 
     private ParticipantCtrl participantCtrl;
     private Scene configParticipant;
@@ -117,11 +115,7 @@ public class MainCtrl {
         primaryStage.setScene(scene);
     }
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
+
 
     public OverviewCtrl getOverviewCtrl() {
         return overviewCtrl;
