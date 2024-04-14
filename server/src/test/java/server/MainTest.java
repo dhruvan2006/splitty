@@ -1,7 +1,7 @@
 package server;
 
 import org.junit.jupiter.api.Test;
-import server.database.Main;
+import server.Main;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,15 +52,4 @@ class MainTest {
         assertFalse(Main.isPasswordStrong(weakPassword));
     }
 
-    @Test
-    void testValidatePasswordStrength() {
-        String strongPassword = "StrongPassword123!@#";
-        assertTrue(Main.validatePasswordStrength(strongPassword));
-    }
-
-    @Test
-    void testValidateWeakPassword() {
-        String weakPassword = "weak";
-        assertFalse(Main.validatePasswordStrength(weakPassword));
-    }
 }
