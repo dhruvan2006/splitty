@@ -1,4 +1,4 @@
-package server.api;
+package server;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
