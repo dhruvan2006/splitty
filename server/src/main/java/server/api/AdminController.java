@@ -16,4 +16,16 @@ public class AdminController {
     public boolean authenticate(@RequestParam String password) {
         return password.equals(adminPassword);
     }
+
+    @PostMapping("/changePassword")
+    public boolean changePassword(@RequestBody String newPassword) {
+        if (newPassword == null || newPassword.isEmpty()) {
+            return false;
+        }
+        Main.setPassword(newPassword);
+        adminPassword = newPassword;
+        
+        return true;
+    }
+    
 }
