@@ -111,8 +111,8 @@ class ExpenseTest {
     public void testEquals_SameAttributes() {
 
         Participant p = new Participant("Mara@g.c", "123", "MT");
-        Expense expense1 = new Expense("Expense Title", 100, participant);
-        Expense expense2 = new Expense("Expense Title", 100, participant);
+        Expense expense1 = new Expense("Expense Title", 100, p);
+        Expense expense2 = new Expense("Expense Title", 100, p);
 
         assertEquals(expense1, expense2);
     }
@@ -132,7 +132,7 @@ class ExpenseTest {
     @Test
     public void testGetSharePerPerson() {
         Participant p = new Participant("Mara@g.c", "123", "MT");
-        Expense expense = new Expense("Expense Title", 100, participant);
+        Expense expense = new Expense("Expense Title", 100, p);
         assertEquals(20, expense.getSharePerPerson(5));
     }
 
