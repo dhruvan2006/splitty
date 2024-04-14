@@ -98,7 +98,11 @@ public class OverviewCtrl implements Initializable {
         updateParticipantsComboBox();
         updateExpenseList();
         updateFinancialDashboard();
-        server.getEventTitle(q -> {titleLabel.setText(q);}, event.getId());
+        server.getEventTitle(q -> {
+            Platform.runLater(() -> {
+                titleLabel.setText(q);
+            });
+            }, event.getId());
     }
 
     private void updateParticipantsComboBox() {
