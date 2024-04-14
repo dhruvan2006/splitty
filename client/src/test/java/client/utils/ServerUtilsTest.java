@@ -9,7 +9,6 @@ import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
 import org.mockserver.model.JsonBody;
-import org.mockserver.verify.Times;
 
 import java.util.List;
 import static org.mockserver.verify.VerificationTimes.once;
@@ -209,7 +208,7 @@ public class ServerUtilsTest {
     public void testAuthenticateAdmin() {
         String password = "adminPassword";
         mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
-                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), Times.once()))
+                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), 1))
                 .respond(HttpResponse.response()
                         .withStatusCode(200)
                         .withHeader("Content-Type", "application/json")
@@ -223,7 +222,7 @@ public class ServerUtilsTest {
     public void testGivesException() {
         String password = "adminPassword";
         mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
-                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), Times.once()))
+                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), 1))
                 .respond(HttpResponse.response()
                         .withStatusCode(500)
                         .withHeader("Content-Type", "application/json")
