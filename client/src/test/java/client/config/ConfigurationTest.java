@@ -32,9 +32,8 @@ class ConfigurationTest {
 
     @Test
     void testExceptionThrowing() {
-        final Configuration configuration; 
         assertThrows(RuntimeException.class, () -> {
-        configuration = Configuration.getInstance();
+        final Configuration configuration = Configuration.getInstance();
         });
     }
 
