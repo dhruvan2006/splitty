@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.interactors.Interactor;
-import client.utils.ServerUtilsInterface;
+import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ExpensesCtrl implements Initializable {
-    private final ServerUtilsInterface server;
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final Interactor expenseInteractor;
     @FXML
@@ -46,9 +46,7 @@ public class ExpensesCtrl implements Initializable {
     public void initialize(Expense expense) {
         this.editMode = expense != null;
         username.getItems().clear();
-        username.getItems().addAll(
-                event.getParticipants().stream().map(Participant::getUserName).toList()
-        );
+        fillParticipantDropdown();
         if (editMode){
             assert expense != null;
             setExpense(expense);
@@ -60,28 +58,44 @@ public class ExpensesCtrl implements Initializable {
         }
     }
 
+    public void fillParticipantDropdown(){
+        username.getItems().addAll(
+                event.getParticipants().stream().map(Participant::getUserName).toList()
+        );
+    }
+
     public void setEvent(Event event) {
         this.event = event;
     }
 
 
     @Inject
-    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl, Interactor expenseInteractor) {
+    public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl, Interactor expenseInteractor) {
         this.expenseInteractor = expenseInteractor;
         this.server = server;
-        //server.connectWebSocket();
+        server.connectWebSocket();
         this.mainCtrl = mainCtrl;
         editMode = false;
         expense = null;
     }
     public void cancel() {
         clearFields();
+        expense = null;
         mainCtrl.showOverview();
     }
 
     public void clearFields() {
         expenseInteractor.clear(description);
         expenseInteractor.clear(amount);
+    }
+
+    public boolean checkExpenseExistence(List<Expense> expenses) {
+        // expense != null means we are editing a participant, not creating one
+        if (expense != null && !expenses.contains(expense)) {
+            cancel();
+            return false;
+        }
+        return true;
     }
 
     public void modify() {
@@ -99,9 +113,11 @@ public class ExpensesCtrl implements Initializable {
             event.addExpense(updated);
         }
         clearFields();
+        server.send("/app/websocket/notify/event", event);
         mainCtrl.getOverviewCtrl().updateExpenseList();
         mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
+        expense = null;
     }
 //    public void modify(String sUsername, String sAmount, String sDescription) {
 //        Expense modify = getExpenses();

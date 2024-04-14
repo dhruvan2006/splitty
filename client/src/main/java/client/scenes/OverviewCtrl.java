@@ -66,15 +66,14 @@ public class OverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.server = server;
         server.connectWebSocket();
-        server.registerForMessages("/topic/event", Event.class, event1 -> {
-            if (this.event == null) return;
+        server.registerForMessages("/topic/event", Event.class, event1 -> {System.out.println("received");
             Platform.runLater(() -> {
-                if(event1.getId() == event.getId()) {
-                    setEvent(event1);
-                    initialize();
-                    if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())){
-                        mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 15);
-                    }
+                this.initialize();
+                if (!mainCtrl.getParticipantCtrl().checkParticipantExistence(event1.getParticipants())) {
+                    mainCtrl.showNotification(bundle.getString("overview.removed_participant_popup"), "#d14c04", 5);
+                }
+                if (!this.expensesCtrl.checkExpenseExistence(event1.getExpenses())) {
+                    mainCtrl.showNotification(bundle.getString("overview.removed_expense_popup"), "#d14c04", 5);
                 }
             });
         });
@@ -89,6 +88,9 @@ public class OverviewCtrl implements Initializable {
         if(event == null){
             return;
         }
+        var events = server.getEvents();
+        var newEvent = events.stream().filter(e -> e.getId() == event.getId()).findAny();
+        event = newEvent.isEmpty() ? event : newEvent.get();
 
         if (titleTextField == null) titleTextField = new TextField();
 
@@ -213,6 +215,7 @@ public class OverviewCtrl implements Initializable {
                 updateParticipantsComboBox();
                 updateExpenseList();
                 updateFinancialDashboard();
+                server.send("/app/websocket/notify/event", event);
             }
         });
     }
@@ -285,6 +288,7 @@ public class OverviewCtrl implements Initializable {
         server.deleteExpense(expense.getId());
         updateExpenseList();
         updateFinancialDashboard();
+        server.send("/app/websocket/notify/event", event);
     }
 
     @FXML
