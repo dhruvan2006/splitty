@@ -17,6 +17,7 @@ public class JoinAdminCtrl {
     @Inject
     public JoinAdminCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
+        server.connectWebSocket();
         this.mainCtrl = mainCtrl;
     }
 
@@ -27,7 +28,7 @@ public class JoinAdminCtrl {
             mainCtrl.showAdminScreen();
         }
         else{
-            mainCtrl.showNotification("Wrong Password", "#FF6666");
+            mainCtrl.showNotification("Wrong Password", "#FF6666", 2);
             password.setStyle("-fx-border-color: #FF6666");
         }
     }

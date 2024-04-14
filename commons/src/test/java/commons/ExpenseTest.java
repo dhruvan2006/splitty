@@ -132,6 +132,27 @@ class ExpenseTest {
         list2.add(h);
     }
 
+    @Test
+    public void testEquals_SameAttributes() {
+
+        Participant participant = new Participant("email@example.com", "IBAN123", "username");
+        Expense expense1 = new Expense("Expense Title", 100, participant);
+        Expense expense2 = new Expense("Expense Title", 100, participant);
+
+        assertEquals(expense1, expense2);
+    }
+
+    @Test
+    public void testEquals_DifferentAttributes() {
+
+        Participant participant1 = new Participant("email1@example.com", "IBAN123", "username1");
+        Participant participant2 = new Participant("email2@example.com", "IBAN456", "username2");
+        Expense expense1 = new Expense("Expense Title", 100, participant1);
+        Expense expense2 = new Expense("Different Title", 200, participant2);
+
+
+        assertNotEquals(expense1, expense2);
+    }
 
 
 

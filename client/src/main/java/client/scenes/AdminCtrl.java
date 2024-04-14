@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,10 +59,13 @@ public class AdminCtrl implements Initializable {
     public AdminCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        server.connectWebSocket();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        server.registerForMessages("/topic/event", Event.class, this::handleEventUpdate);
+
         titleColumn.setCellValueFactory(event -> new SimpleStringProperty(event.getValue().getTitle()));
         creationDateColumn.setCellValueFactory(event -> new SimpleStringProperty(formatDate(event.getValue().getOpenDate())));
         lastActivityColumn.setCellValueFactory(event -> new SimpleStringProperty(formatDate(event.getValue().getLastUsed())));
@@ -87,7 +91,7 @@ public class AdminCtrl implements Initializable {
                             server.deleteEventById(eventToDelete.getId());
                             refresh();
                             // success
-                            mainCtrl.showNotification("Event deleted successfully", "#4CAF50");
+                            mainCtrl.showNotification("Event deleted successfully", "#4CAF50", 2);
                         }
                     });
                 }
@@ -113,12 +117,12 @@ public class AdminCtrl implements Initializable {
                             boolean saved = saveJsonToFile(json, eventData.getTitle());
                             if (saved) {
                                 // success
-                                mainCtrl.showNotification("Event exported successfully", "#4CAF50");
+                                mainCtrl.showNotification("Event exported successfully", "#4CAF50", 2);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                             // error
-                            mainCtrl.showNotification("Event export failed", "#F44336");
+                            mainCtrl.showNotification("Event export failed", "#F44336", 2);
                         }
                     });
                 }
@@ -126,6 +130,21 @@ public class AdminCtrl implements Initializable {
         });
 
         refresh();
+    }
+
+    private void handleEventUpdate(Event eventUpdate) {
+        Platform.runLater(() -> {
+            Optional<Event> existingEvent = data.stream()
+                    .filter(e -> e.getId() == eventUpdate.getId())
+                    .findFirst();
+
+            if (existingEvent.isPresent()) {
+                int index = data.indexOf(existingEvent.get());
+                data.set(index, eventUpdate);  // update an existing event
+            } else {
+                data.add(eventUpdate);  // add the new event
+            }
+        });
     }
 
     private boolean saveJsonToFile(String json, String eventTitle) throws IOException {
@@ -158,7 +177,7 @@ public class AdminCtrl implements Initializable {
                 importEventFromJSON(jsonContent);
             } catch (IOException e) {
                 e.printStackTrace();
-                mainCtrl.showNotification("Error importing event", "#F44336");
+                mainCtrl.showNotification("Error importing event", "#F44336", 2);
             }
         }
     }
@@ -176,13 +195,13 @@ public class AdminCtrl implements Initializable {
                 Event newEvent = server.addEvent(eventToImport);
                 addExpenses(lostExpenses, newEvent);
                 refresh();
-                mainCtrl.showNotification("Event imported successfully", "#4CAF50");
+                mainCtrl.showNotification("Event imported successfully", "#4CAF50", 2);
             } else {
                 handleInviteCodeConflict(eventToImport);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            mainCtrl.showNotification("Error importing event", "#F44336");
+            mainCtrl.showNotification("Error importing event", "#F44336", 2);
         }
     }
 
@@ -200,9 +219,9 @@ public class AdminCtrl implements Initializable {
             Event newEvent = server.addEvent(eventToImport);
             addExpenses(lostExpenses, newEvent);
             refresh();
-            mainCtrl.showNotification("Event imported successfully", "#4CAF50");
+            mainCtrl.showNotification("Event imported successfully", "#4CAF50", 2);
         } else {
-            mainCtrl.showNotification("Event import canceled", "#F44336");
+            mainCtrl.showNotification("Event import canceled", "#F44336", 2);
         }
     }
 
@@ -236,7 +255,7 @@ public class AdminCtrl implements Initializable {
 
     private String formatDate(Timestamp date) {
         if (date != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ; hh:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
             return sdf.format(date);
         }
         return null;

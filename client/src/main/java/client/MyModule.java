@@ -22,8 +22,6 @@ import client.scenes.StartScreenCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-
-import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 
 public class MyModule implements Module {
@@ -31,7 +29,6 @@ public class MyModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(OverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(StartScreenCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ParticipantCtrl.class).in(Scopes.SINGLETON);

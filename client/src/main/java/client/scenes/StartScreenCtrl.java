@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,6 +38,8 @@ public class StartScreenCtrl {
     public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        server.connectWebSocket();
+        server.registerForMessages("/topic/event", Event.class, this::updateRecentEvents);
     }
 
     @FXML
@@ -58,6 +61,7 @@ public class StartScreenCtrl {
         Event newEvent = new Event(createEventText);
         try {
             newEvent = server.addEvent(newEvent);
+            server.send("/app/websocket/notify/event", newEvent);
             clearFields();
             mainCtrl.showOverviewWithEvent(newEvent);
             observableEvents.addFirst(newEvent);
@@ -104,7 +108,8 @@ public class StartScreenCtrl {
 
         clearFields();
         try{
-            server.updateLastUsedDate(event.getId());
+            Event updatedEvent = server.updateLastUsedDate(event.getId());
+            server.send("/app/websocket/notify/event", updatedEvent);
         }
         catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -163,12 +168,26 @@ public class StartScreenCtrl {
         }
     }
 
+    public void updateRecentEvents(Event eventUpdate) {
+        Platform.runLater(() -> {
+            // If event is already in the list
+            for (Event event : observableEvents) {
+                if (event.getId() == eventUpdate.getId()) {
+                    observableEvents.remove(event);
+                    observableEvents.add(0, eventUpdate);
+                    return;
+                }
+            }
+        });
+    }
+
     @FXML
     public void handleRecentEventClick(MouseEvent arg0) {
         Event event = recentlyViewedEvents.getSelectionModel().getSelectedItem();
         if (event == null) return;
         try{
-            server.updateLastUsedDate(event.getId());
+            Event updatedEvent = server.updateLastUsedDate(event.getId());
+            server.send("/app/websocket/notify/event", updatedEvent);
         }
         catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);

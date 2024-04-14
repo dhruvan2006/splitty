@@ -13,11 +13,11 @@
       </Label>
       <TableView fx:id="table" layoutX="14.0" layoutY="54.0" prefHeight="289.0" prefWidth="570.0">
         <columns>
-          <TableColumn fx:id="titleColumn" prefWidth="220.0" text="Title" />
-          <TableColumn fx:id="creationDateColumn" prefWidth="100.0" text="Creation Date" />
-            <TableColumn fx:id="lastActivityColumn" minWidth="0.0" prefWidth="100.0" text="Last Activity" />
-            <TableColumn fx:id="deleteColumn" prefWidth="65.0" text="Delete" />
-            <TableColumn fx:id="jsonColumn" prefWidth="65.0" text="JSON" />
+          <TableColumn fx:id="titleColumn" prefWidth="147.00001525878906" text="Title" />
+          <TableColumn fx:id="creationDateColumn" prefWidth="142.66668701171875" text="Creation Date" />
+            <TableColumn fx:id="lastActivityColumn" minWidth="0.0" prefWidth="139.0" text="Last Activity" />
+            <TableColumn fx:id="deleteColumn" prefWidth="68.66668701171875" text="Delete" />
+            <TableColumn fx:id="jsonColumn" prefWidth="61.33331298828125" text="JSON" />
         </columns>
       </TableView>
       <Button fx:id="importEventButton" layoutX="490.0" layoutY="356.0" mnemonicParsing="false" onAction="#handleImportEvent" prefHeight="29.0" prefWidth="94.0" text="Import Event" />

@@ -31,22 +31,6 @@ public class EventController {
     public ResponseEntity<List<Event>> getAllEvents() {
         return ResponseEntity.ok(repo.findAll());
     }
-    
-    @GetMapping("/id/{id}")
-    public ResponseEntity<List<Event>> getById(@PathVariable("id") String id) {
-        long lid;
-        try {
-            lid = Long.parseLong(id);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-        if (lid < 0 || !repo.existsById(lid))
-            return ResponseEntity.badRequest().build();
-
-        List<Event> resp = repo.findAll().stream().filter(x -> x.getId() == lid).toList();
-        return ResponseEntity.ok(resp);
-    }
-
 
     @GetMapping("/invite/{inviteCode}")
     public ResponseEntity<List<Event>> getByInviteCode(@PathVariable("inviteCode") String inviteCode){
@@ -121,15 +105,6 @@ public class EventController {
             Event updatedEvent = repo.save(event);
             return ResponseEntity.ok(updatedEvent);
         }).orElse(ResponseEntity.notFound().build());
-    }
-    @GetMapping("/{id}/participant")
-    public ResponseEntity<List<Participant>> getParticipants(@PathVariable("id") Long id){
-        var event = repo.findById(id);
-        if(event.isEmpty())
-            return ResponseEntity.badRequest().build();
-
-        var participants = event.get().getParticipants();
-        return ResponseEntity.ok(participants);
     }
 
     @PutMapping("/{eventId}/date")

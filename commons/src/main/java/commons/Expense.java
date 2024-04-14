@@ -106,4 +106,11 @@ public class Expense {
     public int getSharePerPerson(int amountParticipants){
         return getTotalExpense() == 0 ? 0 : amountParticipants == 0 ? getTotalExpense() : getTotalExpense()/amountParticipants;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Expense expense)) return false;
+        return getId() == expense.getId() && getTotalExpense() == expense.getTotalExpense() && Objects.equals(getCreator(), expense.getCreator()) && Objects.equals(getEvent(), expense.getEvent()) && Objects.equals(getTitle(), expense.getTitle());
+    }
 }
