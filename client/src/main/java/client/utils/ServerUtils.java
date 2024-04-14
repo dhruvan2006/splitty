@@ -192,13 +192,6 @@ public class ServerUtils {
 				.get(new GenericType<List<Event>>() {});
 	}
 
-	public List<Participant> getParticipants() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/participant") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON)//
-				.get(new GenericType<List<Participant>>(){});
-	}
 	public Expense addExpense(Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())//
 				.target(SERVER).path("api/expense/addToEvent/" + expense.getEvent().getId())//
