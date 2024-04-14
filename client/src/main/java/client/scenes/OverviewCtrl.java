@@ -67,7 +67,7 @@ public class OverviewCtrl implements Initializable {
             Platform.runLater(() -> {
                 if(event != null && event1.getId() == event.getId()) {
                     event = event1;
-                    mainCtrl.showOverviewWithEvent(event);}
+                    initialize();}
             });});
     }
 
@@ -80,6 +80,9 @@ public class OverviewCtrl implements Initializable {
         if(event == null){
             return;
         }
+        var events = server.getEvents();
+        var newEvent = events.stream().filter(e -> e.getId() == event.getId()).findAny();
+        event = newEvent.isEmpty() ? event : newEvent.get();
 
         titleTextField = new TextField();
         titleTextField.setPromptText("Enter title here...");
