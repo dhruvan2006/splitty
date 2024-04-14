@@ -28,11 +28,11 @@ public class Main {
 
     public static void main(String[] args) {
         password = passwordGenerator();
-        System.out.println(password);
+        System.out.println("ADMIN PASSWORD: " + password);
         SpringApplication.run(Main.class, args);
     }
 
-    private static String passwordGenerator(){
+    public static String passwordGenerator(){
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
         Random random = new Random();
 
