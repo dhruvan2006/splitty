@@ -1,7 +1,7 @@
 package server;
 
 import org.junit.jupiter.api.Test;
-
+import server.Main;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
