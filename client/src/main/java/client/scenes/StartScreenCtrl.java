@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 
@@ -29,6 +31,9 @@ public class StartScreenCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final Main main;
+    @FXML
+    public ComboBox<String> languageDropdown;
+
     @FXML
     private TextField createEventTextField;
 
@@ -60,6 +65,9 @@ public class StartScreenCtrl {
         recentlyViewedEvents.setItems(observableEvents);
         createEventTextField.setStyle(borderColor);
         joinEventTextField.setStyle(borderColor);
+        languageDropdown.getItems().addAll(
+                List.of("en", "nl")
+        );
     }
 
 
@@ -209,22 +217,21 @@ public class StartScreenCtrl {
         mainCtrl.showOverviewWithEvent(event);
     }
 
-    public void test(ActionEvent actionEvent) throws IOException {
+    public void changeLanguage(ActionEvent actionEvent) throws IOException {
         Properties props = new Properties();
         String fileName = "client/config.properties";
+        try (FileInputStream in = new FileInputStream(fileName)) {
+            props.load(in);
+        }
         try (FileOutputStream out = new FileOutputStream(fileName))
         {
-            props.setProperty("LANGUAGE", "nl");
+            if (Objects.equals(props.getProperty("LANGUAGE"), languageDropdown.getValue())) return;
+            props.setProperty("LANGUAGE", languageDropdown.getValue());
             props.store(out, null);
+            main.start(mainCtrl.getPrimaryStage());
         }
         catch (IOException ex) {
             System.out.println(ex.toString());
         }
-//        try (FileInputStream fis = new FileInputStream(fileName)) {
-//            prop.load(fis);
-//            prop.setProperty("LANGUAGE", "nl");
-//            prop.save();
-//        }
-        main.start(mainCtrl.getPrimaryStage());
     }
 }
