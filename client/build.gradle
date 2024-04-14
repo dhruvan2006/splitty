@@ -19,7 +19,7 @@ java {
 
 dependencies {
 	implementation project(":commons")
-	
+	testImplementation group: 'org.testfx', name: 'testfx-junit', version: '4.0.18'
 	implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.0.3'
 	implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '3.0.3'
 	implementation group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '3.0.3'
