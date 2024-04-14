@@ -203,12 +203,11 @@ public class ServerUtilsTest {
         Assertions.assertEquals(expectedEvent, actualEvent);
     }
 
-    
     @Test
     public void testAuthenticateAdmin() {
         String password = "adminPassword";
         mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
-                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), 1))
+                .withBody("{ \"password\": \"" + password + "\" }"))
                 .respond(HttpResponse.response()
                         .withStatusCode(200)
                         .withHeader("Content-Type", "application/json")
@@ -222,7 +221,7 @@ public class ServerUtilsTest {
     public void testGivesException() {
         String password = "adminPassword";
         mockServer.when(HttpRequest.request().withMethod("POST").withPath("/admin/authenticate")
-                .withBody(JsonBody.json("{ \"password\": \"" + password + "\" }"), 1))
+                .withBody("{ \"password\": \"" + password + "\" }"))
                 .respond(HttpResponse.response()
                         .withStatusCode(500)
                         .withHeader("Content-Type", "application/json")
@@ -232,7 +231,6 @@ public class ServerUtilsTest {
             serverUtils.authenticateAdmin(password);
         });
     }
-
 
 
 
