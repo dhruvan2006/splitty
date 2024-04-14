@@ -57,6 +57,15 @@ public class Main {
     // strong password means at least one uppercase letter, one lowercase letter, one digit
     // and one special character
     public static boolean isPasswordStrong(String candidatePassword) {
-        return Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{15,}$", candidatePassword);
+        String upper = ".*[A-Z].*";
+        String lower = ".*[a-z].*";
+        String digit = ".*\\d.*";
+        String special = ".*[^A-Za-z0-9].*";
+
+        // Check if the password matches all the criteria
+        return candidatePassword.matches(upper) &&
+                candidatePassword.matches(lower) &&
+                candidatePassword.matches(digit) &&
+                candidatePassword.matches(special);
     }
 }

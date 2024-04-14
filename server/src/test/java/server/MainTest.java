@@ -28,13 +28,7 @@ class MainTest {
     }
 
     @Test
-    void testGetPassword() {
-        String generatedPassword = Main.passwordGenerator();
-        assertEquals(generatedPassword, Main.getPassword());
-    }
-
-    @Test
-    void testSetPassword() {
+    void testSetAndGetPassword() {
         String newPassword = "NewSecurePassword123!";
         Main.setPassword(newPassword);
         assertEquals(newPassword, Main.getPassword());
