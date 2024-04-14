@@ -23,7 +23,7 @@ public class ExpenseControllerTest {
     public void addExpenseToEvent() {
         TestExpenseRepository repo = new TestExpenseRepository();
         ExpenseController sut = new ExpenseController(repo);
-        Expense expense = new Expense("Title", 100.0, "Creator");
+        Expense expense = new Expense("Title", 100, "Creator");
         var actual = sut.add(expense, 1);
         assertEquals(OK, actual.getStatusCode());
     }
@@ -32,7 +32,7 @@ public class ExpenseControllerTest {
     public void deleteExpense() {
         TestExpenseRepository repo = new TestExpenseRepository();
         ExpenseController sut = new ExpenseController(repo);
-        Expense expense = new Expense("Title", 100.0, "Creator");
+        Expense expense = new Expense("Title", 100, "Creator");
         Expense posted = sut.add(expense, 1).getBody();
         assert posted != null;
         var actual = sut.deleteIt(posted.getId());
@@ -43,7 +43,7 @@ public class ExpenseControllerTest {
     public void getById_ValidId_ReturnsExpense() {
         TestExpenseRepository repo = new TestExpenseRepository();
         ExpenseController sut = new ExpenseController(repo);
-        Expense expense = new Expense("Title", 100.0, "Creator");
+        Expense expense = new Expense("Title", 100, "Creator");
         Expense savedExpense = sut.add(expense, 1).getBody();
         var actual = sut.getById(String.valueOf(savedExpense.getId()));
         assertEquals(OK, actual.getStatusCode());
@@ -72,13 +72,14 @@ public class ExpenseControllerTest {
     public void updateExpense() {
         TestExpenseRepository repo = new TestExpenseRepository();
         ExpenseController sut = new ExpenseController(repo);
-        Expense expense = new Expense("Title", 100.0, "Creator");
+        Expense expense = new Expense("Title", 100, );
         Expense savedExpense = sut.add(expense, 1).getBody();
+        Participant p = new Participant("john@example.com", "IBAN12345", "JD");
         assert savedExpense != null;
 
         savedExpense.setTitle("Updated Title");
-        savedExpense.setTotalExpense(200.0);
-        savedExpense.setCreator("Updated Creator");
+        savedExpense.setTotalExpense(200);
+        savedExpense.setCreator(p);
 
         var actual = sut.updateExpense(savedExpense.getId(), savedExpense);
         assertEquals(OK, actual.getStatusCode());
@@ -86,7 +87,7 @@ public class ExpenseControllerTest {
         Expense updatedExpense = actual.getBody();
         assert updatedExpense != null;
         assertEquals("Updated Title", updatedExpense.getTitle());
-        assertEquals(200.0, updatedExpense.getTotalExpense());
-        assertEquals("Updated Creator", updatedExpense.getCreator());
+        assertEquals(200, updatedExpense.getTotalExpense());
+        assertEquals(p, updatedExpense.getCreator());
     }
 }

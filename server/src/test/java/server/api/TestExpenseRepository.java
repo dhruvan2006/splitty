@@ -38,12 +38,12 @@ public class TestExpenseRepository implements ExpensesRepository {
     @Override
     public void deleteById(Long id) {
         call("deleteById");
-        expenses.removeIf(expense -> expense.getId().equals(id));
+        expenses.removeIf(expense -> expense.getId()==id);
     }
 
     @Override
     public Optional<Expense> findById(Long id) {
-        return expenses.stream().filter(expense -> expense.getId().equals(id)).findFirst();
+        return expenses.stream().filter(expense -> expense.getId() == id).findFirst();
     }
 
     @Override
@@ -70,23 +70,9 @@ public class TestExpenseRepository implements ExpensesRepository {
     }
 
     @Override
-    public List<Expense> findByDescription(String description) {
-        return null;
-    }
-
-    @Override
-    public List<Expense> findByAmount(Double amount) {
-        return null;
-    }
-
-    @Override
-    public List<Expense> findByDate(String date) {
-        return null;
-    }
-
-    @Override
-    public List<Expense> findByCategory(String category) {
-        return null;
+    public Participant getReferenceById(Long id) {
+        call("getReferenceById");
+        return find(id).get();
     }
 
     @Override
@@ -94,15 +80,10 @@ public class TestExpenseRepository implements ExpensesRepository {
         return null;
     }
 
-    @Override
     public <S extends Expense> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
-    @Override
-    public Optional<Expense> findOne(Example<Expense> example) {
-        return Optional.empty();
-    }
 
     @Override
     public <S extends Expense> List<S> findAll(Example<S> example) {
