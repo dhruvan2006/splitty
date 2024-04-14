@@ -15,6 +15,8 @@
  */
 package client;
 
+import client.interactors.DefaultExpenseInteractor;
+import client.interactors.ExpenseInteractor;
 import client.scenes.OverviewCtrl;
 import client.scenes.ParticipantCtrl;
 import client.scenes.StartScreenCtrl;
@@ -37,5 +39,7 @@ public class MyModule implements Module {
         binder.bind(ParticipantCtrl.class).in(Scopes.SINGLETON);
     }
     @Provides
-    public ServerUtilsInterface providesIt() {return new ServerUtils();}
+    public ServerUtilsInterface providesServerUtils() {return new ServerUtils();}
+    @Provides
+    public ExpenseInteractor provideExpenseInteractor() {return new DefaultExpenseInteractor();}
 }

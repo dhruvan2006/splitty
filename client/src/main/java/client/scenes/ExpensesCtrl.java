@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.interactors.ExpenseInteractor;
 import client.utils.ServerUtilsInterface;
 import com.google.inject.Inject;
 import commons.Event;
@@ -22,6 +23,7 @@ import java.util.ResourceBundle;
 public class ExpensesCtrl implements Initializable {
     private final ServerUtilsInterface server;
     private final MainCtrl mainCtrl;
+    private final ExpenseInteractor expenseInteractor;
     @FXML
     public Button finishButton;
 
@@ -64,8 +66,10 @@ public class ExpensesCtrl implements Initializable {
         this.event = event;
     }
 
+
     @Inject
-    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl) {
+    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl, ExpenseInteractor expenseInteractor) {
+        this.expenseInteractor = expenseInteractor;
         this.server = server;
         //server.connectWebSocket();
         this.mainCtrl = mainCtrl;
@@ -77,9 +81,9 @@ public class ExpensesCtrl implements Initializable {
         mainCtrl.showOverview();
     }
 
-    private void clearFields() {
-        description.clear();
-        amount.clear();
+    public void clearFields() {
+        expenseInteractor.clear(description);
+        expenseInteractor.clear(amount);
     }
 
     public void modify() {
@@ -101,26 +105,25 @@ public class ExpensesCtrl implements Initializable {
         mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
     }
-    //TODO I will figue out how I can test this method later
-//    public void modify(String sUsername, String sAmount, String sDescription) {
-//        Expense modify = getExpenses();
-//        if (modify == null) return;
-//        if (!updateLastUsed()) return;
-//        System.out.println(modify.getCreator());
-//        if (!editMode){
-//            Expense added = server.addExpense(modify);
-//            event.addExpense(added);
-//        }
-//        else {
-//            event.getExpenses().remove(expense);
-//            Expense updated = server.putExpense(expense.getId(), modify);
-//            event.addExpense(updated);
-//        }
-//        clearFields();
-//        mainCtrl.getOverviewCtrl().updateExpenseList();
-//        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
-//        mainCtrl.showOverview();
-//    }
+    public void modify(String sUsername, String sAmount, String sDescription) {
+        Expense modify = getExpenses();
+        if (modify == null) return;
+        if (!updateLastUsed()) return;
+        System.out.println(modify.getCreator());
+        if (!editMode){
+            Expense added = server.addExpense(modify);
+            event.addExpense(added);
+        }
+        else {
+            event.getExpenses().remove(expense);
+            Expense updated = server.putExpense(expense.getId(), modify);
+            event.addExpense(updated);
+        }
+        clearFields();
+        mainCtrl.getOverviewCtrl().updateExpenseList();
+        mainCtrl.getOverviewCtrl().updateFinancialDashboard();
+        mainCtrl.showOverview();
+    }
     //TODO instead of retrieving all participants it is more efficient to just write a query, which I will do later
     public Expense getExpenses() {
         var participants = mainCtrl.getOverviewCtrl().getEvent().getParticipants();
@@ -185,11 +188,10 @@ public class ExpensesCtrl implements Initializable {
     }
 
     public void initializeWithExpense(Expense expense) {
-        username.getSelectionModel().select(expense.getCreator().getUserName());
-        description.setText(expense.getTitle());
-        amount.setText(expense.getTotalExpenseString());
+        expenseInteractor.select(username, expense.getCreator().getUserName());
+        expenseInteractor.setText(description, expense.getTitle());
+        expenseInteractor.setText(amount, expense.getTotalExpenseString());
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.bundle = resourceBundle;

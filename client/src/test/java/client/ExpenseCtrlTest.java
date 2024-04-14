@@ -1,5 +1,6 @@
 package client;
 
+import client.interactors.ExpenseInteractor;
 import client.scenes.ExpensesCtrl;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
@@ -7,6 +8,8 @@ import client.utils.ServerUtilsInterface;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,44 +19,56 @@ import java.util.Objects;
 
 public class ExpenseCtrlTest{
     ExpensesCtrl expensesCtrl;
+    ExpenseInteractor expenseInteractor;
+    ServerUtilsInterface su;
+    MainCtrl mainCtrl;
+    Participant p;
+    Expense e;
+    List<Participant> participants;
+    @BeforeEach
+    public void setup() {
+        expenseInteractor = new MockExpenseInteractor();
+        su = new MockServerUtils();
+        mainCtrl = new MainCtrl();
+        expensesCtrl = new ExpensesCtrl(su, mainCtrl, expenseInteractor);
+        p = new Participant("Z", "X", "ZX");
+        e = new Expense("title", 1200, p);
+        participants = new ArrayList<>();
+        participants.add(p);
+    }
     @Test
     public void setExpenseTest() {
-        ServerUtils su = new ServerUtils();
-        MainCtrl mainCtrl = new MainCtrl();
-        expensesCtrl = new ExpensesCtrl(su, mainCtrl);
-        Participant p = new Participant("Z", "X", "ZX");
-        Expense e = new Expense("title", 1200, p);
         expensesCtrl.setExpense(e);
     }
 
     @Test
     public void getExpenseTest() {
-        ServerUtils su = new ServerUtils();
-        MainCtrl mainCtrl = new MainCtrl();
-        expensesCtrl = new ExpensesCtrl(su, mainCtrl);
-        Participant p = new Participant("Z", "X", "ZX");
-        Expense e = new Expense("title", 1200, p);
-        List<Participant> participants = new ArrayList<Participant>();
-        participants.add(p);
         Expense expense = expensesCtrl.getExpenses(participants, "ZX", "1", "L");
         assert(Objects.equals(expense, new Expense("L", 100, p)));
     }
     @Test void modifyTest() {
+        ExpenseInteractor expenseInteractor = new MockExpenseInteractor();
         ServerUtilsInterface su = new MockServerUtils();
         MainCtrl mainCtrl = new MainCtrl();
-        expensesCtrl = new ExpensesCtrl(su, mainCtrl);
+        expensesCtrl = new ExpensesCtrl(su, mainCtrl, expenseInteractor);
         Participant p = new Participant("Z", "X", "ZX");
         Expense e = new Expense("title", 1200, p);
         List<Participant> participants = new ArrayList<Participant>();
     }
-    @Test void updateLastUsedTest() {
-        ServerUtilsInterface su = new MockServerUtils();
-        MainCtrl mainCtrl = new MainCtrl();
-        expensesCtrl = new ExpensesCtrl(su, mainCtrl);
-        Participant p = new Participant("Z", "X", "ZX");
-        Expense e = new Expense("title", 1200, p);
-        List<Participant> participants = new ArrayList<Participant>();
+    @Test
+    void updateLastUsedTest() {
         expensesCtrl.setEvent(new Event("some event"));
         expensesCtrl.updateLastUsed();
+    }
+    @Test
+    void clearTest(){
+        expensesCtrl.setExpense(e);
+        expensesCtrl.clearFields();
+    }
+    @Test
+    void initializeWithExpenseTest() {
+        Expense e1 = new Expense("title", 1200, p);
+        expensesCtrl.setExpense(e1);
+        expensesCtrl.initializeWithExpense(e1);
     }
 }
