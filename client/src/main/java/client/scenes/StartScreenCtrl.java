@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.Main;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -8,6 +9,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
@@ -15,13 +17,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 
 public class StartScreenCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final Main main;
     @FXML
     private TextField createEventTextField;
 
@@ -35,7 +42,8 @@ public class StartScreenCtrl {
 
 
     @Inject
-    public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public StartScreenCtrl(ServerUtils server, MainCtrl mainCtrl, Main main) {
+        this.main = main;
         this.mainCtrl = mainCtrl;
         this.server = server;
         server.connectWebSocket();
@@ -199,5 +207,24 @@ public class StartScreenCtrl {
         observableEvents.remove(event);
         observableEvents.addFirst(event);
         mainCtrl.showOverviewWithEvent(event);
+    }
+
+    public void test(ActionEvent actionEvent) throws IOException {
+        Properties props = new Properties();
+        String fileName = "client/config.properties";
+        try (FileOutputStream out = new FileOutputStream(fileName))
+        {
+            props.setProperty("LANGUAGE", "nl");
+            props.store(out, null);
+        }
+        catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
+//        try (FileInputStream fis = new FileInputStream(fileName)) {
+//            prop.load(fis);
+//            prop.setProperty("LANGUAGE", "nl");
+//            prop.save();
+//        }
+        main.start(mainCtrl.getPrimaryStage());
     }
 }
