@@ -62,6 +62,10 @@ public class AdminCtrl implements Initializable {
         server.connectWebSocket();
     }
 
+    public void setData(ObservableList<Event> data) {
+        this.data = data;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         server.registerForMessages("/topic/event", Event.class, this::handleEventUpdate);
@@ -132,7 +136,7 @@ public class AdminCtrl implements Initializable {
         refresh();
     }
 
-    private void handleEventUpdate(Event eventUpdate) {
+    void handleEventUpdate(Event eventUpdate) {
         Platform.runLater(() -> {
             Optional<Event> existingEvent = data.stream()
                     .filter(e -> e.getId() == eventUpdate.getId())
