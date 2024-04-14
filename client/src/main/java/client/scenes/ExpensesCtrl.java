@@ -1,7 +1,7 @@
 package client.scenes;
 
 import client.interactors.Interactor;
-import client.utils.ServerUtilsInterface;
+import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ExpensesCtrl implements Initializable {
-    private final ServerUtilsInterface server;
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final Interactor expenseInteractor;
     @FXML
@@ -70,10 +70,10 @@ public class ExpensesCtrl implements Initializable {
 
 
     @Inject
-    public ExpensesCtrl(ServerUtilsInterface server, MainCtrl mainCtrl, Interactor expenseInteractor) {
+    public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl, Interactor expenseInteractor) {
         this.expenseInteractor = expenseInteractor;
         this.server = server;
-        //server.connectWebSocket();
+        server.connectWebSocket();
         this.mainCtrl = mainCtrl;
         editMode = false;
         expense = null;
@@ -117,6 +117,7 @@ public class ExpensesCtrl implements Initializable {
         mainCtrl.getOverviewCtrl().updateExpenseList();
         mainCtrl.getOverviewCtrl().updateFinancialDashboard();
         mainCtrl.showOverview();
+        expense = null;
     }
 //    public void modify(String sUsername, String sAmount, String sDescription) {
 //        Expense modify = getExpenses();
