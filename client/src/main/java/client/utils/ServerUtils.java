@@ -163,8 +163,15 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.put(Entity.entity(updatedParticipant, APPLICATION_JSON));
-		if(x.getStatus() != 200) return null;
+		if(x.getStatus() != 200) return getById(eventId);
 		return x.readEntity(Event.class);
+	}
+	public Event getById(long id) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER).path("api/event/" + id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(Event.class);
 	}
 
 	public List<Event> getEventByInviteCode(String inviteCode) {

@@ -32,6 +32,11 @@ public class EventController {
         return ResponseEntity.ok(repo.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Event> getEventsById(@PathVariable("id") long id) {
+        return repo.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/invite/{inviteCode}")
     public ResponseEntity<List<Event>> getByInviteCode(@PathVariable("inviteCode") String inviteCode){
         if(inviteCode.isEmpty()){

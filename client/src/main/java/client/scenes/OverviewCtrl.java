@@ -65,7 +65,7 @@ public class OverviewCtrl implements Initializable {
         this.server = server;
         server.connectWebSocket();
         server.registerForMessages("/topic/event", Event.class, event1 -> {System.out.println("received");
-            Platform.runLater(() -> {if(event1!=null) this.initialize();});});
+            Platform.runLater(this::initialize);});
     }
 
     public void initialize(Pair<ExpensesCtrl, Parent> pe) {
