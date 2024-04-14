@@ -48,4 +48,14 @@ public class Main {
     public static String getPassword() {
         return password;
     }
+
+    public static void setPassword(String newPassword) {
+        password = newPassword;
+    }
+
+    // strong password means at least one uppercase letter, one lowercase letter, one digit
+    // and one special character
+    public static boolean isPasswordStrong(String candidatePassword) {
+        return Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{15,}$", candidatePassword);
+    }
 }
