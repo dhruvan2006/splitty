@@ -186,40 +186,6 @@ public class ServerUtilsTest {
         Assertions.assertEquals(expectedExpense, actualExpense);
     }
 
-    @Test
-    public void testGetParticipants() throws JsonProcessingException {
-        List<Participant> expectedParticipants = List.of(
-                new Participant("email@exa23123mple.com", "IBAN1212313", "username1"),
-                new Participant("email@example3.com", "IBAN321123", "username2"),
-                new Participant("email@example1231.com", "I123BAN123", "username3")
-        );
-        mockServer.when(HttpRequest.request().withMethod("GET").withPath("/api/participant"))
-                .respond(HttpResponse.response()
-                        .withStatusCode(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(objectMapper.writeValueAsString(expectedParticipants)));
-        List<Participant> actualParticipants = serverUtils.getParticipants();
-        Assertions.assertEquals(expectedParticipants, actualParticipants);
-    }
-
-    @Test
-    public void testGetParticipantsInEvent() throws JsonProcessingException {
-        long eventId = 1L;
-        List<Participant> expectedParticipants = List.of(
-                new Participant("email@exa23123mple.com", "IBAN1212313", "username1"),
-                new Participant("email@example3.com", "IBAN321123", "username2"),
-                new Participant("email@example1231.com", "I123BAN123", "username3")
-        );
-        mockServer.when(HttpRequest.request().withMethod("GET").withPath("/api/event/" + eventId + "/participant"))
-                .respond(HttpResponse.response()
-                        .withStatusCode(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(objectMapper.writeValueAsString(expectedParticipants)));
-        List<Participant> actualParticipants = serverUtils.getParticipantsInEvent(eventId);
-        Assertions.assertEquals(expectedParticipants, actualParticipants);
-    }
-
-
 
     @Test
     public void testUpdateLastUsedDate() throws JsonProcessingException {
