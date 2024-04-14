@@ -71,4 +71,32 @@ public class ParticipantControllerTest {
         var actual = sut.deleteIt(posted.getId());
         assertEquals(OK, actual.getStatusCode());
     }
+
+    @Test
+    public void getById_ValidId_ReturnsParticipant() {
+        TestParticipantRepository repo = new TestParticipantRepository();
+        ParticipantController sut = new ParticipantController(repo);
+        Participant participant = new Participant("John", "Doe", "jd@g.com");
+        Participant savedParticipant = sut.createParticipant(participant).getBody();
+        var actual = sut.getById(String.valueOf(savedParticipant.getId()));
+        assertEquals(OK, actual.getStatusCode());
+        assertEquals(savedParticipant, actual.getBody().get(0));
+    }
+
+    @Test
+    public void getById_InexistentId_ReturnsBadRequest() {
+        TestParticipantRepository repo = new TestParticipantRepository();
+        ParticipantController sut = new ParticipantController(repo);
+        var actual = sut.getById("9999"); 
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+    }
+
+    @Test
+    public void getById_InvalidId_ReturnsBadRequest() {
+        TestParticipantRepository repo = new TestParticipantRepository();
+        ParticipantController sut = new ParticipantController(repo);
+        var actual = sut.getById("abc"); 
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
+    }
+
 }

@@ -94,48 +94,23 @@ class ExpenseTest {
         assertNotEquals(e1.hashCode(), e.hashCode());
     }
 
-//    @Test
-//    void testToString() {
-//        Participant p = new Participant("Mara", "Tacenco", "MT");
-//        Expense e = new Expense("Brunch in Delft", 1200, p);
-//        assertTrue(e.toString().contains("Expense "));
-//        assertTrue(e.toString().contains("- Brunch in Delft, created by "));
-//    }
-
     @Test
-    void testGetParticipants() {
-
-        Event event = new Event("X");
-        Participant p = new Participant("Mara", "Tacenco", "MT");
-        Participant h = new Participant("Hugh", "Jones", "HJ");
-        List<Participant> list = new ArrayList<>();
-        list.add(p);
-        list.add(h);
-
-        Expense e = new Expense("Brunch in Delft", 1200, p ,event);
+    public void testToString() {
+        Participant participant = new Participant("email@example.com", "IBAN123", "username");
+        Event event = new Event("Event Title");
+        Expense expense = new Expense("Expense Title", 100, participant, event);
+        String expectedString = "Expense{id=0, creator=Participant{id=0, email='email@example.com', IBAN='IBAN123', userName='username'}, event=Event{id=0, title='Event Title'}, totalExpense=100, title='Expense Title'}";
+        assertEquals(true, expense.toString().contains("Expense{id="));
+        assertEquals(true, expense.toString().contains("creator=Participant{id="));
+        assertEquals(true,expense.toString().contains(", event=Event{id="));
+        assertEquals(true,expense.toString().contains(", totalExpense=100, title='Expense Title'}"));
     }
 
-    @Test
-    void testSetParticipants() {
-
-        Event event = new Event("X");
-        Participant p = new Participant("Mara", "Tacenco", "MT");
-        Participant h = new Participant("Hugh", "Jones", "HJ");
-
-        List<Participant> list = new ArrayList<>();
-        list.add(p);
-        list.add(h);
-
-        Expense e = new Expense("Brunch in Delft", 1200, p ,event);
-
-        List<Participant> list2 = new ArrayList<>();
-        list2.add(h);
-    }
 
     @Test
     public void testEquals_SameAttributes() {
 
-        Participant participant = new Participant("email@example.com", "IBAN123", "username");
+        Participant p = new Participant("Mara@g.c", "123", "MT");
         Expense expense1 = new Expense("Expense Title", 100, participant);
         Expense expense2 = new Expense("Expense Title", 100, participant);
 
@@ -145,14 +120,22 @@ class ExpenseTest {
     @Test
     public void testEquals_DifferentAttributes() {
 
-        Participant participant1 = new Participant("email1@example.com", "IBAN123", "username1");
-        Participant participant2 = new Participant("email2@example.com", "IBAN456", "username2");
-        Expense expense1 = new Expense("Expense Title", 100, participant1);
-        Expense expense2 = new Expense("Different Title", 200, participant2);
+        Participant p = new Participant("Mara@g.c", "123", "MT");
+        Participant h = new Participant("Hugh@g.c", "123", "HJ");
+        Expense expense1 = new Expense("Expense Title", 100, p);
+        Expense expense2 = new Expense("Different Title", 200, h);
 
 
         assertNotEquals(expense1, expense2);
     }
+
+    @Test
+    public void testGetSharePerPerson() {
+        Participant p = new Participant("Mara@g.c", "123", "MT");
+        Expense expense = new Expense("Expense Title", 100, participant);
+        assertEquals(20, expense.getSharePerPerson(5));
+    }
+
 
 
 

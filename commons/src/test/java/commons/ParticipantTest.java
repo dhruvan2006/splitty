@@ -70,5 +70,20 @@ public class ParticipantTest {
         assertEquals(p1, p2);
     }
 
+    @Test
+    public void testToString() {
+        Participant participant = new Participant("john@example.com", "IBAN12345", "JD");
+        String expectedString = "Participant{id=0, email='john@example.com', IBAN='IBAN12345', userName='JD'}";
+        assertEquals(expectedString, participant.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        Participant p1 = new Participant("john@example.com", "IBAN12345", "JD");
+        Participant p2 = new Participant("john@example.com", "IBAN12345", "JD");
+        assertEquals(p1.hashCode(), p2.hashCode());
+    }
+
+
 
 }
