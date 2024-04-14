@@ -3,24 +3,25 @@ package server.api;
 import commons.Event;
 import commons.Expense;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import server.database.ExpensesRepository;
+import server.database.EventRepository;
 
 import java.util.*;
+
 
 @RestController
 @RequestMapping("/api/expense")
 public class ExpenseController {
     private final ExpensesRepository repo;
+    
+    @Autowired
+    private EventRepository eventRepository; 
 
     public ExpenseController(ExpensesRepository repo) {
         this.repo = repo;
+
     }
 
     @PostMapping(path = {"/addToEvent/{event_id}"})
@@ -58,5 +59,50 @@ public class ExpenseController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Expense> getExpenseById(@PathVariable Long id) {
+        Optional<Expense> expenseOptional = repo.findById(id);
+        return expenseOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/byEvent")
+    public ResponseEntity<List<Expense>> getExpensesByEvent(@RequestParam("eventId") long eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+        if (eventOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        List<Expense> expenses = event.getExpenses();
+        return ResponseEntity.ok(expenses);
+    }
+
+    @GetMapping("/totalExpense")
+    public ResponseEntity<Double> getTotalExpenseForEvent(@RequestParam("eventId") long eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+        if (eventOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        List<Expense> expenses = event.getExpenses();
+        double totalExpense = expenses.stream().mapToDouble(Expense::getTotalExpense).sum();
+        return ResponseEntity.ok(totalExpense);
+    }
+
+    @GetMapping("/averageExpense")
+    public ResponseEntity<Double> getAverageExpenseForEvent(@RequestParam("eventId") long eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+        if (eventOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        List<Expense> expenses = event.getExpenses();
+        double totalExpense = expenses.stream().mapToDouble(Expense::getTotalExpense).sum();
+        double averageExpense = expenses.isEmpty() ? 0 : totalExpense / expenses.size();
+        return ResponseEntity.ok(averageExpense);
     }
 }
