@@ -59,4 +59,55 @@ public class ExpenseController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Expense> getExpenseById(@PathVariable Long id) {
+        Optional<Expense> expenseOptional = repo.findById(id);
+        return expenseOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/byEvent")
+    public ResponseEntity<List<Expense>> getExpensesByEvent(@RequestParam("eventId") long eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+        if (eventOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        List<Expense> expenses = event.getExpenses();
+        return ResponseEntity.ok(expenses);
+    }
+
+    @GetMapping("/byParticipant")
+    public ResponseEntity<List<Expense>> getExpensesByParticipant(@RequestParam("participantId") long participantId) {
+        List<Expense> expenses = repo.findByCreatorId(participantId);
+        return ResponseEntity.ok(expenses);
+    }
+
+    @GetMapping("/totalExpense")
+    public ResponseEntity<Double> getTotalExpenseForEvent(@RequestParam("eventId") long eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+        if (eventOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        List<Expense> expenses = event.getExpenses();
+        double totalExpense = expenses.stream().mapToDouble(Expense::getTotalExpense).sum();
+        return ResponseEntity.ok(totalExpense);
+    }
+
+    @GetMapping("/averageExpense")
+    public ResponseEntity<Double> getAverageExpenseForEvent(@RequestParam("eventId") long eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
+        if (eventOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        List<Expense> expenses = event.getExpenses();
+        double totalExpense = expenses.stream().mapToDouble(Expense::getTotalExpense).sum();
+        double averageExpense = expenses.isEmpty() ? 0 : totalExpense / expenses.size();
+        return ResponseEntity.ok(averageExpense);
+    }
 }

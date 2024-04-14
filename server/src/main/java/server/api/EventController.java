@@ -122,7 +122,7 @@ public class EventController {
         return event;
     }
 
-        @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable("id") Long id) {
         Optional<Event> event = repo.findById(id);
         return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
