@@ -20,7 +20,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
+import javafx.util.Callback;
 import javafx.util.Pair;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.Map;
@@ -45,7 +47,7 @@ public class OverviewCtrl implements Initializable {
     private Button titleButton, sendInvitesButton, addParticipantButton, addExpenseButton, settleDebtsButton;
 
     @FXML
-    private ComboBox<String> participantsComboBox;
+    private ComboBox<Participant> participantsComboBox;
 
     @FXML
     private TextField titleTextField;
@@ -102,16 +104,28 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void updateParticipantsComboBox() {
-        String oldValue = participantsComboBox.getValue();
+        Participant oldValue = participantsComboBox.getValue();
+        participantsComboBox.setConverter(new StringConverter<Participant>() {
+            @Override
+            public String toString(Participant participant) {
+                if (participant == null) return null;
+                return participant.getUserName();
+            }
+
+            @Override
+            public Participant fromString(String string) {
+                return null;
+            }
+        });
         participantsComboBox.getItems().clear();
-        participantsComboBox.getItems().add(bundle.getString("overview.all_participants"));
+        participantsComboBox.getItems().add(null);
         participantsComboBox.getItems().addAll(
-                event.getParticipants().stream().map(Participant::getUserName).toList()
+                event.getParticipants()
         );
         if (participantsComboBox.getItems().contains(oldValue)) {
             participantsComboBox.setValue(oldValue);
         }
-        else participantsComboBox.setValue(bundle.getString("overview.all_participants"));
+        else participantsComboBox.setValue(participantsComboBox.getItems().getFirst());
     }
 
     private void updateParticipantsList() {
@@ -212,8 +226,8 @@ public class OverviewCtrl implements Initializable {
         }
 
         for (Expense expense : event.getExpenses()) {
-            if (!Objects.equals(expense.getCreator().getUserName(), participantsComboBox.getValue())
-                    && !Objects.equals(participantsComboBox.getValue(), bundle.getString("overview.all_participants"))){
+            if (!Objects.equals(expense.getCreator(), participantsComboBox.getValue())
+                    && !Objects.equals(participantsComboBox.getValue(), null)){
                 continue;
             }
             TextFlow flow = new TextFlow();
@@ -249,7 +263,7 @@ public class OverviewCtrl implements Initializable {
         if (expenseListVBox.getChildren().isEmpty()) {
             Label label = new Label(bundle.getString("overview.no_expenses") + " "
                     + bundle.getString("globals.of") + " "
-                    + participantsComboBox.getValue());
+                    + participantsComboBox.getValue().getUserName());
             label.setStyle("-fx-font-size: 20");
             expenseListVBox.getChildren().add(label);
         }
@@ -380,7 +394,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void test(ActionEvent actionEvent) {
-        System.out.println(participantsComboBox.getValue());
+        participantsComboBox.getValue();
         updateExpenseList();
     }
 }
