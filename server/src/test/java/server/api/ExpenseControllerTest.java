@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 import commons.Expense;
+import commons.Participant;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
