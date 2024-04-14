@@ -41,6 +41,7 @@ public class ParticipantCtrl implements Initializable {
     @Inject
     public ParticipantCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
+        server.connectWebSocket();
         this.mainCtrl = mainCtrl;
     }
 

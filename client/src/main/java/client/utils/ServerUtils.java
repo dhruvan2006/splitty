@@ -18,12 +18,7 @@ package client.utils;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -34,7 +29,6 @@ import client.config.Configuration;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.client.Entity;
@@ -46,8 +40,19 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
-	private static final String SERVER = Configuration.getInstance().getServerUrl();
-	private StompSession session = connect("ws://localhost:8080/websocket");
+	private static String SERVER = Configuration.getInstance().getServerUrl();
+	private StompSession session;
+
+	public void connectWebSocket(){
+		session = connect("ws://"+ SERVER.substring(7, SERVER.length()-1) +"/websocket");
+	}
+
+
+	//For testing
+	public void setSERVER(String SERVER) {
+		this.SERVER = SERVER;
+	}
+
 	private StompSession connect(String url){
 		var client = new StandardWebSocketClient();
 		var stomp = new WebSocketStompClient(client);
@@ -100,31 +105,7 @@ public class ServerUtils {
 	public void send(String dest, Object o){
 		session.send(dest, o);
 	}
-	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-		var url = new URI("http://localhost:8080/api/quotes").toURL();
-		var is = url.openConnection().getInputStream();
-		var br = new BufferedReader(new InputStreamReader(is));
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-		}
-	}
 
-	public List<Quote> getQuotes() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
-	}
-
-	public Quote addQuote(Quote quote) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-	}
 
 	public Event addParticipantToEvent(long eventId, Participant participant) {
 		return ClientBuilder.newClient(new ClientConfig()) //
@@ -192,13 +173,6 @@ public class ServerUtils {
 				.get(new GenericType<List<Event>>() {});
 	}
 
-	public List<Participant> getParticipants() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/participant") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON)//
-				.get(new GenericType<List<Participant>>(){});
-	}
 	public Expense addExpense(Expense expense) {
 		return ClientBuilder.newClient(new ClientConfig())//
 				.target(SERVER).path("api/expense/addToEvent/" + expense.getEvent().getId())//

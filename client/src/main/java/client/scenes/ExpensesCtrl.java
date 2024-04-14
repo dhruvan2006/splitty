@@ -64,6 +64,7 @@ public class ExpensesCtrl implements Initializable {
     @Inject
     public ExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
+        server.connectWebSocket();
         this.mainCtrl = mainCtrl;
         editMode = false;
         expense = null;

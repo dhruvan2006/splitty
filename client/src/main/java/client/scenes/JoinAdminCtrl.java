@@ -17,6 +17,7 @@ public class JoinAdminCtrl {
     @Inject
     public JoinAdminCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
+        server.connectWebSocket();
         this.mainCtrl = mainCtrl;
     }
 
