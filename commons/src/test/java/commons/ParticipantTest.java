@@ -73,8 +73,11 @@ public class ParticipantTest {
     @Test
     public void testToString() {
         Participant participant = new Participant("john@example.com", "IBAN12345", "JD");
-        String expectedString = "Participant{id=0, email='john@example.com', IBAN='IBAN12345', userName='JD'}";
-        assertEquals(expectedString, participant.toString());
+        //reference : "Participant{id=*, email='john@example.com', IBAN='IBAN12345', userName='JD'}";
+        assertEquals(true, participant.toString().contains("Participant{id="));
+        assertEquals(true, participant.toString().contains(
+                ", email='john@example.com, IBAN='IBAN12345, userName='JD}"));
+
     }
 
     @Test

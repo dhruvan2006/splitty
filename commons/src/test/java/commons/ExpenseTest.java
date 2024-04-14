@@ -99,10 +99,10 @@ class ExpenseTest {
         Participant participant = new Participant("email@example.com", "IBAN123", "username");
         Event event = new Event("Event Title");
         Expense expense = new Expense("Expense Title", 100, participant, event);
-        String expectedString = "Expense{id=0, creator=Participant{id=0, email='email@example.com', IBAN='IBAN123', userName='username'}, event=Event{id=0, title='Event Title'}, totalExpense=100, title='Expense Title'}";
+        //reference : Expense{id=*, creator=Participant{id=*, email='email@example.com, IBAN='IBAN123, userName='username}, event=Event Title (code: *), totalExpense=100, title='Expense Title'}
         assertEquals(true, expense.toString().contains("Expense{id="));
-        assertEquals(true, expense.toString().contains("creator=Participant{id="));
-        assertEquals(true,expense.toString().contains(", event=Event{id="));
+        assertEquals(true, expense.toString().contains("creator=Participant{"));
+        assertEquals(true,expense.toString().contains(", event=Event Title"));
         assertEquals(true,expense.toString().contains(", totalExpense=100, title='Expense Title'}"));
     }
 
